@@ -1,0 +1,1886 @@
+{
+	"info": {
+		"_postman_id": "dc40942d-8550-4d40-98b0-670b4f290ec0",
+		"name": "lms Copy",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "22069059"
+	},
+	"item": [
+		{
+			"name": "user",
+			"item": [
+				{
+					"name": "get_all_positive",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"//check response code 200\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1.0/users",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1.0",
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create_valid",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"//check response code 201\r",
+									"pm.test(\"Status code is 201\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});\r",
+									"\r",
+									"//JSON structure validation\r",
+									"const schema = {\r",
+									"    \"$id\": \"http://example.com/example.json\",\r",
+									"    \"type\": \"object\",\r",
+									"    \"default\": {},\r",
+									"    \"title\": \"Root Schema\",\r",
+									"    \"required\": [\r",
+									"        \"id\",\r",
+									"        \"email\",\r",
+									"        \"password\",\r",
+									"        \"firstName\",\r",
+									"        \"lastName\",\r",
+									"        \"patronymicName\",\r",
+									"        \"contactPreferences\",\r",
+									"        \"socialMedia\",\r",
+									"        \"role\",\r",
+									"        \"active\"\r",
+									"    ],\r",
+									"    \"properties\": {\r",
+									"        \"id\": {\r",
+									"            \"type\": \"integer\",\r",
+									"            \"default\": 0,\r",
+									"            \"title\": \"The id Schema\",\r",
+									"            \"examples\": [\r",
+									"                1\r",
+									"            ]\r",
+									"        },\r",
+									"        \"email\": {\r",
+									"            \"type\": \"string\",\r",
+									"            \"default\": \"\",\r",
+									"            \"title\": \"The email Schema\",\r",
+									"            \"examples\": [\r",
+									"                \"user@gmail.com\"\r",
+									"            ]\r",
+									"        },\r",
+									"        \"password\": {\r",
+									"            \"type\": \"string\",\r",
+									"            \"default\": \"\",\r",
+									"            \"title\": \"The password Schema\",\r",
+									"            \"examples\": [\r",
+									"                \"123\"\r",
+									"            ]\r",
+									"        },\r",
+									"        \"firstName\": {\r",
+									"            \"type\": \"string\",\r",
+									"            \"default\": \"\",\r",
+									"            \"title\": \"The firstName Schema\",\r",
+									"            \"examples\": [\r",
+									"                \"user\"\r",
+									"            ]\r",
+									"        },\r",
+									"        \"lastName\": {\r",
+									"            \"type\": \"string\",\r",
+									"            \"default\": \"\",\r",
+									"            \"title\": \"The lastName Schema\",\r",
+									"            \"examples\": [\r",
+									"                \"useroff\"\r",
+									"            ]\r",
+									"        },\r",
+									"        \"patronymicName\": {\r",
+									"            \"type\": \"string\",\r",
+									"            \"default\": \"\",\r",
+									"            \"title\": \"The patronymicName Schema\",\r",
+									"            \"examples\": [\r",
+									"                \"userovich\"\r",
+									"            ]\r",
+									"        },\r",
+									"        \"contactPreferences\": {\r",
+									"            \"type\": \"string\",\r",
+									"            \"default\": \"\",\r",
+									"            \"title\": \"The contactPreferences Schema\",\r",
+									"            \"examples\": [\r",
+									"                \"CELLPHONE\"\r",
+									"            ]\r",
+									"        },\r",
+									"        \"socialMedia\": {\r",
+									"            \"type\": \"string\",\r",
+									"            \"default\": \"\",\r",
+									"            \"title\": \"The socialMedia Schema\",\r",
+									"            \"examples\": [\r",
+									"                \"+375291234567\"\r",
+									"            ]\r",
+									"        },\r",
+									"        \"role\": {\r",
+									"            \"type\": \"string\",\r",
+									"            \"default\": \"\",\r",
+									"            \"title\": \"The role Schema\",\r",
+									"            \"examples\": [\r",
+									"                \"STUDENT\"\r",
+									"            ]\r",
+									"        },\r",
+									"        \"active\": {\r",
+									"            \"type\": \"boolean\",\r",
+									"            \"default\": false,\r",
+									"            \"title\": \"The active Schema\",\r",
+									"            \"examples\": [\r",
+									"                true\r",
+									"            ]\r",
+									"        }\r",
+									"    },\r",
+									"    \"examples\": [{\r",
+									"        \"id\": 1,\r",
+									"        \"email\": \"user@gmail.com\",\r",
+									"        \"password\": \"123\",\r",
+									"        \"firstName\": \"user\",\r",
+									"        \"lastName\": \"useroff\",\r",
+									"        \"patronymicName\": \"userovich\",\r",
+									"        \"contactPreferences\": \"CELLPHONE\",\r",
+									"        \"socialMedia\": \"+375291234567\",\r",
+									"        \"role\": \"STUDENT\",\r",
+									"        \"active\": true\r",
+									"    }]\r",
+									"}\r",
+									"\r",
+									"pm.test('Schema is valid', function() {\r",
+									"  pm.response.to.have.jsonSchema(schema);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"user@gmail.com\",\r\n    \"password\": \"123\",\r\n    \"firstName\": \"user\",\r\n    \"lastName\": \"useroff\",\r\n    \"patronymicName\": \"userovich\",\r\n    \"contactPreferences\": \"CELLPHONE\",\r\n    \"socialMedia\": \"+375291234567\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1.0/users",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1.0",
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create_not_valid_with_ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"//check response code 201\r",
+									"pm.test(\"Status code is 201\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});\r",
+									"\r",
+									"//JSON structure validation\r",
+									"const schema = {\r",
+									"    \"$id\": \"http://example.com/example.json\",\r",
+									"    \"type\": \"object\",\r",
+									"    \"default\": {},\r",
+									"    \"title\": \"Root Schema\",\r",
+									"    \"required\": [\r",
+									"        \"id\",\r",
+									"        \"email\",\r",
+									"        \"password\",\r",
+									"        \"firstName\",\r",
+									"        \"lastName\",\r",
+									"        \"patronymicName\",\r",
+									"        \"contactPreferences\",\r",
+									"        \"socialMedia\",\r",
+									"        \"role\",\r",
+									"        \"active\"\r",
+									"    ],\r",
+									"    \"properties\": {\r",
+									"        \"id\": {\r",
+									"            \"type\": \"integer\",\r",
+									"            \"default\": 0,\r",
+									"            \"title\": \"The id Schema\",\r",
+									"            \"examples\": [\r",
+									"                1\r",
+									"            ]\r",
+									"        },\r",
+									"        \"email\": {\r",
+									"            \"type\": \"string\",\r",
+									"            \"default\": \"\",\r",
+									"            \"title\": \"The email Schema\",\r",
+									"            \"examples\": [\r",
+									"                \"user@gmail.com\"\r",
+									"            ]\r",
+									"        },\r",
+									"        \"password\": {\r",
+									"            \"type\": \"string\",\r",
+									"            \"default\": \"\",\r",
+									"            \"title\": \"The password Schema\",\r",
+									"            \"examples\": [\r",
+									"                \"123\"\r",
+									"            ]\r",
+									"        },\r",
+									"        \"firstName\": {\r",
+									"            \"type\": \"string\",\r",
+									"            \"default\": \"\",\r",
+									"            \"title\": \"The firstName Schema\",\r",
+									"            \"examples\": [\r",
+									"                \"user\"\r",
+									"            ]\r",
+									"        },\r",
+									"        \"lastName\": {\r",
+									"            \"type\": \"string\",\r",
+									"            \"default\": \"\",\r",
+									"            \"title\": \"The lastName Schema\",\r",
+									"            \"examples\": [\r",
+									"                \"useroff\"\r",
+									"            ]\r",
+									"        },\r",
+									"        \"patronymicName\": {\r",
+									"            \"type\": \"string\",\r",
+									"            \"default\": \"\",\r",
+									"            \"title\": \"The patronymicName Schema\",\r",
+									"            \"examples\": [\r",
+									"                \"userovich\"\r",
+									"            ]\r",
+									"        },\r",
+									"        \"contactPreferences\": {\r",
+									"            \"type\": \"string\",\r",
+									"            \"default\": \"\",\r",
+									"            \"title\": \"The contactPreferences Schema\",\r",
+									"            \"examples\": [\r",
+									"                \"CELLPHONE\"\r",
+									"            ]\r",
+									"        },\r",
+									"        \"socialMedia\": {\r",
+									"            \"type\": \"string\",\r",
+									"            \"default\": \"\",\r",
+									"            \"title\": \"The socialMedia Schema\",\r",
+									"            \"examples\": [\r",
+									"                \"+375291234567\"\r",
+									"            ]\r",
+									"        },\r",
+									"        \"role\": {\r",
+									"            \"type\": \"string\",\r",
+									"            \"default\": \"\",\r",
+									"            \"title\": \"The role Schema\",\r",
+									"            \"examples\": [\r",
+									"                \"STUDENT\"\r",
+									"            ]\r",
+									"        },\r",
+									"        \"active\": {\r",
+									"            \"type\": \"boolean\",\r",
+									"            \"default\": false,\r",
+									"            \"title\": \"The active Schema\",\r",
+									"            \"examples\": [\r",
+									"                true\r",
+									"            ]\r",
+									"        }\r",
+									"    },\r",
+									"    \"examples\": [{\r",
+									"        \"id\": 1,\r",
+									"        \"email\": \"user@gmail.com\",\r",
+									"        \"password\": \"123\",\r",
+									"        \"firstName\": \"user\",\r",
+									"        \"lastName\": \"useroff\",\r",
+									"        \"patronymicName\": \"userovich\",\r",
+									"        \"contactPreferences\": \"CELLPHONE\",\r",
+									"        \"socialMedia\": \"+375291234567\",\r",
+									"        \"role\": \"STUDENT\",\r",
+									"        \"active\": true\r",
+									"    }]\r",
+									"}\r",
+									"\r",
+									"pm.test('Schema is valid', function() {\r",
+									"  pm.response.to.have.jsonSchema(schema);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": 1,\r\n    \"email\": \"user1@gmail.com\",\r\n    \"password\": \"123\",\r\n    \"firstName\": \"user\",\r\n    \"lastName\": \"useroff\",\r\n    \"patronymicName\": \"userovich\",\r\n    \"contactPreferences\": \"CELLPHONE\",\r\n    \"socialMedia\": \"+375291234567\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1.0/users",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1.0",
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create_not_valid_with_role",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"//check response code 201\r",
+									"pm.test(\"Status code is 201\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});\r",
+									"\r",
+									"//JSON structure validation\r",
+									"const schema = {\r",
+									"    \"$id\": \"http://example.com/example.json\",\r",
+									"    \"type\": \"object\",\r",
+									"    \"default\": {},\r",
+									"    \"title\": \"Root Schema\",\r",
+									"    \"required\": [\r",
+									"        \"id\",\r",
+									"        \"email\",\r",
+									"        \"password\",\r",
+									"        \"firstName\",\r",
+									"        \"lastName\",\r",
+									"        \"patronymicName\",\r",
+									"        \"contactPreferences\",\r",
+									"        \"socialMedia\",\r",
+									"        \"role\",\r",
+									"        \"active\"\r",
+									"    ],\r",
+									"    \"properties\": {\r",
+									"        \"id\": {\r",
+									"            \"type\": \"integer\",\r",
+									"            \"default\": 0,\r",
+									"            \"title\": \"The id Schema\",\r",
+									"            \"examples\": [\r",
+									"                1\r",
+									"            ]\r",
+									"        },\r",
+									"        \"email\": {\r",
+									"            \"type\": \"string\",\r",
+									"            \"default\": \"\",\r",
+									"            \"title\": \"The email Schema\",\r",
+									"            \"examples\": [\r",
+									"                \"user@gmail.com\"\r",
+									"            ]\r",
+									"        },\r",
+									"        \"password\": {\r",
+									"            \"type\": \"string\",\r",
+									"            \"default\": \"\",\r",
+									"            \"title\": \"The password Schema\",\r",
+									"            \"examples\": [\r",
+									"                \"123\"\r",
+									"            ]\r",
+									"        },\r",
+									"        \"firstName\": {\r",
+									"            \"type\": \"string\",\r",
+									"            \"default\": \"\",\r",
+									"            \"title\": \"The firstName Schema\",\r",
+									"            \"examples\": [\r",
+									"                \"user\"\r",
+									"            ]\r",
+									"        },\r",
+									"        \"lastName\": {\r",
+									"            \"type\": \"string\",\r",
+									"            \"default\": \"\",\r",
+									"            \"title\": \"The lastName Schema\",\r",
+									"            \"examples\": [\r",
+									"                \"useroff\"\r",
+									"            ]\r",
+									"        },\r",
+									"        \"patronymicName\": {\r",
+									"            \"type\": \"string\",\r",
+									"            \"default\": \"\",\r",
+									"            \"title\": \"The patronymicName Schema\",\r",
+									"            \"examples\": [\r",
+									"                \"userovich\"\r",
+									"            ]\r",
+									"        },\r",
+									"        \"contactPreferences\": {\r",
+									"            \"type\": \"string\",\r",
+									"            \"default\": \"\",\r",
+									"            \"title\": \"The contactPreferences Schema\",\r",
+									"            \"examples\": [\r",
+									"                \"CELLPHONE\"\r",
+									"            ]\r",
+									"        },\r",
+									"        \"socialMedia\": {\r",
+									"            \"type\": \"string\",\r",
+									"            \"default\": \"\",\r",
+									"            \"title\": \"The socialMedia Schema\",\r",
+									"            \"examples\": [\r",
+									"                \"+375291234567\"\r",
+									"            ]\r",
+									"        },\r",
+									"        \"role\": {\r",
+									"            \"type\": \"string\",\r",
+									"            \"default\": \"\",\r",
+									"            \"title\": \"The role Schema\",\r",
+									"            \"examples\": [\r",
+									"                \"STUDENT\"\r",
+									"            ]\r",
+									"        },\r",
+									"        \"active\": {\r",
+									"            \"type\": \"boolean\",\r",
+									"            \"default\": false,\r",
+									"            \"title\": \"The active Schema\",\r",
+									"            \"examples\": [\r",
+									"                true\r",
+									"            ]\r",
+									"        }\r",
+									"    },\r",
+									"    \"examples\": [{\r",
+									"        \"id\": 1,\r",
+									"        \"email\": \"user@gmail.com\",\r",
+									"        \"password\": \"123\",\r",
+									"        \"firstName\": \"user\",\r",
+									"        \"lastName\": \"useroff\",\r",
+									"        \"patronymicName\": \"userovich\",\r",
+									"        \"contactPreferences\": \"CELLPHONE\",\r",
+									"        \"socialMedia\": \"+375291234567\",\r",
+									"        \"role\": \"STUDENT\",\r",
+									"        \"active\": true\r",
+									"    }]\r",
+									"}\r",
+									"\r",
+									"pm.test('Schema is valid', function() {\r",
+									"  pm.response.to.have.jsonSchema(schema);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"user2@gmail.com\",\r\n    \"password\": \"123\",\r\n    \"firstName\": \"user\",\r\n    \"lastName\": \"useroff\",\r\n    \"patronymicName\": \"userovich\",\r\n    \"contactPreferences\": \"CELLPHONE\",\r\n    \"socialMedia\": \"+375291234567\",\r\n    \"role\": \"TRAINER\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1.0/users",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1.0",
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create_not_valid_with_is_active",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"//check response code 201\r",
+									"pm.test(\"Status code is 201\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});\r",
+									"\r",
+									"//JSON structure validation\r",
+									"const schema = {\r",
+									"    \"$id\": \"http://example.com/example.json\",\r",
+									"    \"type\": \"object\",\r",
+									"    \"default\": {},\r",
+									"    \"title\": \"Root Schema\",\r",
+									"    \"required\": [\r",
+									"        \"id\",\r",
+									"        \"email\",\r",
+									"        \"password\",\r",
+									"        \"firstName\",\r",
+									"        \"lastName\",\r",
+									"        \"patronymicName\",\r",
+									"        \"contactPreferences\",\r",
+									"        \"socialMedia\",\r",
+									"        \"role\",\r",
+									"        \"active\"\r",
+									"    ],\r",
+									"    \"properties\": {\r",
+									"        \"id\": {\r",
+									"            \"type\": \"integer\",\r",
+									"            \"default\": 0,\r",
+									"            \"title\": \"The id Schema\",\r",
+									"            \"examples\": [\r",
+									"                1\r",
+									"            ]\r",
+									"        },\r",
+									"        \"email\": {\r",
+									"            \"type\": \"string\",\r",
+									"            \"default\": \"\",\r",
+									"            \"title\": \"The email Schema\",\r",
+									"            \"examples\": [\r",
+									"                \"user@gmail.com\"\r",
+									"            ]\r",
+									"        },\r",
+									"        \"password\": {\r",
+									"            \"type\": \"string\",\r",
+									"            \"default\": \"\",\r",
+									"            \"title\": \"The password Schema\",\r",
+									"            \"examples\": [\r",
+									"                \"123\"\r",
+									"            ]\r",
+									"        },\r",
+									"        \"firstName\": {\r",
+									"            \"type\": \"string\",\r",
+									"            \"default\": \"\",\r",
+									"            \"title\": \"The firstName Schema\",\r",
+									"            \"examples\": [\r",
+									"                \"user\"\r",
+									"            ]\r",
+									"        },\r",
+									"        \"lastName\": {\r",
+									"            \"type\": \"string\",\r",
+									"            \"default\": \"\",\r",
+									"            \"title\": \"The lastName Schema\",\r",
+									"            \"examples\": [\r",
+									"                \"useroff\"\r",
+									"            ]\r",
+									"        },\r",
+									"        \"patronymicName\": {\r",
+									"            \"type\": \"string\",\r",
+									"            \"default\": \"\",\r",
+									"            \"title\": \"The patronymicName Schema\",\r",
+									"            \"examples\": [\r",
+									"                \"userovich\"\r",
+									"            ]\r",
+									"        },\r",
+									"        \"contactPreferences\": {\r",
+									"            \"type\": \"string\",\r",
+									"            \"default\": \"\",\r",
+									"            \"title\": \"The contactPreferences Schema\",\r",
+									"            \"examples\": [\r",
+									"                \"CELLPHONE\"\r",
+									"            ]\r",
+									"        },\r",
+									"        \"socialMedia\": {\r",
+									"            \"type\": \"string\",\r",
+									"            \"default\": \"\",\r",
+									"            \"title\": \"The socialMedia Schema\",\r",
+									"            \"examples\": [\r",
+									"                \"+375291234567\"\r",
+									"            ]\r",
+									"        },\r",
+									"        \"role\": {\r",
+									"            \"type\": \"string\",\r",
+									"            \"default\": \"\",\r",
+									"            \"title\": \"The role Schema\",\r",
+									"            \"examples\": [\r",
+									"                \"STUDENT\"\r",
+									"            ]\r",
+									"        },\r",
+									"        \"active\": {\r",
+									"            \"type\": \"boolean\",\r",
+									"            \"default\": false,\r",
+									"            \"title\": \"The active Schema\",\r",
+									"            \"examples\": [\r",
+									"                true\r",
+									"            ]\r",
+									"        }\r",
+									"    },\r",
+									"    \"examples\": [{\r",
+									"        \"id\": 1,\r",
+									"        \"email\": \"user@gmail.com\",\r",
+									"        \"password\": \"123\",\r",
+									"        \"firstName\": \"user\",\r",
+									"        \"lastName\": \"useroff\",\r",
+									"        \"patronymicName\": \"userovich\",\r",
+									"        \"contactPreferences\": \"CELLPHONE\",\r",
+									"        \"socialMedia\": \"+375291234567\",\r",
+									"        \"role\": \"STUDENT\",\r",
+									"        \"active\": true\r",
+									"    }]\r",
+									"}\r",
+									"\r",
+									"pm.test('Schema is valid', function() {\r",
+									"  pm.response.to.have.jsonSchema(schema);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"user3@gmail.com\",\r\n    \"password\": \"123\",\r\n    \"firstName\": \"user\",\r\n    \"lastName\": \"useroff\",\r\n    \"patronymicName\": \"userovich\",\r\n    \"contactPreferences\": \"CELLPHONE\",\r\n    \"socialMedia\": \"+375291234567\",\r\n    \"is_active\": false\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1.0/users",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1.0",
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create_not_valid_with_random_field",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"//check response code 201\r",
+									"pm.test(\"Status code is 201\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});\r",
+									"\r",
+									"//JSON structure validation\r",
+									"const schema = {\r",
+									"    \"$id\": \"http://example.com/example.json\",\r",
+									"    \"type\": \"object\",\r",
+									"    \"default\": {},\r",
+									"    \"title\": \"Root Schema\",\r",
+									"    \"required\": [\r",
+									"        \"id\",\r",
+									"        \"email\",\r",
+									"        \"password\",\r",
+									"        \"firstName\",\r",
+									"        \"lastName\",\r",
+									"        \"patronymicName\",\r",
+									"        \"contactPreferences\",\r",
+									"        \"socialMedia\",\r",
+									"        \"role\",\r",
+									"        \"active\"\r",
+									"    ],\r",
+									"    \"properties\": {\r",
+									"        \"id\": {\r",
+									"            \"type\": \"integer\",\r",
+									"            \"default\": 0,\r",
+									"            \"title\": \"The id Schema\",\r",
+									"            \"examples\": [\r",
+									"                1\r",
+									"            ]\r",
+									"        },\r",
+									"        \"email\": {\r",
+									"            \"type\": \"string\",\r",
+									"            \"default\": \"\",\r",
+									"            \"title\": \"The email Schema\",\r",
+									"            \"examples\": [\r",
+									"                \"user@gmail.com\"\r",
+									"            ]\r",
+									"        },\r",
+									"        \"password\": {\r",
+									"            \"type\": \"string\",\r",
+									"            \"default\": \"\",\r",
+									"            \"title\": \"The password Schema\",\r",
+									"            \"examples\": [\r",
+									"                \"123\"\r",
+									"            ]\r",
+									"        },\r",
+									"        \"firstName\": {\r",
+									"            \"type\": \"string\",\r",
+									"            \"default\": \"\",\r",
+									"            \"title\": \"The firstName Schema\",\r",
+									"            \"examples\": [\r",
+									"                \"user\"\r",
+									"            ]\r",
+									"        },\r",
+									"        \"lastName\": {\r",
+									"            \"type\": \"string\",\r",
+									"            \"default\": \"\",\r",
+									"            \"title\": \"The lastName Schema\",\r",
+									"            \"examples\": [\r",
+									"                \"useroff\"\r",
+									"            ]\r",
+									"        },\r",
+									"        \"patronymicName\": {\r",
+									"            \"type\": \"string\",\r",
+									"            \"default\": \"\",\r",
+									"            \"title\": \"The patronymicName Schema\",\r",
+									"            \"examples\": [\r",
+									"                \"userovich\"\r",
+									"            ]\r",
+									"        },\r",
+									"        \"contactPreferences\": {\r",
+									"            \"type\": \"string\",\r",
+									"            \"default\": \"\",\r",
+									"            \"title\": \"The contactPreferences Schema\",\r",
+									"            \"examples\": [\r",
+									"                \"CELLPHONE\"\r",
+									"            ]\r",
+									"        },\r",
+									"        \"socialMedia\": {\r",
+									"            \"type\": \"string\",\r",
+									"            \"default\": \"\",\r",
+									"            \"title\": \"The socialMedia Schema\",\r",
+									"            \"examples\": [\r",
+									"                \"+375291234567\"\r",
+									"            ]\r",
+									"        },\r",
+									"        \"role\": {\r",
+									"            \"type\": \"string\",\r",
+									"            \"default\": \"\",\r",
+									"            \"title\": \"The role Schema\",\r",
+									"            \"examples\": [\r",
+									"                \"STUDENT\"\r",
+									"            ]\r",
+									"        },\r",
+									"        \"active\": {\r",
+									"            \"type\": \"boolean\",\r",
+									"            \"default\": false,\r",
+									"            \"title\": \"The active Schema\",\r",
+									"            \"examples\": [\r",
+									"                true\r",
+									"            ]\r",
+									"        }\r",
+									"    },\r",
+									"    \"examples\": [{\r",
+									"        \"id\": 1,\r",
+									"        \"email\": \"user@gmail.com\",\r",
+									"        \"password\": \"123\",\r",
+									"        \"firstName\": \"user\",\r",
+									"        \"lastName\": \"useroff\",\r",
+									"        \"patronymicName\": \"userovich\",\r",
+									"        \"contactPreferences\": \"CELLPHONE\",\r",
+									"        \"socialMedia\": \"+375291234567\",\r",
+									"        \"role\": \"STUDENT\",\r",
+									"        \"active\": true\r",
+									"    }]\r",
+									"}\r",
+									"\r",
+									"pm.test('Schema is valid', function() {\r",
+									"  pm.response.to.have.jsonSchema(schema);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"user4@gmail.com\",\r\n    \"password\": \"123\",\r\n    \"firstName\": \"user\",\r\n    \"lastName\": \"useroff\",\r\n    \"patronymicName\": \"userovich\",\r\n    \"contactPreferences\": \"CELLPHONE\",\r\n    \"socialMedia\": \"+375291234567\",\r\n    \"random field\": \"random field\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1.0/users",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1.0",
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create_not_valid_without_email",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"//check response code 400\r",
+									"pm.test(\"Status code is 400\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"password\": \"123\",\r\n    \"firstName\": \"user\",\r\n    \"lastName\": \"useroff\",\r\n    \"patronymicName\": \"userovich\",\r\n    \"contactPreferences\": \"CELLPHONE\",\r\n    \"socialMedia\": \"+375291234567\",\r\n    \"random field\": \"random field\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1.0/users",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1.0",
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create_not_valid_email_reuse",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"//check response code 400\r",
+									"pm.test(\"Status code is 400\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"user@gmail.com\",\r\n    \"password\": \"123\",\r\n    \"firstName\": \"user\",\r\n    \"lastName\": \"useroff\",\r\n    \"patronymicName\": \"userovich\",\r\n    \"contactPreferences\": \"CELLPHONE\",\r\n    \"socialMedia\": \"+375291234567\",\r\n    \"random field\": \"random field\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1.0/users",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1.0",
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update_existing",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"//check response code 200\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"//JSON structure validation\r",
+									"const schema = {\r",
+									"    \"$id\": \"http://example.com/example.json\",\r",
+									"    \"type\": \"object\",\r",
+									"    \"default\": {},\r",
+									"    \"title\": \"Root Schema\",\r",
+									"    \"required\": [\r",
+									"        \"id\",\r",
+									"        \"email\",\r",
+									"        \"password\",\r",
+									"        \"firstName\",\r",
+									"        \"lastName\",\r",
+									"        \"patronymicName\",\r",
+									"        \"contactPreferences\",\r",
+									"        \"socialMedia\",\r",
+									"        \"role\",\r",
+									"        \"active\"\r",
+									"    ],\r",
+									"    \"properties\": {\r",
+									"        \"id\": {\r",
+									"            \"type\": \"integer\",\r",
+									"            \"default\": 0,\r",
+									"            \"title\": \"The id Schema\",\r",
+									"            \"examples\": [\r",
+									"                1\r",
+									"            ]\r",
+									"        },\r",
+									"        \"email\": {\r",
+									"            \"type\": \"string\",\r",
+									"            \"default\": \"\",\r",
+									"            \"title\": \"The email Schema\",\r",
+									"            \"examples\": [\r",
+									"                \"user@gmail.com\"\r",
+									"            ]\r",
+									"        },\r",
+									"        \"password\": {\r",
+									"            \"type\": \"string\",\r",
+									"            \"default\": \"\",\r",
+									"            \"title\": \"The password Schema\",\r",
+									"            \"examples\": [\r",
+									"                \"123\"\r",
+									"            ]\r",
+									"        },\r",
+									"        \"firstName\": {\r",
+									"            \"type\": \"string\",\r",
+									"            \"default\": \"\",\r",
+									"            \"title\": \"The firstName Schema\",\r",
+									"            \"examples\": [\r",
+									"                \"user\"\r",
+									"            ]\r",
+									"        },\r",
+									"        \"lastName\": {\r",
+									"            \"type\": \"string\",\r",
+									"            \"default\": \"\",\r",
+									"            \"title\": \"The lastName Schema\",\r",
+									"            \"examples\": [\r",
+									"                \"useroff\"\r",
+									"            ]\r",
+									"        },\r",
+									"        \"patronymicName\": {\r",
+									"            \"type\": \"string\",\r",
+									"            \"default\": \"\",\r",
+									"            \"title\": \"The patronymicName Schema\",\r",
+									"            \"examples\": [\r",
+									"                \"userovich\"\r",
+									"            ]\r",
+									"        },\r",
+									"        \"contactPreferences\": {\r",
+									"            \"type\": \"string\",\r",
+									"            \"default\": \"\",\r",
+									"            \"title\": \"The contactPreferences Schema\",\r",
+									"            \"examples\": [\r",
+									"                \"CELLPHONE\"\r",
+									"            ]\r",
+									"        },\r",
+									"        \"socialMedia\": {\r",
+									"            \"type\": \"string\",\r",
+									"            \"default\": \"\",\r",
+									"            \"title\": \"The socialMedia Schema\",\r",
+									"            \"examples\": [\r",
+									"                \"+375291234567\"\r",
+									"            ]\r",
+									"        },\r",
+									"        \"role\": {\r",
+									"            \"type\": \"string\",\r",
+									"            \"default\": \"\",\r",
+									"            \"title\": \"The role Schema\",\r",
+									"            \"examples\": [\r",
+									"                \"STUDENT\"\r",
+									"            ]\r",
+									"        },\r",
+									"        \"active\": {\r",
+									"            \"type\": \"boolean\",\r",
+									"            \"default\": false,\r",
+									"            \"title\": \"The active Schema\",\r",
+									"            \"examples\": [\r",
+									"                true\r",
+									"            ]\r",
+									"        }\r",
+									"    },\r",
+									"    \"examples\": [{\r",
+									"        \"id\": 1,\r",
+									"        \"email\": \"user@gmail.com\",\r",
+									"        \"password\": \"123\",\r",
+									"        \"firstName\": \"user\",\r",
+									"        \"lastName\": \"useroff\",\r",
+									"        \"patronymicName\": \"userovich\",\r",
+									"        \"contactPreferences\": \"CELLPHONE\",\r",
+									"        \"socialMedia\": \"+375291234567\",\r",
+									"        \"role\": \"STUDENT\",\r",
+									"        \"active\": true\r",
+									"    }]\r",
+									"}\r",
+									"\r",
+									"pm.test('Schema is valid', function() {\r",
+									"  pm.response.to.have.jsonSchema(schema);\r",
+									"});\r",
+									"\r",
+									"//check role\r",
+									"let jsonData = JSON.parse(responseBody);\r",
+									"postman.setEnvironmentVariable(\"role\", jsonData.role);\r",
+									"pm.test(function() {\r",
+									"    pm.expect(request.data.role).to.eql(pm.environment.get(\"role\"))\r",
+									"    });\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "        {\r\n            \"email\": \"user@gmail.com\",\r\n            \"password\": \"12345\",\r\n            \"firstName\": \"user\",\r\n            \"lastName\": \"useroff\",\r\n            \"patronymicName\": \"userovich\",\r\n            \"contactPreferences\": \"TELEGRAM\",\r\n            \"socialMedia\": \"@User\",\r\n            \"role\": \"TRAINER\",\r\n            \"active\": true\r\n        }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1.0/users/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1.0",
+								"users",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update_not_existing",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"//check response code 404\r",
+									"pm.test(\"Status code is 404\", function () {\r",
+									"    pm.response.to.have.status(404);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Body matches string\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"User not found\");\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"password\": \"12345\",\r\n    \"contactPreferences\": \"TELEGRAM\",\r\n    \"socialMedia\": \"@User\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1.0/users/999",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1.0",
+								"users",
+								"999"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update_not_valid",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"//check response code 400\r",
+									"pm.test(\"Status code is 400\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"password\": \"12345\",\r\n    \"contactPreferences\": \"TELEGRAM\",\r\n    \"socialMedia\": \"@User\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1.0/users/gdhhg",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1.0",
+								"users",
+								"gdhhg"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete_existing",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"//check response code 204\r",
+									"pm.test(\"Status code is 204\", function () {\r",
+									"    pm.response.to.have.status(204);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1.0/users/6",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1.0",
+								"users",
+								"6"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete_existing_reuse",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"//check response code 404\r",
+									"pm.test(\"Status code is 404\", function () {\r",
+									"    pm.response.to.have.status(404);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Body matches string\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"User not found\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1.0/users/5",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1.0",
+								"users",
+								"5"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete_not_existing",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"//check response code 404\r",
+									"pm.test(\"Status code is 404\", function () {\r",
+									"    pm.response.to.have.status(404);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Body matches string\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"User not found\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1.0/users/5",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1.0",
+								"users",
+								"5"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete_not_valid",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"//check response code 400\r",
+									"pm.test(\"Status code is 400\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1.0/users/jhgcgc",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1.0",
+								"users",
+								"jhgcgc"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get_by_ID_existing",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"//check response code 200\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"//JSON structure validation\r",
+									"const schema = {\r",
+									"    \"$id\": \"http://example.com/example.json\",\r",
+									"    \"type\": \"object\",\r",
+									"    \"default\": {},\r",
+									"    \"title\": \"Root Schema\",\r",
+									"    \"required\": [\r",
+									"        \"id\",\r",
+									"        \"email\",\r",
+									"        \"password\",\r",
+									"        \"firstName\",\r",
+									"        \"lastName\",\r",
+									"        \"patronymicName\",\r",
+									"        \"contactPreferences\",\r",
+									"        \"socialMedia\",\r",
+									"        \"role\",\r",
+									"        \"active\"\r",
+									"    ],\r",
+									"    \"properties\": {\r",
+									"        \"id\": {\r",
+									"            \"type\": \"integer\",\r",
+									"            \"default\": 0,\r",
+									"            \"title\": \"The id Schema\",\r",
+									"            \"examples\": [\r",
+									"                1\r",
+									"            ]\r",
+									"        },\r",
+									"        \"email\": {\r",
+									"            \"type\": \"string\",\r",
+									"            \"default\": \"\",\r",
+									"            \"title\": \"The email Schema\",\r",
+									"            \"examples\": [\r",
+									"                \"user@gmail.com\"\r",
+									"            ]\r",
+									"        },\r",
+									"        \"password\": {\r",
+									"            \"type\": \"string\",\r",
+									"            \"default\": \"\",\r",
+									"            \"title\": \"The password Schema\",\r",
+									"            \"examples\": [\r",
+									"                \"123\"\r",
+									"            ]\r",
+									"        },\r",
+									"        \"firstName\": {\r",
+									"            \"type\": \"string\",\r",
+									"            \"default\": \"\",\r",
+									"            \"title\": \"The firstName Schema\",\r",
+									"            \"examples\": [\r",
+									"                \"user\"\r",
+									"            ]\r",
+									"        },\r",
+									"        \"lastName\": {\r",
+									"            \"type\": \"string\",\r",
+									"            \"default\": \"\",\r",
+									"            \"title\": \"The lastName Schema\",\r",
+									"            \"examples\": [\r",
+									"                \"useroff\"\r",
+									"            ]\r",
+									"        },\r",
+									"        \"patronymicName\": {\r",
+									"            \"type\": \"string\",\r",
+									"            \"default\": \"\",\r",
+									"            \"title\": \"The patronymicName Schema\",\r",
+									"            \"examples\": [\r",
+									"                \"userovich\"\r",
+									"            ]\r",
+									"        },\r",
+									"        \"contactPreferences\": {\r",
+									"            \"type\": \"string\",\r",
+									"            \"default\": \"\",\r",
+									"            \"title\": \"The contactPreferences Schema\",\r",
+									"            \"examples\": [\r",
+									"                \"CELLPHONE\"\r",
+									"            ]\r",
+									"        },\r",
+									"        \"socialMedia\": {\r",
+									"            \"type\": \"string\",\r",
+									"            \"default\": \"\",\r",
+									"            \"title\": \"The socialMedia Schema\",\r",
+									"            \"examples\": [\r",
+									"                \"+375291234567\"\r",
+									"            ]\r",
+									"        },\r",
+									"        \"role\": {\r",
+									"            \"type\": \"string\",\r",
+									"            \"default\": \"\",\r",
+									"            \"title\": \"The role Schema\",\r",
+									"            \"examples\": [\r",
+									"                \"STUDENT\"\r",
+									"            ]\r",
+									"        },\r",
+									"        \"active\": {\r",
+									"            \"type\": \"boolean\",\r",
+									"            \"default\": false,\r",
+									"            \"title\": \"The active Schema\",\r",
+									"            \"examples\": [\r",
+									"                true\r",
+									"            ]\r",
+									"        }\r",
+									"    },\r",
+									"    \"examples\": [{\r",
+									"        \"id\": 1,\r",
+									"        \"email\": \"user@gmail.com\",\r",
+									"        \"password\": \"123\",\r",
+									"        \"firstName\": \"user\",\r",
+									"        \"lastName\": \"useroff\",\r",
+									"        \"patronymicName\": \"userovich\",\r",
+									"        \"contactPreferences\": \"CELLPHONE\",\r",
+									"        \"socialMedia\": \"+375291234567\",\r",
+									"        \"role\": \"STUDENT\",\r",
+									"        \"active\": true\r",
+									"    }]\r",
+									"}\r",
+									"\r",
+									"pm.test('Schema is valid', function() {\r",
+									"  pm.response.to.have.jsonSchema(schema);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1.0/users/3",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1.0",
+								"users",
+								"3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get_by_ID_not_existing",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"//check response code 404\r",
+									"pm.test(\"Status code is 404\", function () {\r",
+									"    pm.response.to.have.status(404);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Body matches string\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"User not found\");\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1.0/users/999",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1.0",
+								"users",
+								"999"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get_by_ID_not_valid",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"//check response code 400\r",
+									"pm.test(\"Status code is 400\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1.0/users/hjhfgc",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1.0",
+								"users",
+								"hjhfgc"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "patch_existing",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"//check response code 200\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"//JSON structure validation\r",
+									"const schema = {\r",
+									"    \"$id\": \"http://example.com/example.json\",\r",
+									"    \"type\": \"object\",\r",
+									"    \"default\": {},\r",
+									"    \"title\": \"Root Schema\",\r",
+									"    \"required\": [\r",
+									"        \"id\",\r",
+									"        \"email\",\r",
+									"        \"password\",\r",
+									"        \"firstName\",\r",
+									"        \"lastName\",\r",
+									"        \"patronymicName\",\r",
+									"        \"contactPreferences\",\r",
+									"        \"socialMedia\",\r",
+									"        \"role\",\r",
+									"        \"active\"\r",
+									"    ],\r",
+									"    \"properties\": {\r",
+									"        \"id\": {\r",
+									"            \"type\": \"integer\",\r",
+									"            \"default\": 0,\r",
+									"            \"title\": \"The id Schema\",\r",
+									"            \"examples\": [\r",
+									"                1\r",
+									"            ]\r",
+									"        },\r",
+									"        \"email\": {\r",
+									"            \"type\": \"string\",\r",
+									"            \"default\": \"\",\r",
+									"            \"title\": \"The email Schema\",\r",
+									"            \"examples\": [\r",
+									"                \"user@gmail.com\"\r",
+									"            ]\r",
+									"        },\r",
+									"        \"password\": {\r",
+									"            \"type\": \"string\",\r",
+									"            \"default\": \"\",\r",
+									"            \"title\": \"The password Schema\",\r",
+									"            \"examples\": [\r",
+									"                \"123\"\r",
+									"            ]\r",
+									"        },\r",
+									"        \"firstName\": {\r",
+									"            \"type\": \"string\",\r",
+									"            \"default\": \"\",\r",
+									"            \"title\": \"The firstName Schema\",\r",
+									"            \"examples\": [\r",
+									"                \"user\"\r",
+									"            ]\r",
+									"        },\r",
+									"        \"lastName\": {\r",
+									"            \"type\": \"string\",\r",
+									"            \"default\": \"\",\r",
+									"            \"title\": \"The lastName Schema\",\r",
+									"            \"examples\": [\r",
+									"                \"useroff\"\r",
+									"            ]\r",
+									"        },\r",
+									"        \"patronymicName\": {\r",
+									"            \"type\": \"string\",\r",
+									"            \"default\": \"\",\r",
+									"            \"title\": \"The patronymicName Schema\",\r",
+									"            \"examples\": [\r",
+									"                \"userovich\"\r",
+									"            ]\r",
+									"        },\r",
+									"        \"contactPreferences\": {\r",
+									"            \"type\": \"string\",\r",
+									"            \"default\": \"\",\r",
+									"            \"title\": \"The contactPreferences Schema\",\r",
+									"            \"examples\": [\r",
+									"                \"CELLPHONE\"\r",
+									"            ]\r",
+									"        },\r",
+									"        \"socialMedia\": {\r",
+									"            \"type\": \"string\",\r",
+									"            \"default\": \"\",\r",
+									"            \"title\": \"The socialMedia Schema\",\r",
+									"            \"examples\": [\r",
+									"                \"+375291234567\"\r",
+									"            ]\r",
+									"        },\r",
+									"        \"role\": {\r",
+									"            \"type\": \"string\",\r",
+									"            \"default\": \"\",\r",
+									"            \"title\": \"The role Schema\",\r",
+									"            \"examples\": [\r",
+									"                \"STUDENT\"\r",
+									"            ]\r",
+									"        },\r",
+									"        \"active\": {\r",
+									"            \"type\": \"boolean\",\r",
+									"            \"default\": false,\r",
+									"            \"title\": \"The active Schema\",\r",
+									"            \"examples\": [\r",
+									"                true\r",
+									"            ]\r",
+									"        }\r",
+									"    },\r",
+									"    \"examples\": [{\r",
+									"        \"id\": 1,\r",
+									"        \"email\": \"user@gmail.com\",\r",
+									"        \"password\": \"123\",\r",
+									"        \"firstName\": \"user\",\r",
+									"        \"lastName\": \"useroff\",\r",
+									"        \"patronymicName\": \"userovich\",\r",
+									"        \"contactPreferences\": \"CELLPHONE\",\r",
+									"        \"socialMedia\": \"+375291234567\",\r",
+									"        \"role\": \"STUDENT\",\r",
+									"        \"active\": true\r",
+									"    }]\r",
+									"}\r",
+									"\r",
+									"pm.test('Schema is valid', function() {\r",
+									"  pm.response.to.have.jsonSchema(schema);\r",
+									"});\r",
+									"\r",
+									"//check socialMedia\r",
+									"let jsonData = JSON.parse(responseBody);\r",
+									"postman.setEnvironmentVariable(\"socialMedia\", jsonData.role);\r",
+									"pm.test(function() {\r",
+									"    pm.expect(request.data.socialMedia).to.eql(pm.environment.get(\"socialMedia\"))\r",
+									"    });\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"user@gmail.com\",\r\n    \"password\": \"12345\",\r\n    \"firstName\": \"user\",\r\n    \"lastName\": \"useroff\",\r\n    \"patronymicName\": \"userovich\",\r\n    \"contactPreferences\": \"TELEGRAM\",\r\n    \"socialMedia\": \"@Usernew\",\r\n    \"role\": \"STUDENT\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1.0/users/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1.0",
+								"users",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "patch_not_existing",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"//check response code 404\r",
+									"pm.test(\"Status code is 404\", function () {\r",
+									"    pm.response.to.have.status(404);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Body matches string\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"User not found\");\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"user@gmail.com\",\r\n    \"password\": \"12345\",\r\n    \"firstName\": \"user\",\r\n    \"lastName\": \"useroff\",\r\n    \"contactPreferences\": \"TELEGRAM\",\r\n    \"socialMedia\": \"@User\",\r\n    \"role\": \"STUDENT\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1.0/users/999",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1.0",
+								"users",
+								"999"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "patch_not_valid",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"//check response code 400\r",
+									"pm.test(\"Status code is 400\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"user@gmail.com\",\r\n    \"password\": \"12345\",\r\n    \"firstName\": \"user\",\r\n    \"lastName\": \"useroff\",\r\n    \"contactPreferences\": \"TELEGRAM\",\r\n    \"socialMedia\": \"@User\",\r\n    \"role\": \"STUDENT\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1.0/users/jkghg",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1.0",
+								"users",
+								"jkghg"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
