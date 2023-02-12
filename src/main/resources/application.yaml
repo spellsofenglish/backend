@@ -1,0 +1,55 @@
+spring:
+  config:
+    activate:
+      on-profile: development
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/languageDB
+    username: root
+    password: root
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: validate
+  mail:
+    host:
+    port:
+    username:
+server:
+  port: 8080
+  error:
+    path: /error
+  compression:
+    enabled: true
+    mime-types: application/json,application/xml,text/html,text/xml,text/plain,application/javascript,text/css
+    min-response-size: 10240
+app:
+  files:
+    localStorage: files
+  host: http://localhost:8080
+---
+#spring:
+#  config:
+#    activate:
+#      on-profile: production
+#  datasource:
+#    driver-class-name:
+#    url:
+#  jpa:
+#    show-sql: true
+#    hibernate:
+#      ddl-auto: validate
+#  mail:
+#    host:
+#    port:
+#    username:
+#server:
+#  port: 8080
+#  error:
+#    path: /error
+#  compression:
+#    enabled: true
+#    mime-types: application/json,application/xml,text/html,text/xml,text/plain,application/javascript,text/css
+#    min-response-size: 10240
+#app:
+#  host: http://000.000.000.000
