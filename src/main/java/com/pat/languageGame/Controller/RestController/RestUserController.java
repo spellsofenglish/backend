@@ -3,7 +3,6 @@ package com.pat.languageGame.Controller.RestController;
 import com.pat.languageGame.Data.Entity.User;
 import com.pat.languageGame.Service.Impl.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,7 +30,7 @@ public class RestUserController {
     }
 
     @GetMapping
-    public List<User> getAll(Pageable pageable) {
+    public List<User> getAll() {
         return userService.getAll();
     }
 
