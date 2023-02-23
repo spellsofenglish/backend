@@ -1,4 +1,4 @@
-package com.pat.languageGame.Data.Entity;
+package com.pat.SpellsOfEnglish.data.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -33,11 +33,11 @@ public class User {
     @Column(name = "password")
     private String password;
 
-    @Column(name = "first_name")
-    private String firstName;
+    @Column(name = "nick_name")
+    private String nickName;
 
-    @Column(name = "last_name")
-    private String lastName;
+    @Column(name = "results")
+    private String result;
 
     @Column(name = "role")
     @Enumerated(EnumType.STRING)
@@ -46,7 +46,13 @@ public class User {
     @Column(name = "is_active")
     private boolean isActive;
 
+    @Column(name = "secret")
+    private String secret;
+
+    @Column(name = "is_using_2FA")
+    private boolean isUsing2FA;
+
     public enum Role {
-        STUDENT, TRAINER, MANAGER
+        PLAYER, MANAGER, ADMINISTRATOR
     }
 }
