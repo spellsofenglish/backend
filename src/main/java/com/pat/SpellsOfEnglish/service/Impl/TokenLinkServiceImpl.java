@@ -3,7 +3,6 @@ package com.pat.SpellsOfEnglish.service.Impl;
 import com.pat.SpellsOfEnglish.data.entity.TokenLink;
 import com.pat.SpellsOfEnglish.data.repository.TokenLinkRepository;
 import com.pat.SpellsOfEnglish.service.TokenLinkService;
-import com.pat.SpellsOfEnglish.service.dto.user.UserDtoForSave;
 import com.pat.SpellsOfEnglish.service.exception.NotFoundException;
 import com.pat.SpellsOfEnglish.service.exception.SoeException;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +24,7 @@ public class TokenLinkServiceImpl implements TokenLinkService {
 
     @Override
     public String generateToken(int seconds) {
-        TokenLink tokenLink = setTokenLink(seconds, null, false);
+        TokenLink tokenLink = setTokenLink(seconds);
         tokenLinkRepository.save(tokenLink);
         return tokenLink.getToken();
     }
@@ -60,7 +59,7 @@ public class TokenLinkServiceImpl implements TokenLinkService {
         return LocalDateTime.now().isAfter(expirationTime);
     }
 
-    private TokenLink setTokenLink(int seconds, UserDtoForSave user, boolean fa) {
+    private TokenLink setTokenLink(int seconds) {
         TokenLink tokenLink = new TokenLink();
         tokenLink.setActiveTime(seconds);
         tokenLink.setCreateTime(LocalDateTime.now());

@@ -1,47 +1,53 @@
 package com.pat.SpellsOfEnglish.security;
 
 import com.pat.SpellsOfEnglish.service.Impl.UserServiceImpl;
-import lombok.RequiredArgsConstructor;
-import org.springframework.boot.autoconfigure.security.SecurityProperties;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
-import org.springframework.core.annotation.Order;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.servlet.HandlerExceptionResolver;
 
 @Configuration
-@EnableWebSecurity
-@Order(SecurityProperties.BASIC_AUTH_ORDER)
-@RequiredArgsConstructor(onConstructor_ = {@Lazy})
+@EnableMethodSecurity
 public class SecurityConfig {
-    @Lazy
     private final UserServiceImpl userService;
-    private final CustomWebAuthenticationDetailsSource authenticationDetailsSource;
-
+    @Autowired
+    private AuthEntryPointJwt unauthorizedHandler;
+    @Autowired
+    @Qualifier("handlerExceptionResolver")
+    private HandlerExceptionResolver resolver;
+    @Autowired
+    public SecurityConfig(@Lazy UserServiceImpl userService, CustomWebAuthenticationDetailsSource authenticationDetailsSource) {
+        this.userService = userService;
+    }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        return http.csrf().disable()
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        http.cors().and().csrf().disable()
+                .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .authorizeHttpRequests()
-//                .requestMatchers("/courses", "/auth/registration", "/auth/login", "/css/**").permitAll()
-//                .requestMatchers("/users").hasAnyAuthority("ADMINISTRATOR")
-                .requestMatchers("/**").permitAll()
-                .anyRequest()
-                .authenticated()
-                .and()
-                .userDetailsService(userService)
-                .formLogin()
-                .loginPage("/login").permitAll()
-                .authenticationDetailsSource(authenticationDetailsSource)
-                .and()
-                .logout().permitAll()
-                .and()
-                .build();
+                .requestMatchers("/api/v1.0/auth/**").permitAll()
+//                .requestMatchers("/**").permitAll()
+                .anyRequest().authenticated();
+
+        http.authenticationProvider(authenticationProvider());
+
+        http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
+
+        return http.build();
     }
 
     @Bean
@@ -50,10 +56,22 @@ public class SecurityConfig {
     }
 
     @Bean
-    public DaoAuthenticationProvider authProvider() {
-        CustomAuthenticationProvider authProvider = new CustomAuthenticationProvider();
+    public JwtCsrfFilter authenticationJwtTokenFilter() {
+        return new JwtCsrfFilter();
+    }
+
+    @Bean
+    public DaoAuthenticationProvider authenticationProvider() {
+        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+
         authProvider.setUserDetailsService(userService);
         authProvider.setPasswordEncoder(passwordEncoder());
+
         return authProvider;
+    }
+
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
+        return authConfig.getAuthenticationManager();
     }
 }

@@ -27,6 +27,9 @@ app:
   files:
     localStorage: files
   host: http://localhost:8080
+  jwtSecret: testCode
+  jwtExpirationMs: 86400000
+  jwtCookieName: testName
 ---
 spring:
   config:

@@ -28,7 +28,7 @@ public class UserRestController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public UserDto create(@RequestBody UserDtoForSave user) {
-        return userService.create(user);//FixMe password
+        return userService.create(user);
     }
 
     @GetMapping
