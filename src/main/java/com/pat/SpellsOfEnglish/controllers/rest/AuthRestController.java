@@ -1,43 +1,26 @@
 package com.pat.SpellsOfEnglish.controllers.rest;
 
-import com.pat.SpellsOfEnglish.data.entity.User;
-import com.pat.SpellsOfEnglish.security.JwtCsrfFilter;
 import com.pat.SpellsOfEnglish.security.JwtUtils;
-import com.pat.SpellsOfEnglish.service.Impl.UserAppDetails;
+import com.pat.SpellsOfEnglish.service.Impl.TotpManager;
 import com.pat.SpellsOfEnglish.service.TokenLinkService;
 import com.pat.SpellsOfEnglish.service.UserService;
-import com.pat.SpellsOfEnglish.service.dto.user.UserDto;
 import com.pat.SpellsOfEnglish.service.dto.user.UserDtoForAuth;
 import com.pat.SpellsOfEnglish.service.dto.user.UserDtoForResponse;
 import com.pat.SpellsOfEnglish.service.dto.user.UserDtoForSave;
-import com.pat.SpellsOfEnglish.service.exception.NotFoundException;
-import com.pat.SpellsOfEnglish.service.exception.SoeException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
 
 @RequestMapping("/api/v1.0/auth")
 @RequiredArgsConstructor
@@ -53,22 +36,14 @@ public class AuthRestController {
     private final UserService userService;
     private final JwtUtils jwtUtils;
     private final TokenLinkService tokenLinkService;
-    private final AuthenticationManager authenticationManager;
+
+    private final TotpManager totpManager;
 
     @PostMapping("/login")
-    public ResponseEntity<?> authenticateUser(@RequestBody UserDtoForAuth dtoForAuth) {
-
-        Authentication authentication = authenticationManager
-                .authenticate(new UsernamePasswordAuthenticationToken(dtoForAuth.getEmail(), dtoForAuth.getPassword()));
-
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-
-        UserAppDetails userDetails = (UserAppDetails) authentication.getPrincipal();
-        UserDtoForResponse dtoForResponse =  userService.getByEmail(userDetails.getUsername());
-
-        ResponseCookie jwtCookie = jwtUtils.generateJwtCookie(userDetails);
-
-        return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, jwtCookie.toString())
+    public ResponseEntity<?> authenticateUser(@Valid @RequestBody UserDtoForAuth dtoForAuth) {
+        String cooke = userService.loginUser(dtoForAuth.getEmail(), dtoForAuth.getPassword(), dtoForAuth.getSecret());
+        UserDtoForResponse dtoForResponse =  userService.getByEmail(dtoForAuth.getEmail());
+        return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, cooke)
                 .body(dtoForResponse);
     }
 
@@ -80,10 +55,15 @@ public class AuthRestController {
     }
 
     @PostMapping("/registration")
-    public ResponseEntity<?> performRegistration(@ModelAttribute UserDtoForSave user, Model model) {
+    public ResponseEntity<?> performRegistration(@RequestBody UserDtoForSave user, Model model) {
         userService.registerUser(user);
-        model.addAttribute("message", CONFIRMATION_MESSAGE);
-        return new ResponseEntity<>(USER_REGISTERED_SUCCESSFULLY, HttpStatus.OK);
+        return new ResponseEntity<>(CONFIRMATION_MESSAGE, HttpStatus.OK);
+    }
+
+    @PostMapping("/registration2fa")
+    public ResponseEntity<?> performRegistration2fa(@RequestBody UserDtoForSave user, Model model) {
+        String image = userService.registerUser(user);
+        return ResponseEntity.ok().body(image);
     }
 
     @GetMapping("/activate/{token}/{userId}")

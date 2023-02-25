@@ -8,5 +8,6 @@ public class UserDtoForResponse {
     private String email;
     private String nickName;
     private RoleDto role;
+    private String UriForImage;
     private boolean isUsing2FA;
 }

@@ -29,7 +29,7 @@ public class SecurityConfig {
     @Qualifier("handlerExceptionResolver")
     private HandlerExceptionResolver resolver;
     @Autowired
-    public SecurityConfig(@Lazy UserServiceImpl userService, CustomWebAuthenticationDetailsSource authenticationDetailsSource) {
+    public SecurityConfig(@Lazy UserServiceImpl userService) {
         this.userService = userService;
     }
 

@@ -2,6 +2,7 @@ package com.pat.SpellsOfEnglish.service.Impl;
 
 import com.pat.SpellsOfEnglish.data.entity.User;
 import com.pat.SpellsOfEnglish.data.repository.UserRepository;
+import com.pat.SpellsOfEnglish.security.JwtUtils;
 import com.pat.SpellsOfEnglish.service.MailService;
 import com.pat.SpellsOfEnglish.service.TokenLinkService;
 import com.pat.SpellsOfEnglish.service.UserService;
@@ -17,13 +18,16 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-//import java.util.HashSet;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -36,6 +40,10 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     private final PasswordEncoder passwordEncoder;
     private final TokenLinkService tokenLinkService;
     private final MailService mailService;
+    private final AuthenticationManager authenticationManager;
+    private final JwtUtils jwtUtils;
+    private final TotpManager totpManager;
+
 
     @Value("${app.host}")
     private String host;
@@ -117,7 +125,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public void registerUser(UserDtoForSave dtoForSave) {
+    public String registerUser(UserDtoForSave dtoForSave) {
         Optional<User> existing = userRepository.findByEmail(dtoForSave.getEmail());
         if (existing.isPresent()) {
             throw new SoeException(String.format(InternalizationMessageManagerConfig
@@ -136,10 +144,34 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         entity.setActive(false);
         User created = userRepository.save(entity);
         String token = tokenLinkService.generateToken(REGISTER_TOKEN_ACTIVITY_SECONDS);
-        mailService.sendEmail(created.getEmail(), InternalizationMessageManagerConfig
-                        .getMessage(KEY_FOR_EMAIL_USER_CONFIRMATION_SUBJECT),
-                String.format(InternalizationMessageManagerConfig
-                        .getMessage(KEY_FOR_EXCEPTION_ACTIVATE_LINK_PATTERN), host, token, created.getId()));
+//        mailService.sendEmail(created.getEmail(), InternalizationMessageManagerConfig
+//                        .getMessage(KEY_FOR_EMAIL_USER_CONFIRMATION_SUBJECT),
+//                String.format(InternalizationMessageManagerConfig
+//                        .getMessage(KEY_FOR_EXCEPTION_ACTIVATE_LINK_PATTERN), host, token, created.getId()));
+        return totpManager.getUriForImage(created.getSecret());
+    }
+
+    @Override
+    public String loginUser(String username, String password, String code) {
+        Authentication authentication = authenticationManager
+                .authenticate(new UsernamePasswordAuthenticationToken(username, password));
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        UserAppDetails userDetails = (UserAppDetails) authentication.getPrincipal();
+        UserDtoForResponse dtoForResponse = getByEmail(userDetails.getUsername());
+        if(dtoForResponse.isUsing2FA()){
+            verify(username, code);
+        }
+        return jwtUtils.generateJwtCookie(userDetails).toString();
+    }
+
+    @Override
+    public void verify(String username, String code) {
+        User user = userRepository.findByEmail(username)
+                .orElseThrow(() -> new NotFoundException(InternalizationMessageManagerConfig
+                        .getExceptionMessage(KEY_FOR_EXCEPTION_USER_NOT_FOUND)));
+        if(!totpManager.verifyCode(code, user.getSecret())) {
+            throw new SoeException("Code is incorrect");
+        }
     }
 
     @Override
@@ -198,20 +230,4 @@ public class UserServiceImpl implements UserService, UserDetailsService {
                 .orElseThrow(() -> new NotFoundException(InternalizationMessageManagerConfig
                         .getExceptionMessage(KEY_FOR_EXCEPTION_USER_NOT_ACTIVATED))));
     }
-
-//    @Override
-//    public UserDetails loadUserByUsername(String login) {
-//        User existingUser = userMapper.userDtoToUser(getByEmail(login));
-//        if (Objects.isNull(existingUser)) {
-//            throw new NotFoundException(InternalizationMessageManagerConfig
-//                    .getExceptionMessage(String.format(USER_S_IS_NOT_FOUND, login)));
-//        }
-//        return new org.springframework.security.core.userdetails.User(existingUser.getEmail(),
-//                existingUser.getPassword(),
-//                true,
-//                true,
-//                true,
-//                true,
-//                new HashSet<>());
-//    }
 }

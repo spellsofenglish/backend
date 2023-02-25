@@ -1,6 +1,7 @@
 package com.pat.SpellsOfEnglish.security;
 
 import com.pat.SpellsOfEnglish.service.Impl.UserAppDetails;
+import com.pat.SpellsOfEnglish.service.exception.SoeException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.SignatureException;
@@ -53,8 +54,10 @@ public class JwtUtils {
             Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(authToken);
             return true;
         } catch (SignatureException e) {
-            return false;
+            new SoeException(INVALID_JWT);
         }
+
+        return false;
     }
 
     public String generateTokenFromUsername(String username) {

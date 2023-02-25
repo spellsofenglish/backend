@@ -21,6 +21,7 @@ import static dev.samstevens.totp.util.Utils.getDataUriForImage;
 @Component
 public class TotpManager {
     public static final String UNABLE_TO_GENERATE_QR_CODE = "unable to generate QrCode";
+    public static final int PERIOD = 30;
 
     public String generateSecret() {
         SecretGenerator generator = new DefaultSecretGenerator();
@@ -34,10 +35,10 @@ public class TotpManager {
                 .issuer("exampleTwoFactor")
                 .algorithm(HashingAlgorithm.SHA1)
                 .digits(6)
-                .period(30)
+                .period(PERIOD)
                 .build();
         QrGenerator generator = new ZxingPngQrGenerator();
-        byte[] imageData = new byte[0];
+        byte[] imageData;
         try {
             imageData = generator.generate(data);
         } catch (QrGenerationException e) {

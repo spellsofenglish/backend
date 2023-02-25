@@ -20,7 +20,11 @@ public interface UserService {
 
     void delete(Long id);
 
-    void registerUser(UserDtoForSave dto);
+    String registerUser(UserDtoForSave dto);
+
+    String loginUser(String username, String password, String code);
+
+    void verify(String username, String code);
 
     void activateUser(Long userId);
 
