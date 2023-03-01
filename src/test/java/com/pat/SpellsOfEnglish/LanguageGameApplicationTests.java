@@ -1,4 +1,4 @@
-package com.pat.languageGame;
+package com.pat.SpellsOfEnglish;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

@@ -1,4 +1,4 @@
-package com.pat.languageGame;
+package com.pat.SpellsOfEnglish;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
