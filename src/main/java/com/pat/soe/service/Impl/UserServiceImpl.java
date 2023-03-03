@@ -34,7 +34,6 @@ import java.util.Optional;
 @Service(value = "userService")
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService, UserDetailsService {
-    public static final String USER_S_IS_NOT_FOUND = "User %s is not found";
     private final UserRepository userRepository;
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
@@ -44,10 +43,10 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     private final JwtUtils jwtUtils;
     private final TotpManager totpManager;
 
-
     @Value("${app.host}")
     private String host;
 
+    public static final String USER_S_IS_NOT_FOUND = "User %s is not found";
     public static final String KET_FOR_EMAIL_RECOVERY_PASSWORD_SUBJECT = "UserService.EmailRecoveryPasswordSubject";
     private static final int REGISTER_TOKEN_ACTIVITY_SECONDS = 60 * 60;
     private static final int RECOVERY_TOKEN_ACTIVITY_SECONDS = 5 * 60;
