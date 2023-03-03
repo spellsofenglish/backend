@@ -27,9 +27,12 @@ public class Information {
     @Column(name = "id", nullable = false)
     private Long id;
 
+    @Column(name = "name")
+    private String name;
+
     @Column(name = "class_message")
     @Enumerated(EnumType.STRING)
-    private String classMessage;
+    private ClassMessage classMessage;
 
     @Column(name = "message")
     private String message;
@@ -41,7 +44,7 @@ public class Information {
     private boolean isActive;
 
 
-    public enum classMessage {
+    public enum ClassMessage {
         SYSTEM, GAME
     }
 }
