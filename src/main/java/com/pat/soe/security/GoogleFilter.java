@@ -18,9 +18,8 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 
 @Component
-@Order(2)
-public class JwtCsrfFilter extends OncePerRequestFilter {
-
+@Order(1)
+public class GoogleFilter extends OncePerRequestFilter {
     @Autowired
     private JwtUtils jwtUtils;
     @Autowired
