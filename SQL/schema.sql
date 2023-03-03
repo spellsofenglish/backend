@@ -19,3 +19,12 @@ CREATE TABLE IF NOT EXISTS token_links
     create_time         TIMESTAMP,
     is_active           BOOLEAN DEFAULT FALSE NOT NULL
 );
+
+CREATE TABLE IF NOT EXISTS information
+(
+    id                  BIGSERIAL PRIMARY KEY NOT NULL,
+    class_message       CHARACTER VARYING(60) NOT NULL,
+    message             CHARACTER VARYING(1000),
+    note                CHARACTER VARYING(1000),
+    is_active           BOOLEAN DEFAULT FALSE NOT NULL
+);
