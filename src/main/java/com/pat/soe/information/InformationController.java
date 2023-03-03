@@ -26,30 +26,30 @@ public class InformationController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public UserDto create(@RequestBody UserDtoForSave user) {
-        return informationService.create(user);
+    public InformationDto create(@RequestBody InformationDtoForSave dtoForSave) {
+        return informationService.create(dtoForSave);
     }
 
     @GetMapping
-    public Page<UserDto> getAll(Pageable pageable) {
+    public Page<InformationDto> getAll(Pageable pageable) {
         return informationService.getAll(pageable);
     }
 
     @GetMapping("/{id}")
-    public UserDto getById(@PathVariable Long id){
+    public InformationDto getById(@PathVariable Long id){
         return informationService.getById(id);
     }
 
     @PutMapping("/{id}")
-    public UserDto update(@PathVariable Long id, @RequestBody UserDtoForUpdate user) {
-        user.setId(id);
-        return informationService.update(user);
+    public InformationDto update(@PathVariable Long id, @RequestBody InformationDto dto) {
+        dto.setId(id);
+        return informationService.update(dto);
     }
 
     @PatchMapping("/{id}")
-    public UserDto updatePartly(@PathVariable Long id, @RequestBody UserDtoForUpdate user) {
-        user.setId(id);
-        return informationService.update(user);
+    public InformationDto updatePartly(@PathVariable Long id, @RequestBody InformationDto informationDto) {
+        informationDto.setId(id);
+        return informationService.update(informationDto);
     }
 
     @DeleteMapping("/{id}")
