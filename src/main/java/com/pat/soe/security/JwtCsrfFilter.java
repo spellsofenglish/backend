@@ -44,7 +44,7 @@ public class JwtCsrfFilter extends OncePerRequestFilter {
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
         } catch (Exception e) {
-           new UserException("Cannot set user authentication");
+            new UserException("Cannot set user authentication");
         }
 
         filterChain.doFilter(request, response);

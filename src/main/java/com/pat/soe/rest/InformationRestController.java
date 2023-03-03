@@ -36,7 +36,7 @@ public class InformationRestController {
     }
 
     @GetMapping("/{id}")
-    public InformationDto getById(@PathVariable Long id){
+    public InformationDto getById(@PathVariable Long id) {
         return informationService.getById(id);
     }
 
@@ -54,7 +54,7 @@ public class InformationRestController {
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@PathVariable Long id){
+    public void delete(@PathVariable Long id) {
         informationService.delete(id);
     }
 }

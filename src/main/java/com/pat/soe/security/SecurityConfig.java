@@ -27,6 +27,7 @@ public class SecurityConfig {
     @Autowired
     @Qualifier("handlerExceptionResolver")
     private HandlerExceptionResolver resolver;
+
     @Autowired
     public SecurityConfig(@Lazy UserServiceImpl userService) {
         this.userService = userService;

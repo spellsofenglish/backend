@@ -47,11 +47,11 @@ public class UserAppDetails implements UserDetails {
         return true;
     }
 
-    public Long getId(){
+    public Long getId() {
         return this.user.getId();
     }
 
-    public String getRole(){
+    public String getRole() {
         return this.user.getRole().toString();
     }
 }

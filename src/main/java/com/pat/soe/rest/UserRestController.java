@@ -37,7 +37,7 @@ public class UserRestController {
     }
 
     @GetMapping("/{id}")
-    public UserDto getById(@PathVariable Long id){
+    public UserDto getById(@PathVariable Long id) {
         return userService.getById(id);
     }
 
@@ -55,7 +55,7 @@ public class UserRestController {
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@PathVariable Long id){
+    public void delete(@PathVariable Long id) {
         userService.delete(id);
     }
 }

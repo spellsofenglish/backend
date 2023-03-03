@@ -149,7 +149,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         SecurityContextHolder.getContext().setAuthentication(authentication);
         UserAppDetails userDetails = (UserAppDetails) authentication.getPrincipal();
         UserDtoForResponse dtoForResponse = getByEmail(userDetails.getUsername());
-        if(dtoForResponse.isUsing2FA()){
+        if (dtoForResponse.isUsing2FA()) {
             verify(username, code);
         }
         return jwtUtils.generateJwtCookie(userDetails).toString();
@@ -160,7 +160,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         User user = userRepository.findByEmail(username)
                 .orElseThrow(() -> new UserNotFoundException(UserInternalizationMessageManagerConfig
                         .getExceptionMessage(KEY_FOR_EXCEPTION_USER_NOT_FOUND)));
-        if(!totpManager.verifyCode(code, user.getSecret())) {
+        if (!totpManager.verifyCode(code, user.getSecret())) {
             throw new UserException("Code is incorrect");
         }
     }
@@ -212,7 +212,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-                User existingUser = userMapper.userDtoForResponseToUser(getByEmail(email));
+        User existingUser = userMapper.userDtoForResponseToUser(getByEmail(email));
         if (Objects.isNull(existingUser)) {
             throw new UserNotFoundException(UserInternalizationMessageManagerConfig
                     .getExceptionMessage(String.format(KEY_FOR_EXCEPTION_USER_NOT_FOUND)));
