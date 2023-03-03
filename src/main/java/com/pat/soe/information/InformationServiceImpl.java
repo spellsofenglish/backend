@@ -1,8 +1,8 @@
 package com.pat.soe.information;
 
-import com.pat.soe.user.exception.NotFoundException;
-import com.pat.soe.user.exception.SoeException;
-import com.pat.soe.user.InternalizationMessageManagerConfig;
+import com.pat.soe.information.exception.InformationNotFoundException;
+import com.pat.soe.user.exception.UserException;
+import com.pat.soe.user.UserInternalizationMessageManagerConfig;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -19,11 +19,7 @@ public class InformationServiceImpl implements InformationService {
     public static final String USER_S_IS_NOT_FOUND = "User %s is not found";
     public static final String KET_FOR_EMAIL_RECOVERY_PASSWORD_SUBJECT = "UserService.EmailRecoveryPasswordSubject";
     public static final String KEY_FOR_EXCEPTION_INFORMATION_NOT_FOUND = "informationService.informationNotFound";
-    public static final String KEY_FOR_EXCEPTION_ACTIVATE_LINK_PATTERN = "UserService.ActivateLinkPattern";
-    public static final String KEY_FOR_EMAIL_USER_CONFIRMATION_SUBJECT = "UserService.UserConfirmationSubject";
-    public static final String KEY_FOR_RECOVERY_PASS_LINK_PATTERN = "UserService.RecoveryPassLinkPattern";
-    public static final String KEY_FOR_EXCEPTION_WRONG_OLD_PASSWORD = "UserService.WrongOldPassword";
-    public static final String KEY_FOR_EXCEPTION_USER_NOT_ACTIVATED = "UserService.UserNotActivated";
+
     @Override
     public InformationDto getById(Long id) {
         Information information = informationRepository.findById(id)
