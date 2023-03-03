@@ -27,7 +27,7 @@ public class InformationServiceImpl implements InformationService {
     @Override
     public InformationDto getById(Long id) {
         Information information = informationRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException(InternalizationMessageManagerConfig
+                .orElseThrow(() -> new InformationNotFoundException(InformationInternalizationMessageManagerConfig
                         .getExceptionMessage(KEY_FOR_EXCEPTION_INFORMATION_NOT_FOUND)));
         return informationMapper.informationToInformationDto(information);
     }
@@ -50,7 +50,7 @@ public class InformationServiceImpl implements InformationService {
     public InformationDto update(InformationDto dto) {
         Optional<Information> existing = informationRepository.findById(dto.getId());
         if (existing.isPresent() && !existing.get().getId().equals(dto.getId())) {
-            throw new SoeException(String.format(InternalizationMessageManagerConfig
+            throw new UserException(String.format(InformationInternalizationMessageManagerConfig
                     .getExceptionMessage(KEY_FOR_EXCEPTION_INFORMATION_NOT_FOUND), dto.getName()));
         }
         Information created = informationMapper.informationDtoToInformation(dto);
@@ -61,10 +61,10 @@ public class InformationServiceImpl implements InformationService {
     @Override
     public void delete(Long id) {
         Information information = informationRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException(InternalizationMessageManagerConfig
+                .orElseThrow(() -> new InformationNotFoundException(InformationInternalizationMessageManagerConfig
                         .getExceptionMessage(KEY_FOR_EXCEPTION_INFORMATION_NOT_FOUND)));
         if (!information.isActive()) {
-            throw new NotFoundException(InternalizationMessageManagerConfig
+            throw new InformationNotFoundException(InformationInternalizationMessageManagerConfig
                     .getExceptionMessage(KEY_FOR_EXCEPTION_INFORMATION_NOT_FOUND));
         }
         information.setActive(false);
