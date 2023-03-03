@@ -23,6 +23,7 @@ CREATE TABLE IF NOT EXISTS token_links
 CREATE TABLE IF NOT EXISTS information
 (
     id                  BIGSERIAL PRIMARY KEY NOT NULL,
+    name                CHARACTER VARYING(50),
     class_message       CHARACTER VARYING(60) NOT NULL,
     message             CHARACTER VARYING(1000),
     note                CHARACTER VARYING(1000),
