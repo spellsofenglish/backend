@@ -1,6 +1,6 @@
 package com.pat.soe.security;
 
-import com.pat.soe.user.exception.SoeException;
+import com.pat.soe.user.exception.UserException;
 import dev.samstevens.totp.code.CodeGenerator;
 import dev.samstevens.totp.code.CodeVerifier;
 import dev.samstevens.totp.code.DefaultCodeGenerator;
@@ -42,7 +42,7 @@ public class TotpManager {
         try {
             imageData = generator.generate(data);
         } catch (QrGenerationException e) {
-            throw new SoeException(UNABLE_TO_GENERATE_QR_CODE);
+            throw new UserException(UNABLE_TO_GENERATE_QR_CODE);
         }
         String mimeType = generator.getImageMimeType();
         return getDataUriForImage(imageData, mimeType);

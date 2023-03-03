@@ -1,7 +1,7 @@
 package com.pat.soe.security;
 
 import com.pat.soe.user.UserAppDetails;
-import com.pat.soe.user.exception.SoeException;
+import com.pat.soe.user.exception.UserException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.SignatureException;
@@ -54,7 +54,7 @@ public class JwtUtils {
             Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(authToken);
             return true;
         } catch (SignatureException e) {
-            new SoeException(INVALID_JWT);
+            new UserException(INVALID_JWT);
         }
 
         return false;

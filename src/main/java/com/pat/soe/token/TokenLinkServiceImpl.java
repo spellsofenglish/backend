@@ -1,8 +1,8 @@
 package com.pat.soe.token;
 
 import com.pat.soe.security.TotpManager;
-import com.pat.soe.user.exception.NotFoundException;
-import com.pat.soe.user.exception.SoeException;
+import com.pat.soe.user.exception.UserNotFoundException;
+import com.pat.soe.user.exception.UserException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -40,13 +40,13 @@ public class TokenLinkServiceImpl implements TokenLinkService {
     @Override
     public void activate(String token) {
         TokenLink existingToken = tokenLinkRepository.findByEmailToken(token).orElseThrow(() -> {
-            throw new NotFoundException(TOKEN_NOT_FOUND);
+            throw new UserNotFoundException(TOKEN_NOT_FOUND);
         });
         if (existingToken.isActive()) {
-            throw new SoeException("Token already activated");
+            throw new UserException("Token already activated");
         }
         if (isExpired(existingToken)) {
-            throw new SoeException("Token expired");
+            throw new UserException("Token expired");
         }
         existingToken.setActive(true);
         tokenLinkRepository.save(existingToken);

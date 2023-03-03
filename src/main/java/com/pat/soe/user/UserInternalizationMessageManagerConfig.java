@@ -1,6 +1,6 @@
 package com.pat.soe.user;
 
-public class InternalizationMessageManagerConfig {
+public class UserInternalizationMessageManagerConfig {
 
     public static String getExceptionMessage(String keyMessage) {
 //        ResourceBundle resourceBundle = ResourceBundle.getBundle("exceptionsMessages", LocaleContextHolder.getLocale());

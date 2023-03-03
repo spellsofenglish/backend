@@ -1,6 +1,6 @@
 package com.pat.soe.security;
 
-import com.pat.soe.user.exception.SoeException;
+import com.pat.soe.user.exception.UserException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -44,7 +44,7 @@ public class JwtCsrfFilter extends OncePerRequestFilter {
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
         } catch (Exception e) {
-           new SoeException("Cannot set user authentication");
+           new UserException("Cannot set user authentication");
         }
 
         filterChain.doFilter(request, response);
