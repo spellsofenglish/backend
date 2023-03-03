@@ -1,19 +1,16 @@
 package com.pat.soe.information;
 
-import com.pat.soe.service.dto.user.UserDto;
-import com.pat.soe.service.dto.user.UserDtoForSave;
-import com.pat.soe.service.dto.user.UserDtoForUpdate;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface InformationService {
-    UserDto getById(Long id);
+    InformationDto getById(Long id);
 
-    Page<UserDto> getAll(Pageable pageable);
+    Page<InformationDto> getAll(Pageable pageable);
 
-    UserDto create(UserDtoForSave user);
+    InformationDto create(InformationDtoForSave dtoForSave);
 
-    UserDto update(UserDtoForUpdate user);
+    InformationDto update(InformationDto dto);
 
     void delete(Long id);
 }
