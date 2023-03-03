@@ -1,6 +1,6 @@
 package com.pat.soe.rest;
 
-import com.pat.soe.user.UserService;
+import com.pat.soe.user.UserServiceFacade;
 import com.pat.soe.user.UserDto;
 import com.pat.soe.user.UserDtoForSave;
 import com.pat.soe.user.UserDtoForUpdate;
@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/v1.0/users")
 @RequiredArgsConstructor
 public class UserRestController {
-    private final UserService userService;
+    private final UserServiceFacade userService;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)

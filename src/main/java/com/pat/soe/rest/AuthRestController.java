@@ -3,7 +3,7 @@ package com.pat.soe.rest;
 import com.pat.soe.security.JwtUtils;
 import com.pat.soe.security.TotpManager;
 import com.pat.soe.token.TokenLinkService;
-import com.pat.soe.user.UserService;
+import com.pat.soe.user.UserServiceFacade;
 import com.pat.soe.user.UserDtoForAuth;
 import com.pat.soe.user.UserDtoForResponse;
 import com.pat.soe.user.UserDtoForSave;
@@ -33,7 +33,7 @@ public class AuthRestController {
     private static final String USER_UPDATE_SUCCESSFULLY = "User update password successfully";
     public static final String USER_IS_NOT_AUTH = "User is not Auth";
     public static final String YOU_VE_BEEN_SIGNED_OUT = "You've been signed out!";
-    private final UserService userService;
+    private final UserServiceFacade userService;
     private final JwtUtils jwtUtils;
     private final TokenLinkService tokenLinkService;
 

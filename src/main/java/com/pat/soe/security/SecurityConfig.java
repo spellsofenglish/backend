@@ -1,6 +1,6 @@
 package com.pat.soe.security;
 
-import com.pat.soe.user.UserServiceImpl;
+import com.pat.soe.user.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -22,7 +22,7 @@ import org.springframework.web.servlet.HandlerExceptionResolver;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
-    private final UserServiceImpl userService;
+    private final UserService userService;
     @Autowired
     private AuthEntryPointJwt unauthorizedHandler;
     @Autowired
@@ -30,7 +30,7 @@ public class SecurityConfig {
     private HandlerExceptionResolver resolver;
 
     @Autowired
-    public SecurityConfig(@Lazy UserServiceImpl userService) {
+    public SecurityConfig(@Lazy UserService userService) {
         this.userService = userService;
     }
 

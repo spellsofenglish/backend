@@ -2,7 +2,7 @@ package com.pat.soe.rest;
 
 import com.pat.soe.information.InformationDto;
 import com.pat.soe.information.InformationDtoForSave;
-import com.pat.soe.information.InformationService;
+import com.pat.soe.information.InformationServiceFacade;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -22,39 +22,39 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("api/${app.version}/information")
 @RequiredArgsConstructor
 public class InformationRestController {
-    private final InformationService informationService;
+    private final InformationServiceFacade informationServiceFacade;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public InformationDto create(@RequestBody InformationDtoForSave dtoForSave) {
-        return informationService.create(dtoForSave);
+        return informationServiceFacade.create(dtoForSave);
     }
 
     @GetMapping
     public Page<InformationDto> getAll(Pageable pageable) {
-        return informationService.getAll(pageable);
+        return informationServiceFacade.getAll(pageable);
     }
 
     @GetMapping("/{id}")
     public InformationDto getById(@PathVariable Long id) {
-        return informationService.getById(id);
+        return informationServiceFacade.getById(id);
     }
 
     @PutMapping("/{id}")
     public InformationDto update(@PathVariable Long id, @RequestBody InformationDto dto) {
         dto.setId(id);
-        return informationService.update(dto);
+        return informationServiceFacade.update(dto);
     }
 
     @PatchMapping("/{id}")
     public InformationDto updatePartly(@PathVariable Long id, @RequestBody InformationDto informationDto) {
         informationDto.setId(id);
-        return informationService.update(informationDto);
+        return informationServiceFacade.update(informationDto);
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable Long id) {
-        informationService.delete(id);
+        informationServiceFacade.delete(id);
     }
 }
