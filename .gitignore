@@ -34,3 +34,8 @@ build/
 
 ### Mapper ###
 UserMapperImpl.java
+
+### Maven ###
+.mvn
+mvnw
+mvnw.cmd
