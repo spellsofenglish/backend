@@ -1,7 +1,7 @@
 package com.pat.soe.security;
 
-import com.pat.soe.service.Impl.UserAppDetails;
-import com.pat.soe.service.exception.SoeException;
+import com.pat.soe.user.UserAppDetails;
+import com.pat.soe.user.exception.SoeException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.SignatureException;

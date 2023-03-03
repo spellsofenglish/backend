@@ -1,8 +1,8 @@
 package com.pat.soe.information;
 
-import com.pat.soe.service.exception.NotFoundException;
-import com.pat.soe.service.exception.SoeException;
-import com.pat.soe.service.plugin.InternalizationMessageManagerConfig;
+import com.pat.soe.user.exception.NotFoundException;
+import com.pat.soe.user.exception.SoeException;
+import com.pat.soe.user.InternalizationMessageManagerConfig;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
