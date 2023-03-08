@@ -156,7 +156,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public void verify(String username, String code) {
+    public void verify(String username, String code) {  // it's my commit
         User user = userRepository.findByEmail(username)
                 .orElseThrow(() -> new UserNotFoundException(UserInternalizationMessageManagerConfig
                         .getExceptionMessage(KEY_FOR_EXCEPTION_USER_NOT_FOUND)));
