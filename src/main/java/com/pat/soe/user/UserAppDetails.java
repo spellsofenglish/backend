@@ -14,12 +14,14 @@ public class UserAppDetails implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Arrays.stream(user.getRole().toString().split(",")).map(SimpleGrantedAuthority::new).toList();
+        UserSecurity userSecurity = user.getUserSecurity();
+        return Arrays.stream(userSecurity.getRole().toString().split(",")).map(SimpleGrantedAuthority::new).toList();
     }
 
     @Override
     public String getPassword() {
-        return this.user.getPassword();
+        UserSecurity userSecurity = user.getUserSecurity();
+        return userSecurity.getPassword();
     }
 
     @Override
@@ -52,6 +54,7 @@ public class UserAppDetails implements UserDetails {
     }
 
     public String getRole() {
-        return this.user.getRole().toString();
+        UserSecurity userSecurity = user.getUserSecurity();
+        return userSecurity.getRole().toString();
     }
 }

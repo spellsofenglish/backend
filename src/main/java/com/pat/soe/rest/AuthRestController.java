@@ -14,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -69,14 +70,12 @@ public class AuthRestController {
         return ResponseEntity.ok().body(image);
     }
 
-    @GetMapping("/registrationGoogle")
-    public Map<String, Object> performRegistrationGoogle(OAuth2AuthenticationToken oAuth2AuthenticationToken) {
 
-//        UserAppDetails userAppDetails = (UserAppDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-//        CustomOAuth2User oauthUser = (CustomOAuth2User) authentication.getPrincipal();
-//                        userService.registerUserGoogle(oauthUser.getEmail());
-        return oAuth2AuthenticationToken.getPrincipal().getAttributes();
-    }
+//    @GetMapping("/registrationGoogle")
+//    public ResponseEntity<?> performRegistrationGoogle(OAuth2User auth2User) {
+//        oAuth2AuthenticationToken.getPrincipal().getAttributes();
+//        return ;
+//    }
 
     @GetMapping("/activate/{token}/{userId}")
     public ResponseEntity<?> activateUser(@PathVariable String token, @PathVariable Long userId) {

@@ -1,3 +1,4 @@
 DROP TABLE IF EXISTS users;
+DROP TABLE IF EXISTS users_security;
 DROP TABLE IF EXISTS token_links;
 DROP TABLE IF EXISTS information;

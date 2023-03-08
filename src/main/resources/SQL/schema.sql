@@ -1,15 +1,21 @@
-CREATE TABLE IF NOT EXISTS users
+CREATE TABLE IF NOT EXISTS users_security
 (
     id                  BIGSERIAL PRIMARY KEY  NOT NULL,
-    email               CHARACTER VARYING(100) NOT NULL,
     "password"          CHARACTER VARYING(150) NOT NULL,
-    nick_name           CHARACTER VARYING(100),
-    results             CHARACTER VARYING(100),
     "role"              CHARACTER VARYING(50)  NOT NULL,
     is_active           BOOLEAN                NOT NULL DEFAULT TRUE,
     is_using_2FA        BOOLEAN                NOT NULL DEFAULT FALSE,
     secret              CHARACTER VARYING(100)
 );
+
+CREATE TABLE IF NOT EXISTS users
+(
+    id                  BIGSERIAL PRIMARY KEY  NOT NULL,
+    email               CHARACTER VARYING(100) NOT NULL,
+    nick_name           CHARACTER VARYING(100),
+    results             CHARACTER VARYING(100),
+    user_id             BIGINT REFERENCES users_security(id)
+ );
 
 CREATE TABLE IF NOT EXISTS token_links
 (

@@ -27,6 +27,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class UserService implements UserServiceFacade, UserDetailsService {
     private final UserRepository userRepository;
+    private final UserSecurityRepository userSecurityRepository;
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
     private final TokenLinkService tokenLinkService;
@@ -80,12 +81,15 @@ public class UserService implements UserServiceFacade, UserDetailsService {
             throw new UserException(String.format(UserInternalizationMessageManagerConfig
                     .getExceptionMessage(KEY_FOR_EXCEPTION_EXISTING_EMAIL), dtoForSave.getEmail()));
         }
-        User entity = userMapper.userDtoForSaveToUser(dtoForSave);
-        entity.setRole(User.Role.PLAYER);
-        entity.setActive(true);
+        UserSecurity entitySecurity = new UserSecurity();
+        entitySecurity.setRole(UserSecurity.Role.ROLE_PLAYER);
+        entitySecurity.setActive(true);
         String encodedPassword = passwordEncoder.encode(dtoForSave.getPassword());
-        entity.setPassword(encodedPassword);
+        entitySecurity.setPassword(encodedPassword);
+//        User entity = userMapper.userDtoForSaveToUser(dtoForSave);
+        User entity = new User();
         entity.setEmail(dtoForSave.getEmail().trim());
+        userSecurityRepository.save(entitySecurity);
         User created = userRepository.save(entity);
         return userMapper.userToUserDto(created);
     }
@@ -107,11 +111,13 @@ public class UserService implements UserServiceFacade, UserDetailsService {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException(UserInternalizationMessageManagerConfig
                         .getExceptionMessage(KEY_FOR_EXCEPTION_USER_NOT_FOUND)));
-        if (!user.isActive()) {
+        UserSecurity userSecurity = user.getUserSecurity();
+        if (!userSecurity.isActive()) {
             throw new UserNotFoundException(UserInternalizationMessageManagerConfig
                     .getExceptionMessage(KEY_FOR_EXCEPTION_USER_NOT_FOUND));
         }
-        user.setActive(false);
+        userSecurity.setActive(false);
+        user.setUserSecurity(userSecurity);
         userRepository.save(user);
     }
 
@@ -123,29 +129,33 @@ public class UserService implements UserServiceFacade, UserDetailsService {
                     .getExceptionMessage(KEY_FOR_EXCEPTION_EXISTING_EMAIL), dtoForSave.getEmail()));
         }
         User entity = userMapper.userDtoForSaveToUser(dtoForSave);
+        UserSecurity entitySecurity = new UserSecurity();
         String encodedPassword = passwordEncoder.encode(dtoForSave.getPassword());
-        entity.setPassword(encodedPassword);
+        entitySecurity.setPassword(encodedPassword);
         entity.setEmail(dtoForSave.getEmail().trim());
-        if (entity.getRole() == null) {
-            entity.setRole(User.Role.PLAYER);
+        if (entitySecurity.getRole() == null) {
+            entitySecurity.setRole(UserSecurity.Role.ROLE_PLAYER);
         }
         if (dtoForSave.isUsing2FA()) {
-            entity.setSecret(tokenLinkService.generate2FAToken());
+            entitySecurity.setSecret(tokenLinkService.generate2FAToken());
         }
-        entity.setActive(false);
+        entitySecurity.setActive(false);
+        UserSecurity createdSecurity = userSecurityRepository.save(entitySecurity);
+        entity.setUserSecurity(createdSecurity);
         User created = userRepository.save(entity);
         String token = tokenLinkService.generateToken(REGISTER_TOKEN_ACTIVITY_SECONDS);
-//        mailService.sendEmail(created.getEmail(), InternalizationMessageManagerConfig
+//        mailService.sendEmail(created.getEmail(), UserInternalizationMessageManagerConfig
 //                        .getMessage(KEY_FOR_EMAIL_USER_CONFIRMATION_SUBJECT),
-//                String.format(InternalizationMessageManagerConfig
+//                String.format(UserInternalizationMessageManagerConfig
 //                        .getMessage(KEY_FOR_EXCEPTION_ACTIVATE_LINK_PATTERN), host, token, created.getId()));
-        return totpManager.getUriForImage(created.getSecret());
+        return totpManager.getUriForImage(createdSecurity.getSecret());
     }
 
     @Override
     public String loginUser(String username, String password, String code) {
+        Authentication authentication2 = new UsernamePasswordAuthenticationToken(username, password);
         Authentication authentication = authenticationManager
-                .authenticate(new UsernamePasswordAuthenticationToken(username, password));
+                .authenticate(authentication2);
         SecurityContextHolder.getContext().setAuthentication(authentication);
         UserAppDetails userDetails = (UserAppDetails) authentication.getPrincipal();
         UserDtoForResponse dtoForResponse = getByEmail(userDetails.getUsername());
@@ -160,7 +170,8 @@ public class UserService implements UserServiceFacade, UserDetailsService {
         User user = userRepository.findByEmail(username)
                 .orElseThrow(() -> new UserNotFoundException(UserInternalizationMessageManagerConfig
                         .getExceptionMessage(KEY_FOR_EXCEPTION_USER_NOT_FOUND)));
-        if (!totpManager.verifyCode(code, user.getSecret())) {
+        UserSecurity userSecurity = user.getUserSecurity();
+        if (!totpManager.verifyCode(code, userSecurity.getSecret())) {
             throw new UserException("Code is incorrect");
         }
     }
@@ -170,8 +181,9 @@ public class UserService implements UserServiceFacade, UserDetailsService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException(UserInternalizationMessageManagerConfig
                         .getExceptionMessage(KEY_FOR_EXCEPTION_USER_NOT_FOUND)));
-        user.setActive(true);
-        userRepository.save(user);
+        UserSecurity userSecurity = user.getUserSecurity();
+        userSecurity.setActive(true);
+        userSecurityRepository.save(userSecurity);
     }
 
     @Override
@@ -192,8 +204,9 @@ public class UserService implements UserServiceFacade, UserDetailsService {
                 .orElseThrow(() -> new UserNotFoundException(UserInternalizationMessageManagerConfig
                         .getExceptionMessage(KEY_FOR_EXCEPTION_USER_NOT_FOUND)));
         String encodedPassword = passwordEncoder.encode(newPassword);
-        user.setPassword(encodedPassword);
-        userRepository.save(user);
+        UserSecurity userSecurity = user.getUserSecurity();
+        userSecurity.setPassword(encodedPassword);
+        userSecurityRepository.save(userSecurity);
     }
 
     @Override
@@ -201,13 +214,14 @@ public class UserService implements UserServiceFacade, UserDetailsService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException(UserInternalizationMessageManagerConfig
                         .getExceptionMessage(KEY_FOR_EXCEPTION_USER_NOT_FOUND)));
-        if (!passwordEncoder.matches(oldPassword, user.getPassword())) {
+        UserSecurity userSecurity = user.getUserSecurity();
+        if (!passwordEncoder.matches(oldPassword, userSecurity.getPassword())) {
             throw new UserException(UserInternalizationMessageManagerConfig
                     .getExceptionMessage(KEY_FOR_EXCEPTION_WRONG_OLD_PASSWORD));
         }
         String encodedPassword = passwordEncoder.encode(newPassword);
-        user.setPassword(encodedPassword);
-        userRepository.save(user);
+        userSecurity.setPassword(encodedPassword);
+        userSecurityRepository.save(userSecurity);
     }
 
     @Override

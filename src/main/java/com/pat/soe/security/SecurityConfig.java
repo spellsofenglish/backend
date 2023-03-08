@@ -24,11 +24,11 @@ import org.springframework.web.servlet.HandlerExceptionResolver;
 //@EnableMethodSecurity
 public class SecurityConfig {
     private final UserService userService;
-//    @Autowired
-//    private AuthEntryPointJwt unauthorizedHandler;
-//    @Autowired
-//    @Qualifier("handlerExceptionResolver")
-//    private HandlerExceptionResolver resolver;
+    @Autowired
+    private AuthEntryPointJwt unauthorizedHandler;
+    @Autowired
+    @Qualifier("handlerExceptionResolver")
+    private HandlerExceptionResolver resolver;
 
     @Autowired
     public SecurityConfig(@Lazy UserService userService) {
@@ -37,29 +37,31 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-//        http.cors()
-//                .and().csrf().disable()
-////                .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
-//                .authorizeHttpRequests()
-//                .requestMatchers("/api/v1.0/auth/**").permitAll()
-////                .requestMatchers("/**").permitAll()
-//                .anyRequest().authenticated()
-//                .and()
-//                .oauth2Login();
-//
-////        http.authenticationProvider(authenticationProvider());
-////
-////        http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
-//
-//        return http.build();
-        return http
+        http.cors()
+                .and().csrf().disable()
+                .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
                 .authorizeHttpRequests()
                 .requestMatchers("/api/v1.0/auth/**").permitAll()
+//                .requestMatchers("/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
-                .oauth2Login()
-                .and()
-                .build();
+                .oauth2Login();
+
+        http.authenticationProvider(authenticationProvider());
+
+        http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
+
+        return http.build();
+//        return http.cors().and().csrf().disable()
+//                .authorizeHttpRequests()
+//                .requestMatchers("/api/v1.0/auth/**").permitAll()
+//                .anyRequest().authenticated()
+//                .and()
+//                .oauth2Client()
+//                .and()
+//                .oauth2Login()
+//                .and()
+//                .build();
     }
 
     @Bean

@@ -25,29 +25,25 @@ import java.util.Map;
 @Component
 @Order(1)
 public class GoogleFilter extends OncePerRequestFilter {
-    @Autowired
-    private JwtUtils jwtUtils;
-    @Autowired
-    private UserDetailsService userService;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
         try {
-            SecurityContext context = SecurityContextHolder.getContext();
-            Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-//                UserDetails jwt =  principal.;
+            OAuth2AuthenticationToken oAuth2AuthenticationToken = (OAuth2AuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
+            boolean check = oAuth2AuthenticationToken.isAuthenticated();
+            String regId = oAuth2AuthenticationToken.getAuthorizedClientRegistrationId();
+            if(check && regId.equals("google")){
+//                response.sendRedirect("api/v1.0/auth/registrationGoogle");
+                String name = oAuth2AuthenticationToken.getPrincipal().getAttributes().get("name").toString();
+                String email = oAuth2AuthenticationToken.getPrincipal().getAttributes().get("email").toString();
+//                response.sendRedirect("/api/v1.0/auth/registrationGoogle");
 
+            }
         } catch (Exception e) {
             new UserException("Cannot set user authentication");
         }
 
-//        filterChain.doFilter(request, response);
+        filterChain.doFilter(request, response);
     }
-
-//    private String parseJwt(HttpServletRequest request) {
-//
-//        String jwt = jwtUtils.getJwtFromCookies(request);
-//        return jwt;
-//    }
 }
