@@ -6,7 +6,7 @@ CREATE TABLE IF NOT EXISTS users
     nick_name           CHARACTER VARYING(100),
     results             CHARACTER VARYING(100),
     "role"              CHARACTER VARYING(50)  NOT NULL,
-    is_active           BOOLEAN                NOT NULL DEFAULT TRUE,
+    is_active           BOOLEAN                NOT NULL DEFAULT FALSE,
     is_using_2FA        BOOLEAN                NOT NULL DEFAULT FALSE,
     secret              CHARACTER VARYING(100)
 );
