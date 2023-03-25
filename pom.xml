@@ -9,7 +9,7 @@
         <relativePath/>
     </parent>
     <groupId>com.pat</groupId>
-    <artifactId>languageGame</artifactId>
+    <artifactId>SpellsOfEnglish</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>languageGame</name>
     <description>languageGame for Spring Boot</description>
