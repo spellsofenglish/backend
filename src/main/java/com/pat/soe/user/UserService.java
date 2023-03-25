@@ -16,7 +16,7 @@ public interface UserService {
 
     void delete(Long id);
 
-    String registerUser(UserDtoForSave dto);
+    void registerUser(UserDtoForSave dto);
 
     String loginUser(String username, String password, String code);
 

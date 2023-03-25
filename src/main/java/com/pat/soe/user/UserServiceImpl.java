@@ -1,7 +1,6 @@
 package com.pat.soe.user;
 
 import com.pat.soe.security.JwtUtils;
-import com.pat.soe.security.TotpManager;
 import com.pat.soe.mail.MailService;
 import com.pat.soe.token.TokenLinkService;
 import com.pat.soe.user.exception.UserNotFoundException;
@@ -33,7 +32,6 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     private final MailService mailService;
     private final AuthenticationManager authenticationManager;
     private final JwtUtils jwtUtils;
-    private final TotpManager totpManager;
 
     @Value("${app.host}")
     private String host;
@@ -116,7 +114,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public String registerUser(UserDtoForSave dtoForSave) {
+    public void registerUser(UserDtoForSave dtoForSave) {
         Optional<User> existing = userRepository.findByEmail(dtoForSave.getEmail());
         if (existing.isPresent()) {
             throw new UserException(String.format(UserInternalizationMessageManagerConfig
@@ -129,9 +127,6 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         if (entity.getRole() == null) {
             entity.setRole(User.Role.PLAYER);
         }
-        if (dtoForSave.isUsing2FA()) {
-            entity.setSecret(tokenLinkService.generate2FAToken());
-        }
         entity.setActive(false);
         User created = userRepository.save(entity);
         String token = tokenLinkService.generateToken(REGISTER_TOKEN_ACTIVITY_SECONDS);
@@ -139,7 +134,6 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 //                        .getMessage(KEY_FOR_EMAIL_USER_CONFIRMATION_SUBJECT),
 //                String.format(InternalizationMessageManagerConfig
 //                        .getMessage(KEY_FOR_EXCEPTION_ACTIVATE_LINK_PATTERN), host, token, created.getId()));
-        return totpManager.getUriForImage(created.getSecret());
     }
 
     @Override
@@ -160,9 +154,6 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         User user = userRepository.findByEmail(username)
                 .orElseThrow(() -> new UserNotFoundException(UserInternalizationMessageManagerConfig
                         .getExceptionMessage(KEY_FOR_EXCEPTION_USER_NOT_FOUND)));
-        if (!totpManager.verifyCode(code, user.getSecret())) {
-            throw new UserException("Code is incorrect");
-        }
     }
 
     @Override

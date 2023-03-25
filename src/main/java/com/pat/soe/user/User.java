@@ -46,12 +46,6 @@ public class User {
     @Column(name = "is_active")
     private boolean isActive;
 
-    @Column(name = "secret")
-    private String secret;
-
-    @Column(name = "is_using_2FA")
-    private boolean isUsing2FA;
-
     public enum Role {
         PLAYER, MANAGER, ADMINISTRATOR
     }

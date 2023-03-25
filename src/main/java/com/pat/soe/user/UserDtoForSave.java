@@ -10,6 +10,4 @@ public class UserDtoForSave {
     private String result;
     private RoleDto role;
     private boolean isActive;
-    private String secret;
-    private boolean isUsing2FA;
 }

@@ -1,6 +1,5 @@
 package com.pat.soe.token;
 
-import com.pat.soe.security.TotpManager;
 import com.pat.soe.user.exception.UserNotFoundException;
 import com.pat.soe.user.exception.UserException;
 import lombok.RequiredArgsConstructor;
@@ -18,23 +17,11 @@ public class TokenLinkServiceImpl implements TokenLinkService {
     public static String QR_PREFIX = "https://chart.googleapis.com/chart?chs=200x200&chld=M%%7C0&cht=qr&chl=";
 
     private final TokenLinkRepository tokenLinkRepository;
-    private final TotpManager totpManager;
-
     @Override
     public String generateToken(int seconds) {
         TokenLink tokenLink = setTokenLink(seconds);
         tokenLinkRepository.save(tokenLink);
         return tokenLink.getToken();
-    }
-
-    @Override
-    public String generate2FAToken() {
-        return totpManager.generateSecret();
-    }
-
-    @Override
-    public String generateQR(String secret) {
-        return totpManager.getUriForImage(secret);
     }
 
     @Override

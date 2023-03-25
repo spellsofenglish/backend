@@ -1,7 +1,6 @@
 package com.pat.soe.rest;
 
 import com.pat.soe.security.JwtUtils;
-import com.pat.soe.security.TotpManager;
 import com.pat.soe.token.TokenLinkService;
 import com.pat.soe.user.UserService;
 import com.pat.soe.user.UserDtoForAuth;
@@ -37,8 +36,6 @@ public class AuthRestController {
     private final JwtUtils jwtUtils;
     private final TokenLinkService tokenLinkService;
 
-    private final TotpManager totpManager;
-
     @PostMapping("/login")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody UserDtoForAuth dtoForAuth) {
         String cooke = userService.loginUser(dtoForAuth.getEmail(), dtoForAuth.getPassword(), dtoForAuth.getSecret());
@@ -58,12 +55,6 @@ public class AuthRestController {
     public ResponseEntity<?> performRegistration(@RequestBody UserDtoForSave user, Model model) {
         userService.registerUser(user);
         return new ResponseEntity<>(CONFIRMATION_MESSAGE, HttpStatus.OK);
-    }
-
-    @PostMapping("/registration2fa")
-    public ResponseEntity<?> performRegistration2fa(@RequestBody UserDtoForSave user, Model model) {
-        String image = userService.registerUser(user);
-        return ResponseEntity.ok().body(image);
     }
 
     @GetMapping("/activate/{token}/{userId}")
