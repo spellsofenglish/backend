@@ -44,7 +44,8 @@ public class JwtCsrfFilter extends OncePerRequestFilter {
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
         } catch (Exception e) {
-            new UserException("Cannot set user authentication");
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST,
+                    "Invalid JWT Token");
         }
 
         filterChain.doFilter(request, response);
