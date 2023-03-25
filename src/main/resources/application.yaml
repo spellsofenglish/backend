@@ -44,9 +44,9 @@ spring:
     hibernate:
       ddl-auto: validate
   mail:
-    host:
-    port:
-    username:
+    host: ${HOST_MAIL}
+    port: ${PORT_MAIL}
+    username: ${LOGIN_MAIL}
 server:
   port: 8080
   error:
