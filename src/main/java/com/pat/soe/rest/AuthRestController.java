@@ -38,7 +38,7 @@ public class AuthRestController {
 
     @PostMapping("/login")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody UserDtoForAuth dtoForAuth) {
-        String cooke = userService.loginUser(dtoForAuth.getEmail(), dtoForAuth.getPassword(), dtoForAuth.getSecret());
+        String cooke = userService.loginUser(dtoForAuth.getEmail(), dtoForAuth.getPassword());
         UserDtoForResponse dtoForResponse = userService.getByEmail(dtoForAuth.getEmail());
         return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, cooke)
                 .body(dtoForResponse);

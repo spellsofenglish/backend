@@ -137,15 +137,12 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public String loginUser(String username, String password, String code) {
+    public String loginUser(String username, String password) {
         Authentication authentication = authenticationManager
                 .authenticate(new UsernamePasswordAuthenticationToken(username, password));
         SecurityContextHolder.getContext().setAuthentication(authentication);
         UserAppDetails userDetails = (UserAppDetails) authentication.getPrincipal();
         UserDtoForResponse dtoForResponse = getByEmail(userDetails.getUsername());
-        if (dtoForResponse.isUsing2FA()) {
-            verify(username, code);
-        }
         return jwtUtils.generateJwtCookie(userDetails).toString();
     }
 

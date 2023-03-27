@@ -18,7 +18,7 @@ public interface UserService {
 
     void registerUser(UserDtoForSave dto);
 
-    String loginUser(String username, String password, String code);
+    String loginUser(String username, String password);
 
     void verify(String username, String code);
 
