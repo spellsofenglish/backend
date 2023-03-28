@@ -39,3 +39,6 @@ UserMapperImpl.java
 .mvn
 mvnw
 mvnw.cmd
+
+### ENV SENSETIVE DATA ###
+dev.env
