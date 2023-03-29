@@ -20,10 +20,10 @@ FROM maven:3.8-openjdk-18-slim
 ENV SPRING_PROFILES_ACTIVE=development
 
 # Database settings
-DRIVER_DB=org.postgresql.Driver
-URL_DB=jdbc:postgresql://postgres:5432/spellsofenglish
-LOGIN_DB=dbuser
-PASSWORD_DB=dbpassword
+ENV DRIVER_DB=org.postgresql.Driver
+ENV URL_DB=jdbc:postgresql://postgres:5432/spellsofenglish
+ENV LOGIN_DB=dbuser
+ENV PASSWORD_DB=dbpassword
 
 # Mail
 ENV HOST_MAIL=localhost
