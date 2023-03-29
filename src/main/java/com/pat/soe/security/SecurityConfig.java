@@ -39,7 +39,7 @@ public class SecurityConfig {
         http.cors().and().csrf().disable()
                 .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
                 .authorizeHttpRequests()
-                .requestMatchers("/api/${app.version}/auth/**").permitAll()
+                .requestMatchers("/api/v0.0.1/auth/**").permitAll()
 //                .requestMatchers("/**").permitAll()
                 .anyRequest().authenticated();
 
