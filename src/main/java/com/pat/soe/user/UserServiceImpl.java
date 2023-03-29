@@ -130,10 +130,10 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         entity.setActive(false);
         User created = userRepository.save(entity);
         String token = tokenLinkService.generateToken(REGISTER_TOKEN_ACTIVITY_SECONDS);
-//        mailService.sendEmail(created.getEmail(), InternalizationMessageManagerConfig
-//                        .getMessage(KEY_FOR_EMAIL_USER_CONFIRMATION_SUBJECT),
-//                String.format(InternalizationMessageManagerConfig
-//                        .getMessage(KEY_FOR_EXCEPTION_ACTIVATE_LINK_PATTERN), host, token, created.getId()));
+        mailService.sendEmail(created.getEmail(), UserInternalizationMessageManagerConfig
+                        .getMessage(KEY_FOR_EMAIL_USER_CONFIRMATION_SUBJECT),
+                String.format(UserInternalizationMessageManagerConfig
+                        .getMessage(KEY_FOR_EXCEPTION_ACTIVATE_LINK_PATTERN), host, token, created.getId()));
     }
 
     @Override
