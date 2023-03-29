@@ -16,6 +16,25 @@ RUN mvn clean install -Dmaven.test.skip=true
 #Stage 2
 # set base image for second stage
 FROM maven:3.8-openjdk-18-slim
+# Common env
+ENV SPRING_PROFILES_ACTIVE=development
+
+# Database settings
+DRIVER_DB=org.postgresql.Driver
+URL_DB=jdbc:postgresql://postgres:5432/spellsofenglish
+LOGIN_DB=dbuser
+PASSWORD_DB=dbpassword
+
+# Mail
+ENV HOST_MAIL=localhost
+ENV PORT_MAIL=2525
+ENV LOGIN_MAIL=login@example.com
+
+# Postgresql
+ENV POSTGRES_DB=spellsofenglish
+ENV POSTGRES_USER=dbuser
+ENV POSTGRES_PASSWORD=dbpassword
+
 # set deployment directory
 WORKDIR /app
 # copy over the built artifact from the maven image
