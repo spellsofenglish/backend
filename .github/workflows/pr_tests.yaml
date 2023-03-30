@@ -26,13 +26,13 @@ jobs:
         with:
           java-version: ${{ env.JAVA_VERSION }}
           maven-version: ${{ env.MAVEN_VERSION }}
-      - uses: actions/cache
+      - name: Cache local Maven repository
+        uses: actions/cache@v3
         with:
-          path: |
-            ${{ inputs.cache-path }}
-            ${{ inputs.cache-path-add }}
-          key: ${{ inputs.cache-prefix }}${{ runner.os }}-jdk${{ inputs.java-version }}-${{ inputs.java-distribution }}-maven${{ inputs.maven-version }}-${{ hashFiles('**/pom.xml') }}
-          restore-keys: ${{ inputs.cache-prefix }}${{ runner.os }}-jdk${{ inputs.java-version }}-${{ inputs.java-distribution }}-maven${{ inputs.maven-version }}-
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
       - name: Maven Test
         continue-on-error: true #Allow failure
         run: |
