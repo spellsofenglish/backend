@@ -10,6 +10,11 @@ env:
   JAVA_VERSION: '17.0.6+10'
   MAVEN_VERSION: '3.8.7'
   MAVEN_OPTS: "-XX:+TieredCompilation -XX:TieredStopAtLevel=1"
+  SPRING_PROFILES_ACTIVE: development
+  DRIVER_DB: org.postgresql.Driver
+  URL_DB: jdbc:postgresql://127.0.0.1:5432/spellsofenglish
+  LOGIN_DB: dbuser
+  PASSWORD_DB: ${{ env.DB_PASSWORD }}
 
 jobs:
   tests:
@@ -21,7 +26,13 @@ jobs:
         with:
           java-version: ${{ env.JAVA_VERSION }}
           maven-version: ${{ env.MAVEN_VERSION }}
-
+      - uses: actions/cache
+        with:
+          path: |
+            ${{ inputs.cache-path }}
+            ${{ inputs.cache-path-add }}
+          key: ${{ inputs.cache-prefix }}${{ runner.os }}-jdk${{ inputs.java-version }}-${{ inputs.java-distribution }}-maven${{ inputs.maven-version }}-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ inputs.cache-prefix }}${{ runner.os }}-jdk${{ inputs.java-version }}-${{ inputs.java-distribution }}-maven${{ inputs.maven-version }}-
       - name: Maven Test
         continue-on-error: true #Allow failure
         run: |
