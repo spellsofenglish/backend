@@ -8,6 +8,7 @@ on:
 env:
   # Java
   JAVA_VERSION: 1.17
+  MAVEN_VERSION: 3.8
   MAVEN_OPTS: "-XX:+TieredCompilation -XX:TieredStopAtLevel=1"
 
 jobs:
@@ -15,11 +16,11 @@ jobs:
     runs-on: self-hosted
     steps:
       - uses: actions/checkout@v3
-
-      - name: Setup Java JDK
-        uses: actions/setup-java@v1.4.3
+      - name: Setup Maven Action
+        uses: s4u/setup-maven-action@v1.7.0
         with:
           java-version: ${{ env.JAVA_VERSION }}
+          maven-version: ${{ env.MAVEN_VERSION }}
 
       - name: Maven Test
         continue-on-error: true #Allow failure
