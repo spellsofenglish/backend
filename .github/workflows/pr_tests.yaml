@@ -12,7 +12,7 @@ env:
   MAVEN_OPTS: "-XX:+TieredCompilation -XX:TieredStopAtLevel=1"
   SPRING_PROFILES_ACTIVE: development
   DRIVER_DB: org.postgresql.Driver
-  URL_DB: jdbc:postgresql://127.0.0.1:5432/spellsofenglish
+  URL_DB: jdbc:postgresql://postgres:5432/spellsofenglish
   LOGIN_DB: dbuser
   PASSWORD_DB: ${{ secrets.DB_PASSWORD }}
   HOST_MAIL: 127.0.0.1
@@ -22,13 +22,27 @@ env:
 jobs:
   tests:
     runs-on: self-hosted
+    container: maven:3.8-openjdk-18-slim
+
+    # Service containers to run with `container-job`
+    services:
+      # Label used to access the service container
+      postgres:
+        # Docker Hub image
+        image: postgres
+        # Provide the password for postgres
+        env:
+          POSTGRES_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          POSTGRES_DB: spellsofenglish
+          POSTGRES_USER: dbuser
+        # Set health checks to wait until postgres has started
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
     steps:
       - uses: actions/checkout@v3
-      - name: Setup Maven Action
-        uses: s4u/setup-maven-action@v1.7.0
-        with:
-          java-version: ${{ env.JAVA_VERSION }}
-          maven-version: ${{ env.MAVEN_VERSION }}
       - name: Cache local Maven repository
         uses: actions/cache@v3
         with:
