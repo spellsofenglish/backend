@@ -8,7 +8,7 @@ on:
 env:
   # Java
   JAVA_VERSION: '17.0.6+10'
-  MAVEN_VERSION: 3.8
+  MAVEN_VERSION: '3.8.7'
   MAVEN_OPTS: "-XX:+TieredCompilation -XX:TieredStopAtLevel=1"
 
 jobs:
