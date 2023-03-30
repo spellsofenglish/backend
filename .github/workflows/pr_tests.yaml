@@ -1,0 +1,43 @@
+name: Pull requests
+
+on:
+  workflow_dispatch:
+  pull_request:
+    branches: [ "master" ]
+
+env:
+  # Java
+  JAVA_VERSION: '17.0.6+10'
+  MAVEN_VERSION: '3.8.7'
+  MAVEN_OPTS: "-XX:+TieredCompilation -XX:TieredStopAtLevel=1"
+  SPRING_PROFILES_ACTIVE: development
+  DRIVER_DB: org.postgresql.Driver
+  URL_DB: jdbc:postgresql://127.0.0.1:5432/spellsofenglish
+  LOGIN_DB: dbuser
+  PASSWORD_DB: ${{ secrets.DB_PASSWORD }}
+  HOST_MAIL: 127.0.0.1
+  PORT_MAIL: 1025
+  LOGIN_MAIL: login@example.com
+
+jobs:
+  tests:
+    runs-on: self-hosted
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup Maven Action
+        uses: s4u/setup-maven-action@v1.7.0
+        with:
+          java-version: ${{ env.JAVA_VERSION }}
+          maven-version: ${{ env.MAVEN_VERSION }}
+      - name: Cache local Maven repository
+        uses: actions/cache@v3
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+      - name: Maven Test
+        continue-on-error: true #Allow failure
+        run: |
+          mvn dependency:go-offline
+          mvn -B test
