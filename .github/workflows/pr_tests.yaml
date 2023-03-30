@@ -12,7 +12,7 @@ env:
   MAVEN_OPTS: "-XX:+TieredCompilation -XX:TieredStopAtLevel=1"
   SPRING_PROFILES_ACTIVE: development
   DRIVER_DB: org.postgresql.Driver
-  URL_DB: jdbc:postgresql://127.0.0.1:5432/spellsofenglish
+  URL_DB: jdbc:postgresql://127.0.0.1:5433/spellsofenglish
   LOGIN_DB: dbuser
   PASSWORD_DB: ${{ secrets.DB_PASSWORD }}
   HOST_MAIL: 127.0.0.1
