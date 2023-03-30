@@ -14,7 +14,7 @@ env:
   DRIVER_DB: org.postgresql.Driver
   URL_DB: jdbc:postgresql://127.0.0.1:5432/spellsofenglish
   LOGIN_DB: dbuser
-  PASSWORD_DB: ${{ env.DB_PASSWORD }}
+  PASSWORD_DB: ${{ secrets.DB_PASSWORD }}
 
 jobs:
   tests:
