@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("${BASE_PATH:""}/${app.version}/users")
+@RequestMapping("${BASE_PATH}/${app.version}/users")
 @RequiredArgsConstructor
 public class UserRestController {
     private final UserService userService;

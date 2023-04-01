@@ -4,7 +4,7 @@ spring:
       on-profile: development
   springdoc:
     swagger-ui:
-      path=${BASE_PATH/swagger-ui.html:""}
+      path=${BASE_PATH/swagger-ui.html}
   data:
     rest:
       basePath: ${BASE_PATH:/}
@@ -25,7 +25,7 @@ spring:
 server:
   port: 8080
   error:
-    path: ${BASE_PATH:""}/error
+    path: ${BASE_PATH}/error
   compression:
     enabled: true
     mime-types: application/json,application/xml,text/html,text/xml,text/plain,application/javascript,text/css
@@ -57,7 +57,7 @@ spring:
 server:
   port: 8080
   error:
-    path: ${BASE_PATH:""}/error
+    path: ${BASE_PATH}/error
   compression:
     enabled: true
     mime-types: application/json,application/xml,text/html,text/xml,text/plain,application/javascript,text/css
