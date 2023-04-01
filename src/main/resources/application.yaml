@@ -2,6 +2,9 @@ spring:
   config:
     activate:
       on-profile: development
+  springdoc:
+    swagger-ui:
+      path=/swagger-ui.html
   datasource:
     driver-class-name: ${DRIVER_DB}
     url: ${URL_DB}

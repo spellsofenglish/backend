@@ -17,6 +17,7 @@ public class TokenLinkServiceImpl implements TokenLinkService {
     public static String QR_PREFIX = "https://chart.googleapis.com/chart?chs=200x200&chld=M%%7C0&cht=qr&chl=";
 
     private final TokenLinkRepository tokenLinkRepository;
+
     @Override
     public String generateToken(int seconds) {
         TokenLink tokenLink = setTokenLink(seconds);

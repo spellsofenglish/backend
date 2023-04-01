@@ -1,6 +1,5 @@
 package com.pat.soe.security;
 
-import com.pat.soe.user.exception.UserException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
