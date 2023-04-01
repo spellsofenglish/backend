@@ -18,7 +18,7 @@ RUN mvn clean install -Dmaven.test.skip=true
 FROM maven:3.8-openjdk-18-slim
 # Common env
 ENV SPRING_PROFILES_ACTIVE=development
-
+ENV BASE_PATH=/api
 # Database settings
 ENV DRIVER_DB=org.postgresql.Driver
 ENV URL_DB=jdbc:postgresql://postgres:5432/spellsofenglish
@@ -39,6 +39,5 @@ ENV POSTGRES_PASSWORD=dbpassword
 WORKDIR /app
 # copy over the built artifact from the maven image
 COPY --from=stage1 /app/target/ /app/
-RUN ls -la /app/
 # entrypoint
 ENTRYPOINT ["java", "-jar", "SpellsOfEnglish-0.0.1-SNAPSHOT.jar"]

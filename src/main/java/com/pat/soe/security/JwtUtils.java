@@ -38,11 +38,11 @@ public class JwtUtils {
 
     public ResponseCookie generateJwtCookie(UserAppDetails userPrincipal) {
         String jwt = generateTokenFromUsername(userPrincipal.getUsername());
-        return ResponseCookie.from(jwtCookie, jwt).path("/api").maxAge(24 * 60 * 60).httpOnly(true).build();
+        return ResponseCookie.from(jwtCookie, jwt).path("${BASE_PATH:/}").maxAge(24 * 60 * 60).httpOnly(true).build();
     }
 
     public ResponseCookie getCleanJwtCookie() {
-        return ResponseCookie.from(jwtCookie, null).path("/api").build();
+        return ResponseCookie.from(jwtCookie, null).path("${BASE_PATH:/}").build();
     }
 
     public String getUserNameFromJwtToken(String token) {

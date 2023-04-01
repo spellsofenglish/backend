@@ -38,8 +38,8 @@ public class SecurityConfig {
         http.cors().and().csrf().disable()
                 .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
                 .authorizeHttpRequests()
-                .requestMatchers("/api/v0.0.1/auth/**").permitAll()
-                .requestMatchers("/swagger-ui/**", "/swagger-ui.html", "/v3/api-docs/**").permitAll()
+                .requestMatchers("${BASE_PATH:""}/v0.0.1/auth/**").permitAll()
+                .requestMatchers("${BASE_PATH:""}/swagger-ui/**", "${BASE_PATH:""}/swagger-ui.html", "${BASE_PATH:""}/v3/api-docs/**").permitAll()
 //                .requestMatchers("/**").permitAll()
                 .anyRequest().authenticated();
 
