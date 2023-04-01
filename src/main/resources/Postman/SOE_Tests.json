@@ -1,386 +1,386 @@
 {
-	"info": {
-		"_postman_id": "01ad31fb-4584-4d18-8eb2-d55fcccfd98f",
-		"name": "SpellsOfEnglish",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "22069059"
-	},
-	"item": [
-		{
-			"name": "createUserPositive",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"pm.test(\"Status code is 200\", function () {\r",
-							"    pm.response.to.have.status(200);\r",
-							"});"
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"email\": \"{{$randomEmail}}\",\r\n    \"password\": 1111,\r\n    \"nickName\": \"Baron\"\r\n}\r\n",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "http://{{LocalHost}}/{{ApiRest}}/{{Auth}}/registration",
-					"protocol": "http",
-					"host": [
-						"{{LocalHost}}"
-					],
-					"path": [
-						"{{ApiRest}}",
-						"{{Auth}}",
-						"registration"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "createUserGooglePositive",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"pm.test(\"Status code is 200\", function () {\r",
-							"    pm.response.to.have.status(200);\r",
-							"});"
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "eyJhbGciOiJSUzI1NiIsImtpZCI6ImQyNWY4ZGJjZjk3ZGM3ZWM0MDFmMDE3MWZiNmU2YmRhOWVkOWU3OTIiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJhY2NvdW50cy5nb29nbGUuY29tIiwiYXpwIjoiNDA0ODQ2MTYxNjMyLTBlZzk0NWc2MjZoczFvcGhtZWZrcDZ2MGdrazU2ZXU3LmFwcHMuZ29vZ2xldXNlcmNvbnRlbnQuY29tIiwiYXVkIjoiNDA0ODQ2MTYxNjMyLTBlZzk0NWc2MjZoczFvcGhtZWZrcDZ2MGdrazU2ZXU3LmFwcHMuZ29vZ2xldXNlcmNvbnRlbnQuY29tIiwic3ViIjoiMTAyNjkzNDg4NDgxMTA3ODA2MDg1IiwiZW1haWwiOiJnYWxpYW5hLnNpZG9yaWtAZ21haWwuY29tIiwiZW1haWxfdmVyaWZpZWQiOnRydWUsImF0X2hhc2giOiJlbjl1OEhoU19zeTJiVGpuS2JEMGtnIiwiaWF0IjoxNjc3NDEyNTQwLCJleHAiOjE2Nzc0MTYxNDB9.pnydZaS51gMg84sjQ_UihbDAnCN1uu1UXjYVbZtwKAJ4Xqnk79strwV6hTxY-oZcus4Upf9k_-mLTnHdB9WX7MWw0LjAdfBtF5cfEmT4PgkRLOF1p2aGZBtx7VYWFu9lhNpGYDxKF3aUd3Qz3jKOgP3KVy2sXhXJ1lHgZNsvEYC8s7p6csvh9TLfDxXGCjJDZtcpMtMi_JERUYz8Ot857tiWMGJvOrJofgYbTtMgeOhM_YNvzuhqwE2SEFvI6ahFzhh2stloIQTJYS25YfGlqUujO28uRghOhbYITP-84j_t9yJnJFrHSWhqWSExthaf4BvbK62lbwC6itAxVoC8kA",
-							"type": "string"
-						}
-					]
-				},
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"email\": \"{{$randomEmail}}\",\r\n    \"password\": 1111,\r\n    \"nickName\": \"Baron\"\r\n}\r\n",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "http://{{LocalHost}}/{{ApiRest}}/{{Auth}}/registrationGoogle",
-					"protocol": "http",
-					"host": [
-						"{{LocalHost}}"
-					],
-					"path": [
-						"{{ApiRest}}",
-						"{{Auth}}",
-						"registrationGoogle"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "createUser2FAPositive",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"pm.test(\"Status code is 500\", function () {\r",
-							"    pm.response.to.have.status(500);\r",
-							"});"
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"email\": \"{{$randomEmail}}\",\r\n    \"password\": 1111,\r\n    \"nickName\": \"Baron\",\r\n    \"result\": null,\r\n    \"role\": \"PLAYER\",\r\n    \"secret\": null,\r\n    \"active\": true,\r\n    \"using2FA\": true\r\n}\r\n",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "http://{{LocalHost}}/{{ApiRest}}/{{Auth}}/registration",
-					"protocol": "http",
-					"host": [
-						"{{LocalHost}}"
-					],
-					"path": [
-						"{{ApiRest}}",
-						"{{Auth}}",
-						"registration"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "getAllUsersPositive",
-			"protocolProfileBehavior": {
-				"disableBodyPruning": true
-			},
-			"request": {
-				"method": "GET",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"course\": {\r\n        \"title\": \"course_test_Postman\"\r\n    },\r\n    \"user\": {\r\n        \"email\": \"Postman@Gmail.com\"\r\n    },\r\n    \"statusReq\": \"ASSEMBLED\",\r\n    \"deleted\": false\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "http://{{LocalHost}}/{{ApiRest}}/users",
-					"protocol": "http",
-					"host": [
-						"{{LocalHost}}"
-					],
-					"path": [
-						"{{ApiRest}}",
-						"users"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "getByIdUsersPositive",
-			"protocolProfileBehavior": {
-				"disableBodyPruning": true
-			},
-			"request": {
-				"method": "GET",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"course\": {\r\n        \"title\": \"course_test_Postman\"\r\n    },\r\n    \"user\": {\r\n        \"email\": \"Postman@Gmail.com\"\r\n    },\r\n    \"statusReq\": \"ASSEMBLED\",\r\n    \"deleted\": false\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "http://{{LocalHost}}/{{ApiRest}}/users/13",
-					"protocol": "http",
-					"host": [
-						"{{LocalHost}}"
-					],
-					"path": [
-						"{{ApiRest}}",
-						"users",
-						"13"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "loginRESTNegative",
-			"request": {
-				"auth": {
-					"type": "basic",
-					"basic": [
-						{
-							"key": "password",
-							"value": "111",
-							"type": "string"
-						},
-						{
-							"key": "username",
-							"value": "fwef",
-							"type": "string"
-						}
-					]
-				},
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"email\":\"Reiy8@gmail.com\",\r\n    \"password\": 1111\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "http://{{LocalHost}}/{{ApiRest}}/{{Auth}}/login",
-					"protocol": "http",
-					"host": [
-						"{{LocalHost}}"
-					],
-					"path": [
-						"{{ApiRest}}",
-						"{{Auth}}",
-						"login"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "loginREST2FAPositive",
-			"request": {
-				"auth": {
-					"type": "basic",
-					"basic": [
-						{
-							"key": "username",
-							"value": "Margarette_Ritchie18@hotmail.com",
-							"type": "string"
-						},
-						{
-							"key": "password",
-							"value": "1111",
-							"type": "string"
-						}
-					]
-				},
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"email\":\"Mose62@hotmail.com\",\r\n    \"password\": 1111,\r\n    \"secret\": 912806\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "http://{{LocalHost}}/{{ApiRest}}/{{Auth}}/login",
-					"protocol": "http",
-					"host": [
-						"{{LocalHost}}"
-					],
-					"path": [
-						"{{ApiRest}}",
-						"{{Auth}}",
-						"login"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "loginRESTPositive",
-			"request": {
-				"auth": {
-					"type": "basic",
-					"basic": [
-						{
-							"key": "username",
-							"value": "Margarette_Ritchie18@hotmail.com",
-							"type": "string"
-						},
-						{
-							"key": "password",
-							"value": "1111",
-							"type": "string"
-						}
-					]
-				},
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"email\":\"Hilton.Armstrong@gmail.com\",\r\n    \"password\": 1111\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "http://{{LocalHost}}/{{ApiRest}}/{{Auth}}/login",
-					"protocol": "http",
-					"host": [
-						"{{LocalHost}}"
-					],
-					"path": [
-						"{{ApiRest}}",
-						"{{Auth}}",
-						"login"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "signoutRESTPositive",
-			"request": {
-				"auth": {
-					"type": "basic",
-					"basic": [
-						{
-							"key": "username",
-							"value": "Margarette_Ritchie18@hotmail.com",
-							"type": "string"
-						},
-						{
-							"key": "password",
-							"value": "1111",
-							"type": "string"
-						}
-					]
-				},
-				"method": "POST",
-				"header": [],
-				"url": {
-					"raw": "http://{{LocalHost}}/{{ApiRest}}/{{Auth}}/signout",
-					"protocol": "http",
-					"host": [
-						"{{LocalHost}}"
-					],
-					"path": [
-						"{{ApiRest}}",
-						"{{Auth}}",
-						"signout"
-					]
-				}
-			},
-			"response": []
-		}
-	],
-	"variable": [
-		{
-			"key": "ApiRest",
-			"value": "api/v1.0"
-		},
-		{
-			"key": "Auth",
-			"value": "auth"
-		}
-	]
+  "info": {
+    "_postman_id": "01ad31fb-4584-4d18-8eb2-d55fcccfd98f",
+    "name": "SpellsOfEnglish",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "22069059"
+  },
+  "item": [
+    {
+      "name": "createUserPositive",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {\r",
+              "    pm.response.to.have.status(200);\r",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"email\": \"{{$randomEmail}}\",\r\n    \"password\": 1111,\r\n    \"nickName\": \"Baron\"\r\n}\r\n",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://{{LocalHost}}/{{ApiRest}}/{{Auth}}/registration",
+          "protocol": "http",
+          "host": [
+            "{{LocalHost}}"
+          ],
+          "path": [
+            "{{ApiRest}}",
+            "{{Auth}}",
+            "registration"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "createUserGooglePositive",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {\r",
+              "    pm.response.to.have.status(200);\r",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJSUzI1NiIsImtpZCI6ImQyNWY4ZGJjZjk3ZGM3ZWM0MDFmMDE3MWZiNmU2YmRhOWVkOWU3OTIiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJhY2NvdW50cy5nb29nbGUuY29tIiwiYXpwIjoiNDA0ODQ2MTYxNjMyLTBlZzk0NWc2MjZoczFvcGhtZWZrcDZ2MGdrazU2ZXU3LmFwcHMuZ29vZ2xldXNlcmNvbnRlbnQuY29tIiwiYXVkIjoiNDA0ODQ2MTYxNjMyLTBlZzk0NWc2MjZoczFvcGhtZWZrcDZ2MGdrazU2ZXU3LmFwcHMuZ29vZ2xldXNlcmNvbnRlbnQuY29tIiwic3ViIjoiMTAyNjkzNDg4NDgxMTA3ODA2MDg1IiwiZW1haWwiOiJnYWxpYW5hLnNpZG9yaWtAZ21haWwuY29tIiwiZW1haWxfdmVyaWZpZWQiOnRydWUsImF0X2hhc2giOiJlbjl1OEhoU19zeTJiVGpuS2JEMGtnIiwiaWF0IjoxNjc3NDEyNTQwLCJleHAiOjE2Nzc0MTYxNDB9.pnydZaS51gMg84sjQ_UihbDAnCN1uu1UXjYVbZtwKAJ4Xqnk79strwV6hTxY-oZcus4Upf9k_-mLTnHdB9WX7MWw0LjAdfBtF5cfEmT4PgkRLOF1p2aGZBtx7VYWFu9lhNpGYDxKF3aUd3Qz3jKOgP3KVy2sXhXJ1lHgZNsvEYC8s7p6csvh9TLfDxXGCjJDZtcpMtMi_JERUYz8Ot857tiWMGJvOrJofgYbTtMgeOhM_YNvzuhqwE2SEFvI6ahFzhh2stloIQTJYS25YfGlqUujO28uRghOhbYITP-84j_t9yJnJFrHSWhqWSExthaf4BvbK62lbwC6itAxVoC8kA",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"email\": \"{{$randomEmail}}\",\r\n    \"password\": 1111,\r\n    \"nickName\": \"Baron\"\r\n}\r\n",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://{{LocalHost}}/{{ApiRest}}/{{Auth}}/registrationGoogle",
+          "protocol": "http",
+          "host": [
+            "{{LocalHost}}"
+          ],
+          "path": [
+            "{{ApiRest}}",
+            "{{Auth}}",
+            "registrationGoogle"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "createUser2FAPositive",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 500\", function () {\r",
+              "    pm.response.to.have.status(500);\r",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"email\": \"{{$randomEmail}}\",\r\n    \"password\": 1111,\r\n    \"nickName\": \"Baron\",\r\n    \"result\": null,\r\n    \"role\": \"PLAYER\",\r\n    \"secret\": null,\r\n    \"active\": true,\r\n    \"using2FA\": true\r\n}\r\n",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://{{LocalHost}}/{{ApiRest}}/{{Auth}}/registration",
+          "protocol": "http",
+          "host": [
+            "{{LocalHost}}"
+          ],
+          "path": [
+            "{{ApiRest}}",
+            "{{Auth}}",
+            "registration"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "getAllUsersPositive",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"course\": {\r\n        \"title\": \"course_test_Postman\"\r\n    },\r\n    \"user\": {\r\n        \"email\": \"Postman@Gmail.com\"\r\n    },\r\n    \"statusReq\": \"ASSEMBLED\",\r\n    \"deleted\": false\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://{{LocalHost}}/{{ApiRest}}/users",
+          "protocol": "http",
+          "host": [
+            "{{LocalHost}}"
+          ],
+          "path": [
+            "{{ApiRest}}",
+            "users"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "getByIdUsersPositive",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"course\": {\r\n        \"title\": \"course_test_Postman\"\r\n    },\r\n    \"user\": {\r\n        \"email\": \"Postman@Gmail.com\"\r\n    },\r\n    \"statusReq\": \"ASSEMBLED\",\r\n    \"deleted\": false\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://{{LocalHost}}/{{ApiRest}}/users/13",
+          "protocol": "http",
+          "host": [
+            "{{LocalHost}}"
+          ],
+          "path": [
+            "{{ApiRest}}",
+            "users",
+            "13"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "loginRESTNegative",
+      "request": {
+        "auth": {
+          "type": "basic",
+          "basic": [
+            {
+              "key": "password",
+              "value": "111",
+              "type": "string"
+            },
+            {
+              "key": "username",
+              "value": "fwef",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"email\":\"Reiy8@gmail.com\",\r\n    \"password\": 1111\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://{{LocalHost}}/{{ApiRest}}/{{Auth}}/login",
+          "protocol": "http",
+          "host": [
+            "{{LocalHost}}"
+          ],
+          "path": [
+            "{{ApiRest}}",
+            "{{Auth}}",
+            "login"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "loginREST2FAPositive",
+      "request": {
+        "auth": {
+          "type": "basic",
+          "basic": [
+            {
+              "key": "username",
+              "value": "Margarette_Ritchie18@hotmail.com",
+              "type": "string"
+            },
+            {
+              "key": "password",
+              "value": "1111",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"email\":\"Mose62@hotmail.com\",\r\n    \"password\": 1111,\r\n    \"secret\": 912806\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://{{LocalHost}}/{{ApiRest}}/{{Auth}}/login",
+          "protocol": "http",
+          "host": [
+            "{{LocalHost}}"
+          ],
+          "path": [
+            "{{ApiRest}}",
+            "{{Auth}}",
+            "login"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "loginRESTPositive",
+      "request": {
+        "auth": {
+          "type": "basic",
+          "basic": [
+            {
+              "key": "username",
+              "value": "Margarette_Ritchie18@hotmail.com",
+              "type": "string"
+            },
+            {
+              "key": "password",
+              "value": "1111",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"email\":\"Hilton.Armstrong@gmail.com\",\r\n    \"password\": 1111\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://{{LocalHost}}/{{ApiRest}}/{{Auth}}/login",
+          "protocol": "http",
+          "host": [
+            "{{LocalHost}}"
+          ],
+          "path": [
+            "{{ApiRest}}",
+            "{{Auth}}",
+            "login"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "signoutRESTPositive",
+      "request": {
+        "auth": {
+          "type": "basic",
+          "basic": [
+            {
+              "key": "username",
+              "value": "Margarette_Ritchie18@hotmail.com",
+              "type": "string"
+            },
+            {
+              "key": "password",
+              "value": "1111",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "url": {
+          "raw": "http://{{LocalHost}}/{{ApiRest}}/{{Auth}}/signout",
+          "protocol": "http",
+          "host": [
+            "{{LocalHost}}"
+          ],
+          "path": [
+            "{{ApiRest}}",
+            "{{Auth}}",
+            "signout"
+          ]
+        }
+      },
+      "response": []
+    }
+  ],
+  "variable": [
+    {
+      "key": "ApiRest",
+      "value": "api/v1.0"
+    },
+    {
+      "key": "Auth",
+      "value": "auth"
+    }
+  ]
 }
