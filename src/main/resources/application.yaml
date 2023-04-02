@@ -16,6 +16,13 @@ spring:
     host: ${HOST_MAIL}
     port: ${PORT_MAIL}
     username: ${LOGIN_MAIL}
+    password: ${PASSWORD_MAIL}
+    properties:
+      mail:
+        smtp:
+          auth: ${PROP_MAIL_SMTP_AUTH_MAIL}
+          starttls:
+            enable: ${PROP_MAIL_SMTP_STARTTLS_ENABLE_MAIL}
 server:
   servlet:
     contextPath: /api/${app.version}
