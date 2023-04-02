@@ -35,6 +35,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Value("${app.host}")
     private String host;
+    @Value("${server.servlet.contextPath}")
+    private String contextPath;
 
     public static final String USER_S_IS_NOT_FOUND = "User %s is not found";
     public static final String KET_FOR_EMAIL_RECOVERY_PASSWORD_SUBJECT = "UserService.EmailRecoveryPasswordSubject";
@@ -133,7 +135,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         mailService.sendEmail(created.getEmail(), UserInternalizationMessageManagerConfig
                         .getMessage(KEY_FOR_EMAIL_USER_CONFIRMATION_SUBJECT),
                 String.format(UserInternalizationMessageManagerConfig
-                        .getMessage(KEY_FOR_EXCEPTION_ACTIVATE_LINK_PATTERN), host, token, created.getId()));
+                        .getMessage(KEY_FOR_EXCEPTION_ACTIVATE_LINK_PATTERN), host, contextPath, token, created.getId()));
     }
 
     @Override
@@ -171,7 +173,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         mailService.sendEmail(email, UserInternalizationMessageManagerConfig
                         .getMessage(KET_FOR_EMAIL_RECOVERY_PASSWORD_SUBJECT),
                 String.format(UserInternalizationMessageManagerConfig
-                        .getMessage(KEY_FOR_RECOVERY_PASS_LINK_PATTERN), host, token, existing.getId()));
+                        .getMessage(KEY_FOR_RECOVERY_PASS_LINK_PATTERN), host, contextPath, token, existing.getId()));
     }
 
     @Override
