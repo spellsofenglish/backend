@@ -2,9 +2,6 @@ spring:
   config:
     activate:
       on-profile: development
-  springdoc:
-    swagger-ui:
-      path=/swagger-ui.html
   datasource:
     driver-class-name: ${DRIVER_DB}
     url: ${URL_DB}
@@ -20,6 +17,8 @@ spring:
     port: ${PORT_MAIL}
     username: ${LOGIN_MAIL}
 server:
+  servlet:
+    contextPath: /api/${app.version}
   port: 8080
   error:
     path: /error
