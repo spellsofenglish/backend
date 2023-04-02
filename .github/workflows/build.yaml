@@ -8,6 +8,7 @@ on:
 jobs:
   docker:
     runs-on: self-hosted
+    container: docker:24-rc-dind
     steps:
       - name: Checkout
         uses: actions/checkout@v3
