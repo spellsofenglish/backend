@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("api/${app.version}/information")
+@RequestMapping("information")
 @RequiredArgsConstructor
 public class InformationRestController {
     private final InformationService informationService;

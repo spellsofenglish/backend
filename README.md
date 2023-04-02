@@ -30,4 +30,9 @@ Copy example.env to the dev.env and change it.
 `docker-compose down && docker system prune -a --volumes`
 
 ## Swagger
-For use swagger write address  `http://localhost:8080/swagger-ui.html`
+
+For use swagger write address  `http://server:port/api/app_version/swagger-ui.html`
+
+## Base path
+
+For use some endpoints write address  `http://server:port/api/app_version/...`
