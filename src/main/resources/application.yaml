@@ -24,6 +24,7 @@ spring:
           starttls:
             enable: ${PROP_MAIL_SMTP_STARTTLS_ENABLE_MAIL}
 server:
+  forward-headers-strategy: framework
   servlet:
     contextPath: /api/${app.version}
   port: 8080
