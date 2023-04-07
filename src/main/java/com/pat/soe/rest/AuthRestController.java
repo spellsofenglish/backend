@@ -2,6 +2,7 @@ package com.pat.soe.rest;
 
 import com.pat.soe.security.JwtUtils;
 import com.pat.soe.token.TokenLinkService;
+import com.pat.soe.user.UserDtoForUpdatePass;
 import com.pat.soe.user.UserService;
 import com.pat.soe.user.UserDtoForAuth;
 import com.pat.soe.user.UserDtoForResponse;
@@ -52,7 +53,7 @@ public class AuthRestController {
     }
 
     @PostMapping("/registration")
-    public ResponseEntity<?> performRegistration(@RequestBody UserDtoForSave user, Model model) {
+    public ResponseEntity<?> performRegistration(@RequestBody UserDtoForSave user) {
         userService.registerUser(user);
         return new ResponseEntity<>(CONFIRMATION_MESSAGE, HttpStatus.OK);
     }
@@ -65,7 +66,7 @@ public class AuthRestController {
     }
 
     @PostMapping("/recoveryPass")
-    public ResponseEntity<?> performRecoveryPass(@RequestParam String email, Model model) {
+    public ResponseEntity<?> performRecoveryPass(@RequestBody String email) {
         userService.recoveryPassword(email);
         return new ResponseEntity<>(USER_RECOVERY_SEND_TO_EMAIL, HttpStatus.OK);
     }
@@ -77,16 +78,14 @@ public class AuthRestController {
     }
 
     @PostMapping("/changePassword")
-    public ResponseEntity<?> changePassword(@RequestParam Long userId, @RequestParam String newPassword) {
-        userService.changePassword(userId, newPassword);
+    public ResponseEntity<?> changePassword(@RequestBody UserDtoForUpdatePass user) {
+        userService.changePassword(user.getId(), user.getNewPassword());
         return new ResponseEntity<>(USER_UPDATE_SUCCESSFULLY, HttpStatus.OK);
     }
 
-    @PostMapping("/updatePassword/{userId}")
-    public ResponseEntity<?> updatePassword(@PathVariable Long userId,
-                                            @RequestParam String oldPassword,
-                                            @RequestParam String newPassword) {
-        userService.updatePassword(userId, oldPassword, newPassword);
+    @PostMapping("/updatePassword")
+    public ResponseEntity<?> updatePassword(@RequestBody UserDtoForUpdatePass user) {
+        userService.updatePassword(user.getId(), user.getOldPassword(), user.getNewPassword());
         return new ResponseEntity<>(USER_UPDATE_SUCCESSFULLY, HttpStatus.OK);
     }
 }
