@@ -22,6 +22,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.net.URI;
+
 @RequestMapping("auth")
 @RequiredArgsConstructor
 @RestController
@@ -62,7 +64,7 @@ public class AuthRestController {
     public ResponseEntity<?> activateUser(@PathVariable String token, @PathVariable Long userId) {
         tokenLinkService.activate(token);
         userService.activateUser(userId);
-        return new ResponseEntity<>(USER_REGISTERED_SUCCESSFULLY, HttpStatus.OK);
+        return ResponseEntity.status(HttpStatus.FOUND).location(URI.create("https://spells.hedgi.ru/")).build();
     }
 
     @PostMapping("/recoveryPass")
