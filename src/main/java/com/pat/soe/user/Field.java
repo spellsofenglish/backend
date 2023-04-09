@@ -14,7 +14,7 @@ public class Field {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
-    private Long id;
+    private int id;
 
     @Column(name = "field_numbers")
     private int field_numbers;
