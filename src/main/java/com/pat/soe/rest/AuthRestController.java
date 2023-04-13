@@ -64,7 +64,7 @@ public class AuthRestController {
     public ResponseEntity<?> activateUser(@PathVariable String token, @PathVariable Long userId) {
         tokenLinkService.activate(token);
         userService.activateUser(userId);
-        return ResponseEntity.status(HttpStatus.FOUND).location(URI.create("https://spells.hedgi.ru/")).build();
+        return ResponseEntity.status(HttpStatus.FOUND).location(URI.create("https://spells.hedgi.ru/auth")).build();
     }
 
     @PostMapping("/recoveryPass")
@@ -76,7 +76,7 @@ public class AuthRestController {
     @GetMapping("/recoveryPass/{token}/{userId}")
     public ResponseEntity<?> recoveryPass(Model model, @PathVariable String token, @PathVariable Long userId) {
         tokenLinkService.activate(token);
-        return new ResponseEntity<>(USER_RECOVERY_SUCCESSFULLY, HttpStatus.OK);
+        return ResponseEntity.status(HttpStatus.FOUND).location(URI.create("https://spells.hedgi.ru/auth")).build();
     }
 
     @PostMapping("/changePassword")
