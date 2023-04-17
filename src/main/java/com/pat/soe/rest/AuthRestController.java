@@ -2,6 +2,7 @@ package com.pat.soe.rest;
 
 import com.pat.soe.security.JwtUtils;
 import com.pat.soe.token.TokenLinkService;
+import com.pat.soe.user.UserDtoForRecoveryPass;
 import com.pat.soe.user.UserDtoForUpdatePass;
 import com.pat.soe.user.UserService;
 import com.pat.soe.user.UserDtoForAuth;
@@ -68,15 +69,15 @@ public class AuthRestController {
     }
 
     @PostMapping("/recoveryPass")
-    public ResponseEntity<?> performRecoveryPass(@RequestBody String email) {
-        userService.recoveryPassword(email);
+    public ResponseEntity<?> performRecoveryPass(@RequestBody UserDtoForRecoveryPass user) {
+        userService.recoveryPassword(user.getEmail());
         return new ResponseEntity<>(USER_RECOVERY_SEND_TO_EMAIL, HttpStatus.OK);
     }
 
     @GetMapping("/recoveryPass/{token}/{userId}")
     public ResponseEntity<?> recoveryPass(Model model, @PathVariable String token, @PathVariable Long userId) {
         tokenLinkService.activate(token);
-        return ResponseEntity.status(HttpStatus.FOUND).location(URI.create("https://spells.hedgi.ru/auth")).build();
+        return ResponseEntity.status(HttpStatus.FOUND).location(URI.create("https://spells.hedgi.ru/reset")).build();
     }
 
     @PostMapping("/changePassword")
