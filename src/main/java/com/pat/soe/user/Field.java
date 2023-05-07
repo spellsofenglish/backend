@@ -9,7 +9,7 @@ import lombok.*;
 @ToString
 @EqualsAndHashCode
 @RequiredArgsConstructor
-@Table(name = "Field") // this the table has not yet been created
+@Table(name = "fields") // this the table has not yet been created
 public class Field {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,5 +24,14 @@ public class Field {
 
     @Column(name = "bonus")
     private int bonus;
+
+    @OneToOne(mappedBy = "field", cascade = CascadeType.ALL)
+    private MiniGame miniGame;
+
+    public Field(int field_numbers, int type_task, int bonus){
+        this.field_numbers = field_numbers;
+        this.type_task = type_task;
+        this.bonus = bonus;
+    }
 
 }

@@ -11,6 +11,7 @@ import lombok.*;
 @RequiredArgsConstructor
 @Table(name = "MiniGame") // this the table has not yet been created
 public class MiniGame {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -22,8 +23,8 @@ public class MiniGame {
     @Column(name = "LanguageLevel")
     private int languageLevel;
 
-    @Column(name = "field_id")
-    private int field_id; //fk
+    //@Column(name = "field_id")
+    //private int field_id; //fk
 
     @Column(name = "dice")
     private int dice;
@@ -33,4 +34,9 @@ public class MiniGame {
 
     @Column(name = "score")
     private int score;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "field_id")
+    private Field field;
+
 }
