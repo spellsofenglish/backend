@@ -2,7 +2,6 @@ package com.pat.soe.rest;
 
 import com.pat.soe.security.JwtUtils;
 import com.pat.soe.token.TokenLinkService;
-import com.pat.soe.user.UserDtoForChangePass;
 import com.pat.soe.user.UserDtoForRecoveryPass;
 import com.pat.soe.user.UserDtoForUpdatePass;
 import com.pat.soe.user.UserService;
@@ -82,7 +81,7 @@ public class AuthRestController {
     }
 
     @PostMapping("/changePassword")
-    public ResponseEntity<?> changePassword(@RequestBody UserDtoForChangePass user) {
+    public ResponseEntity<?> changePassword(@RequestBody UserDtoForUpdatePass user) {
         userService.changePassword(user.getId(), user.getNewPassword());
         return new ResponseEntity<>(USER_UPDATE_SUCCESSFULLY, HttpStatus.OK);
     }
