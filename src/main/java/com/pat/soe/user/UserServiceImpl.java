@@ -6,6 +6,7 @@ import com.pat.soe.token.TokenLinkService;
 import com.pat.soe.user.exception.UserNotFoundException;
 import com.pat.soe.user.exception.UserException;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.CharUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -75,11 +76,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public UserDto create(UserDtoForSave dtoForSave) {
-        Optional<User> existing = userRepository.findByEmailActive(dtoForSave.getEmail());
-        if (existing.isPresent()) {
-            throw new UserException(String.format(UserInternalizationMessageManagerConfig
-                    .getExceptionMessage(KEY_FOR_EXCEPTION_EXISTING_EMAIL), dtoForSave.getEmail()));
-        }
+        validation(dtoForSave);
         User entity = userMapper.userDtoForSaveToUser(dtoForSave);
         entity.setRole(User.Role.PLAYER);
         entity.setActive(true);
@@ -117,11 +114,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public void registerUser(UserDtoForSave dtoForSave) {
-        Optional<User> existing = userRepository.findByEmail(dtoForSave.getEmail());
-        if (existing.isPresent()) {
-            throw new UserException(String.format(UserInternalizationMessageManagerConfig
-                    .getExceptionMessage(KEY_FOR_EXCEPTION_EXISTING_EMAIL), dtoForSave.getEmail()));
-        }
+
+        validation(dtoForSave);
         User entity = userMapper.userDtoForSaveToUser(dtoForSave);
         String encodedPassword = passwordEncoder.encode(dtoForSave.getPassword());
         entity.setPassword(encodedPassword);
@@ -136,6 +130,21 @@ public class UserServiceImpl implements UserService, UserDetailsService {
                         .getMessage(KEY_FOR_EMAIL_USER_CONFIRMATION_SUBJECT),
                 String.format(UserInternalizationMessageManagerConfig
                         .getMessage(KEY_FOR_EXCEPTION_ACTIVATE_LINK_PATTERN), host, contextPath, token, created.getId()));
+    }
+
+    private void validation(UserDtoForSave dtoForSave) {
+        for (int i = 0; i < dtoForSave.getEmail().length(); i++) {
+            char ch = dtoForSave.getEmail().charAt(i);
+            if (!CharUtils.isAscii(ch)) {
+                throw new UserException(String.format(UserInternalizationMessageManagerConfig
+                        .getExceptionMessage(EMAIL_NOT_CORRECT), dtoForSave.getEmail()));
+            }
+        }
+        Optional<User> existing = userRepository.findByEmail(dtoForSave.getEmail());
+        if (existing.isPresent()) {
+            throw new UserException(String.format(UserInternalizationMessageManagerConfig
+                    .getExceptionMessage(KEY_FOR_EXCEPTION_EXISTING_EMAIL), dtoForSave.getEmail()));
+        }
     }
 
     @Override
