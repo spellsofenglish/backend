@@ -38,7 +38,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Value("${server.servlet.contextPath}")
     private String contextPath;
 
-    public static final String USER_S_IS_NOT_FOUND = "User %s is not found";
+    public static final String EMAIL_NOT_CORRECT = "UserService.NotCorrectEmail";
     public static final String KET_FOR_EMAIL_RECOVERY_PASSWORD_SUBJECT = "UserService.EmailRecoveryPasswordSubject";
     private static final int REGISTER_TOKEN_ACTIVITY_SECONDS = 60 * 60;
     private static final int RECOVERY_TOKEN_ACTIVITY_SECONDS = 5 * 60;
