@@ -1,10 +1,10 @@
 package com.pat.soe.user;
 
-import com.pat.soe.security.JwtUtils;
 import com.pat.soe.mail.MailService;
+import com.pat.soe.security.JwtUtils;
 import com.pat.soe.token.TokenLinkService;
-import com.pat.soe.user.exception.UserNotFoundException;
 import com.pat.soe.user.exception.UserException;
+import com.pat.soe.user.exception.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.CharUtils;
 import org.springframework.beans.factory.annotation.Value;
@@ -22,6 +22,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.Objects;
 import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Service(value = "userService")
 @RequiredArgsConstructor
@@ -133,17 +135,25 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     private void validation(UserDtoForSave dtoForSave) {
-        for (int i = 0; i < dtoForSave.getEmail().length(); i++) {
-            char ch = dtoForSave.getEmail().charAt(i);
-            if (!CharUtils.isAscii(ch)) {
-                throw new UserException(String.format(UserInternalizationMessageManagerConfig
-                        .getExceptionMessage(EMAIL_NOT_CORRECT), dtoForSave.getEmail()));
-            }
-        }
-        Optional<User> existing = userRepository.findByEmail(dtoForSave.getEmail());
+        String email = dtoForSave.getEmail();
+        Optional<User> existing = userRepository.findByEmail(email);
         if (existing.isPresent()) {
             throw new UserException(String.format(UserInternalizationMessageManagerConfig
-                    .getExceptionMessage(KEY_FOR_EXCEPTION_EXISTING_EMAIL), dtoForSave.getEmail()));
+                    .getExceptionMessage(KEY_FOR_EXCEPTION_EXISTING_EMAIL), email));
+        }
+        for (int i = 0; i < email.length(); i++) {
+            char ch = email.charAt(i);
+            if (!CharUtils.isAscii(ch)) {
+                throw new UserException(String.format(UserInternalizationMessageManagerConfig
+                        .getExceptionMessage(EMAIL_NOT_CORRECT), email));
+            }
+        }
+        String emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$";
+        Pattern pattern = Pattern.compile(emailRegex);
+        Matcher matcher = pattern.matcher(email);
+        if (!matcher.matches()) {
+            throw new UserException(String.format(UserInternalizationMessageManagerConfig
+                    .getExceptionMessage(EMAIL_NOT_CORRECT), email));
         }
     }
 
