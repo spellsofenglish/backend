@@ -1,11 +1,12 @@
 package com.pat.soe.user;
 
-import com.pat.soe.security.JwtUtils;
 import com.pat.soe.mail.MailService;
+import com.pat.soe.security.JwtUtils;
 import com.pat.soe.token.TokenLinkService;
-import com.pat.soe.user.exception.UserNotFoundException;
 import com.pat.soe.user.exception.UserException;
+import com.pat.soe.user.exception.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.CharUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -21,6 +22,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.Objects;
 import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Service(value = "userService")
 @RequiredArgsConstructor
@@ -38,7 +41,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Value("${server.servlet.contextPath}")
     private String contextPath;
 
-    public static final String USER_S_IS_NOT_FOUND = "User %s is not found";
+    public static final String EMAIL_NOT_CORRECT = "UserService.NotCorrectEmail";
     public static final String KET_FOR_EMAIL_RECOVERY_PASSWORD_SUBJECT = "UserService.EmailRecoveryPasswordSubject";
     private static final int REGISTER_TOKEN_ACTIVITY_SECONDS = 60 * 60;
     private static final int RECOVERY_TOKEN_ACTIVITY_SECONDS = 5 * 60;
@@ -75,11 +78,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public UserDto create(UserDtoForSave dtoForSave) {
-        Optional<User> existing = userRepository.findByEmailActive(dtoForSave.getEmail());
-        if (existing.isPresent()) {
-            throw new UserException(String.format(UserInternalizationMessageManagerConfig
-                    .getExceptionMessage(KEY_FOR_EXCEPTION_EXISTING_EMAIL), dtoForSave.getEmail()));
-        }
+        validation(dtoForSave);
         User entity = userMapper.userDtoForSaveToUser(dtoForSave);
         entity.setRole(User.Role.PLAYER);
         entity.setActive(true);
@@ -117,11 +116,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public void registerUser(UserDtoForSave dtoForSave) {
-        Optional<User> existing = userRepository.findByEmail(dtoForSave.getEmail());
-        if (existing.isPresent()) {
-            throw new UserException(String.format(UserInternalizationMessageManagerConfig
-                    .getExceptionMessage(KEY_FOR_EXCEPTION_EXISTING_EMAIL), dtoForSave.getEmail()));
-        }
+
+        validation(dtoForSave);
         User entity = userMapper.userDtoForSaveToUser(dtoForSave);
         String encodedPassword = passwordEncoder.encode(dtoForSave.getPassword());
         entity.setPassword(encodedPassword);
@@ -136,6 +132,29 @@ public class UserServiceImpl implements UserService, UserDetailsService {
                         .getMessage(KEY_FOR_EMAIL_USER_CONFIRMATION_SUBJECT),
                 String.format(UserInternalizationMessageManagerConfig
                         .getMessage(KEY_FOR_EXCEPTION_ACTIVATE_LINK_PATTERN), host, contextPath, token, created.getId()));
+    }
+
+    private void validation(UserDtoForSave dtoForSave) {
+        String email = dtoForSave.getEmail();
+        Optional<User> existing = userRepository.findByEmail(email);
+        if (existing.isPresent()) {
+            throw new UserException(String.format(UserInternalizationMessageManagerConfig
+                    .getExceptionMessage(KEY_FOR_EXCEPTION_EXISTING_EMAIL), email));
+        }
+        for (int i = 0; i < email.length(); i++) {
+            char ch = email.charAt(i);
+            if (!CharUtils.isAscii(ch)) {
+                throw new UserException(String.format(UserInternalizationMessageManagerConfig
+                        .getExceptionMessage(EMAIL_NOT_CORRECT), email));
+            }
+        }
+        String emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$";
+        Pattern pattern = Pattern.compile(emailRegex);
+        Matcher matcher = pattern.matcher(email);
+        if (!matcher.matches()) {
+            throw new UserException(String.format(UserInternalizationMessageManagerConfig
+                    .getExceptionMessage(EMAIL_NOT_CORRECT), email));
+        }
     }
 
     @Override
