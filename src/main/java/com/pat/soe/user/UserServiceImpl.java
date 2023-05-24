@@ -116,7 +116,6 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public void registerUser(UserDtoForSave dtoForSave) {
-
         validation(dtoForSave);
         User entity = userMapper.userDtoForSaveToUser(dtoForSave);
         String encodedPassword = passwordEncoder.encode(dtoForSave.getPassword());
@@ -148,7 +147,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
                         .getExceptionMessage(EMAIL_NOT_CORRECT), email));
             }
         }
-        String emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$";
+        String emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9-]+\\.[A-Za-z0-9-.]+$";
         Pattern pattern = Pattern.compile(emailRegex);
         Matcher matcher = pattern.matcher(email);
         if (!matcher.matches()) {
