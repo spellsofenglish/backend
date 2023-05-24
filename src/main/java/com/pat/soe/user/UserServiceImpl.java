@@ -5,6 +5,7 @@ import com.pat.soe.security.JwtUtils;
 import com.pat.soe.token.TokenLinkService;
 import com.pat.soe.user.exception.UserException;
 import com.pat.soe.user.exception.UserNotFoundException;
+import com.pat.soe.user.exception.UserValidationException;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.CharUtils;
 import org.springframework.beans.factory.annotation.Value;
@@ -93,7 +94,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     public UserDto update(UserDtoForUpdate user) {
         Optional<User> existing = userRepository.findByEmailActive(user.getEmail());
         if (existing.isPresent() && !existing.get().getId().equals(user.getId())) {
-            throw new UserException(String.format(UserInternalizationMessageManagerConfig
+            throw new UserValidationException(String.format(UserInternalizationMessageManagerConfig
                     .getExceptionMessage(KEY_FOR_EXCEPTION_EXISTING_EMAIL), user.getEmail()));
         }
         User newUser = userMapper.userDtoForUpdateToUser(user);
@@ -137,13 +138,13 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         String email = dtoForSave.getEmail();
         Optional<User> existing = userRepository.findByEmail(email);
         if (existing.isPresent()) {
-            throw new UserException(String.format(UserInternalizationMessageManagerConfig
+            throw new UserNotFoundException(String.format(UserInternalizationMessageManagerConfig
                     .getExceptionMessage(KEY_FOR_EXCEPTION_EXISTING_EMAIL), email));
         }
         for (int i = 0; i < email.length(); i++) {
             char ch = email.charAt(i);
             if (!CharUtils.isAscii(ch)) {
-                throw new UserException(String.format(UserInternalizationMessageManagerConfig
+                throw new UserValidationException(String.format(UserInternalizationMessageManagerConfig
                         .getExceptionMessage(EMAIL_NOT_CORRECT), email));
             }
         }
@@ -151,7 +152,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         Pattern pattern = Pattern.compile(emailRegex);
         Matcher matcher = pattern.matcher(email);
         if (!matcher.matches()) {
-            throw new UserException(String.format(UserInternalizationMessageManagerConfig
+            throw new UserValidationException(String.format(UserInternalizationMessageManagerConfig
                     .getExceptionMessage(EMAIL_NOT_CORRECT), email));
         }
     }
