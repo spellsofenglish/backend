@@ -43,6 +43,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     private String contextPath;
 
     public static final String EMAIL_NOT_CORRECT = "UserService.NotCorrectEmail";
+    public static final String PASSWORD_NOT_CORRECT="UserService.NotCorrectPassword";
+    public static final String NICKNAME_NOT_CORRECT="UserService.NotCorrectNickname";
     public static final String KET_FOR_EMAIL_RECOVERY_PASSWORD_SUBJECT = "UserService.EmailRecoveryPasswordSubject";
     private static final int REGISTER_TOKEN_ACTIVITY_SECONDS = 60 * 60;
     private static final int RECOVERY_TOKEN_ACTIVITY_SECONDS = 5 * 60;
@@ -122,6 +124,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         String encodedPassword = passwordEncoder.encode(dtoForSave.getPassword());
         entity.setPassword(encodedPassword);
         entity.setEmail(dtoForSave.getEmail().trim());
+        entity.setNickName(dtoForSave.getNickName());
         if (entity.getRole() == null) {
             entity.setRole(User.Role.PLAYER);
         }
@@ -136,10 +139,24 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     private void validation(UserDtoForSave dtoForSave) {
         String email = dtoForSave.getEmail();
+        String password= dtoForSave.getPassword();
+        String nickname=dtoForSave.getNickName();
         Optional<User> existing = userRepository.findByEmail(email);
         if (existing.isPresent()) {
             throw new UserNotFoundException(String.format(UserInternalizationMessageManagerConfig
                     .getExceptionMessage(KEY_FOR_EXCEPTION_EXISTING_EMAIL), email));
+        }
+        if(nickname == null || nickname.isEmpty()){
+            throw new UserValidationException(String.format(UserInternalizationMessageManagerConfig
+                    .getExceptionMessage(NICKNAME_NOT_CORRECT), nickname));
+        }
+        if(password == null || password.isEmpty()){
+            throw new UserValidationException(String.format(UserInternalizationMessageManagerConfig
+                    .getExceptionMessage(PASSWORD_NOT_CORRECT), password));
+        }
+        if(password.length() < 8 || password.length() > 24){
+            throw new UserValidationException(String.format(UserInternalizationMessageManagerConfig
+                    .getExceptionMessage(PASSWORD_NOT_CORRECT), password));
         }
         for (int i = 0; i < email.length(); i++) {
             char ch = email.charAt(i);
@@ -149,11 +166,18 @@ public class UserServiceImpl implements UserService, UserDetailsService {
             }
         }
         String emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9-]+\\.[A-Za-z0-9-.]+$";
+        String passwordRegex = "^[a-zA-Z0-9!@#$%^&*()-_+=~`{}\\[\\]|\\\\:;'<>,.?\\/]{8,24}$";
         Pattern pattern = Pattern.compile(emailRegex);
+        Pattern passwordPattern=Pattern.compile(passwordRegex);
         Matcher matcher = pattern.matcher(email);
+        Matcher passwordMatcher=passwordPattern.matcher(password);
         if (!matcher.matches()) {
             throw new UserValidationException(String.format(UserInternalizationMessageManagerConfig
                     .getExceptionMessage(EMAIL_NOT_CORRECT), email));
+        }
+        if (!passwordMatcher.matches()) {
+            throw new UserValidationException(String.format(UserInternalizationMessageManagerConfig
+                   .getExceptionMessage(PASSWORD_NOT_CORRECT), password));
         }
     }
 
