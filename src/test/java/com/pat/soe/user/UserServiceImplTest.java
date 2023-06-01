@@ -83,7 +83,7 @@ class UserServiceImplTest {
     void registerUserValidDtoForSave() {
         UserDtoForSave dtoForSave = new UserDtoForSave();
         dtoForSave.setEmail("valid_test_mail@valid.test");
-        dtoForSave.setPassword("password");
+        dtoForSave.setPassword("password123");
         dtoForSave.setNickName("JUnitTest");
 
         String encodedPassword = "encodedPassword";
@@ -164,7 +164,60 @@ class UserServiceImplTest {
 
         assertThrows(UserException.class, () -> userService.registerUser(dtoForSave));
     }
+    @Test
+    void registerUserNotValidPassword() {
+        UserDtoForSave dtoForSave = new UserDtoForSave();
+        dtoForSave.setEmail("testemail@gmail.com");
+        dtoForSave.setPassword("pas");
+        dtoForSave.setNickName("JUnitTest");
 
+        assertThrows(UserException.class, () -> userService.registerUser(dtoForSave));
+    }
+    @Test
+    void registerUserNotValidPasswordIsNull() {
+        UserDtoForSave dtoForSave = new UserDtoForSave();
+        dtoForSave.setEmail("testemail@gmail.com");
+        dtoForSave.setPassword(null);
+        dtoForSave.setNickName("JUnitTest");
+
+        assertThrows(UserException.class, () -> userService.registerUser(dtoForSave));
+    }
+    @Test
+    void registerUserNotValidPasswordIsEmpty() {
+        UserDtoForSave dtoForSave = new UserDtoForSave();
+        dtoForSave.setEmail("testemail@gmail.com");
+        dtoForSave.setPassword("");
+        dtoForSave.setNickName("JUnitTest");
+
+        assertThrows(UserException.class, () -> userService.registerUser(dtoForSave));
+    }
+    @Test
+    void registerUserNotValidPasswordCyrillic() {
+        UserDtoForSave dtoForSave = new UserDtoForSave();
+        dtoForSave.setEmail("testemail@gmail.com");
+        dtoForSave.setPassword("пароль12345");
+        dtoForSave.setNickName("JUnitTest");
+
+        assertThrows(UserException.class, () -> userService.registerUser(dtoForSave));
+    }
+    @Test
+    void registerUserNotValidNicknameIsEmpty() {
+        UserDtoForSave dtoForSave = new UserDtoForSave();
+        dtoForSave.setEmail("testemail@gmail.com");
+        dtoForSave.setPassword("password123");
+        dtoForSave.setNickName("");
+
+        assertThrows(UserException.class, () -> userService.registerUser(dtoForSave));
+    }
+    @Test
+    void registerUserNotValidNicknameIsNull() {
+        UserDtoForSave dtoForSave = new UserDtoForSave();
+        dtoForSave.setEmail("testemail@gmail.com");
+        dtoForSave.setPassword("password123");
+        dtoForSave.setNickName(null);
+
+        assertThrows(UserException.class, () -> userService.registerUser(dtoForSave));
+    }
     @Test
     void loginUser() {
     }
