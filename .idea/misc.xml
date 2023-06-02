@@ -3,9 +3,10 @@
   <component name="ExternalStorageConfigurationManager" enabled="true" />
   <component name="FrameworkDetectionExcludesConfiguration">
     <file type="web" url="file://$PROJECT_DIR$/config-server" />
-    <file type="web" url="file://$PROJECT_DIR$/discovery" />
-    <file type="web" url="file://$PROJECT_DIR$/gateway" />
-    <file type="web" url="file://$PROJECT_DIR$/player" />
+    <file type="web" url="file://$PROJECT_DIR$/discovery-service" />
+    <file type="web" url="file://$PROJECT_DIR$/gateway-service" />
+    <file type="web" url="file://$PROJECT_DIR$/player-service" />
+    <file type="web" url="file://$PROJECT_DIR$/zipkin-service" />
   </component>
   <component name="MavenProjectsManager">
     <option name="originalFiles">

@@ -8,14 +8,26 @@
         <outputRelativeToContentRoot value="true" />
         <module name="SpellsOfEnglish" />
       </profile>
-      <profile name="Gradle Imported" enabled="true">
-        <outputRelativeToContentRoot value="true" />
-        <processorPath useClasspath="false">
-          <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.projectlombok/lombok/1.18.26/8f8cf0372abf564913e9796623aac4c8ea44025a/lombok-1.18.26.jar" />
-        </processorPath>
-        <module name="player.main" />
-      </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="config-server" target="17" />
+      <module name="config-server.main" target="17" />
+      <module name="config-server.test" target="17" />
+      <module name="discovery" target="17" />
+      <module name="discovery.main" target="17" />
+      <module name="discovery.test" target="17" />
+      <module name="gateway" target="17" />
+      <module name="gateway.main" target="17" />
+      <module name="gateway.test" target="17" />
+      <module name="player" target="17" />
+      <module name="player.main" target="17" />
+      <module name="player.test" target="17" />
+      <module name="ru.spellsofenglish.discovery-service.main" target="17" />
+      <module name="ru.spellsofenglish.gateway-service.main" target="17" />
+      <module name="zipkin-service" target="17" />
+      <module name="zipkin-service.main" target="17" />
+      <module name="zipkin-service.test" target="17" />
+    </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">

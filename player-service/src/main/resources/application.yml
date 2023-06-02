@@ -1,0 +1,27 @@
+eureka:
+  instance:
+    hostname: localhost
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+
+spring:
+  application:
+    name: player-service
+  config:
+    import: optional:configserver:instead
+
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/spellsofenglish_db
+    username: postgres
+    password: postgres
+
+server:
+  port: 8070
+
+
+management:
+ tracing:
+  sampling:
+    probability: 1.0
