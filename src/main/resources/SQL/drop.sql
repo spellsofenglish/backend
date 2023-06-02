@@ -1,3 +1,0 @@
-DROP TABLE IF EXISTS users;
-DROP TABLE IF EXISTS token_links;
-DROP TABLE IF EXISTS information;
