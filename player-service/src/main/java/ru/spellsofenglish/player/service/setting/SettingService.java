@@ -7,4 +7,5 @@ import java.util.UUID;
 @Service
 public interface SettingService {
     Settings playerSetting(UUID playerId);
+    Settings defaultSetting();
 }

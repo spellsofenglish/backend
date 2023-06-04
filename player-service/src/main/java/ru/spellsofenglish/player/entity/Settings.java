@@ -1,7 +1,13 @@
 package ru.spellsofenglish.player.entity;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.experimental.Accessors;
+
+import java.util.UUID;
 
 @Getter
 @Setter
@@ -9,12 +15,12 @@ import lombok.*;
 @NoArgsConstructor
 @Entity
 @Table(name = "settings")
+@Accessors(chain = true)
 public class Settings {
 
     @Id
-    @OneToOne
-    //TODO fix
-    private Player player;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
 
     private Boolean hasAudio;
 

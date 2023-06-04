@@ -16,6 +16,9 @@ spring:
     url: jdbc:postgresql://localhost:5432/spellsofenglish_db
     username: postgres
     password: postgres
+#  jpa:
+#    hibernate:
+#      ddl-auto: create
 
 server:
   port: 8070
