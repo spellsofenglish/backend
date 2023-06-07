@@ -17,9 +17,9 @@ import java.util.UUID;
 @Table(name = "settings")
 @Accessors(chain = true)
 public class Settings {
-
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(unique = true, nullable = false)
     private UUID id;
 
     private Boolean hasAudio;

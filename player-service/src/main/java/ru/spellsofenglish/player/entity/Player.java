@@ -25,7 +25,7 @@ public class Player {
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private Progress progress;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     private Settings settings;
 
 }
