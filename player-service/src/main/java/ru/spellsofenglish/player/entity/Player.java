@@ -1,7 +1,11 @@
 package ru.spellsofenglish.player.entity;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.NoArgsConstructor;
 
 import java.util.UUID;
 
@@ -18,14 +22,10 @@ public class Player {
     @Column(unique = true, nullable = false)
     private UUID id;
 
+    @JoinColumn(unique = true)
     private String username;
-
-    private Integer points;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private Progress progress;
-
-    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
-    private Settings settings;
 
 }

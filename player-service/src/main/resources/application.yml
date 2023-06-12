@@ -10,12 +10,14 @@ spring:
     name: player-service
   config:
     import: optional:configserver:instead
-
   datasource:
     driver-class-name: org.postgresql.Driver
     url: jdbc:postgresql://localhost:5432/spellsofenglish_db
     username: postgres
     password: postgres
+  flyway:
+    locations: classpath:db/migration
+
 #  jpa:
 #    hibernate:
 #      ddl-auto: create
@@ -23,8 +25,8 @@ spring:
 server:
   port: 8070
 
-
 management:
- tracing:
-  sampling:
-    probability: 1.0
+  tracing:
+    sampling:
+      probability: 1.0
+

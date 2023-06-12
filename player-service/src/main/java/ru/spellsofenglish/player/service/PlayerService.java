@@ -1,13 +1,18 @@
 package ru.spellsofenglish.player.service;
 
 import org.springframework.stereotype.Service;
-import ru.spellsofenglish.player.dto.player.DataPlayerDto;
 import ru.spellsofenglish.player.dto.player.PlayerDto;
+import ru.spellsofenglish.player.entity.Player;
 import ru.spellsofenglish.player.entity.Progress;
-import ru.spellsofenglish.player.entity.Settings;
+
+import java.util.UUID;
 
 @Service
 public interface PlayerService {
-    DataPlayerDto getPlayer(String username);
-    void updatePlayer(PlayerDto playerDto, Settings settings, Progress progress);
+    PlayerDto getPlayer(UUID id);
+
+    Player findPlayerById(UUID id);
+
+    void createPlayer(PlayerDto playerDto, Progress progress);
+
 }
