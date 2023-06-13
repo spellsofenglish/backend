@@ -21,6 +21,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.regex.Matcher;
@@ -170,7 +171,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         Pattern pattern = Pattern.compile(emailRegex);
         Pattern passwordPattern=Pattern.compile(passwordRegex);
         Matcher matcher = pattern.matcher(email);
-        Matcher passwordMatcher=passwordPattern.matcher(password);
+        Matcher passwordMatcher=passwordPattern.matcher(java.nio.CharBuffer.wrap(password));
         if (!matcher.matches()) {
             throw new UserValidationException(String.format(UserInternalizationMessageManagerConfig
                     .getExceptionMessage(EMAIL_NOT_CORRECT), email));
@@ -182,7 +183,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public String loginUser(String username, String password) {
+    public String loginUser(String username, char[] password) {
         Authentication authentication = authenticationManager
                 .authenticate(new UsernamePasswordAuthenticationToken(username, password));
         SecurityContextHolder.getContext().setAuthentication(authentication);
