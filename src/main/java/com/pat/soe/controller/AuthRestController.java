@@ -25,8 +25,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.net.URI;
 
-@RequestMapping("auth")
-@RequiredArgsConstructor
 @RestController
 public class AuthRestController {
     private static final String CONFIRMATION_MESSAGE = "An email has been sent to your email address with a confirmation link.";
