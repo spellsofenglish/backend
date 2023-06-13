@@ -85,7 +85,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         User entity = userMapper.userDtoForSaveToUser(dtoForSave);
         entity.setRole(User.Role.PLAYER);
         entity.setActive(true);
-        String encodedPassword = passwordEncoder.encode(dtoForSave.getPassword());
+        char[] encodedPassword = passwordEncoder.encode(java.nio.CharBuffer.wrap(dtoForSave.password())).toCharArray();
         entity.setPassword(encodedPassword);
         entity.setEmail(dtoForSave.getEmail().trim());
         User created = userRepository.save(entity);
@@ -121,7 +121,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     public void registerUser(UserDtoForSave dtoForSave) {
         validation(dtoForSave);
         User entity = userMapper.userDtoForSaveToUser(dtoForSave);
-        String encodedPassword = passwordEncoder.encode(dtoForSave.getPassword());
+        char[] encodedPassword = passwordEncoder.encode(java.nio.CharBuffer.wrap(dtoForSave.password())).toCharArray();
         entity.setPassword(encodedPassword);
         entity.setEmail(dtoForSave.getEmail().trim());
         entity.setNickName(dtoForSave.getNickName());
@@ -138,9 +138,9 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     private void validation(UserDtoForSave dtoForSave) {
-        String email = dtoForSave.getEmail();
-        String password= dtoForSave.getPassword();
-        String nickname=dtoForSave.getNickName();
+        String email = dtoForSave.email();
+        char[] password= dtoForSave.password();
+        String nickname=dtoForSave.nickName();
         Optional<User> existing = userRepository.findByEmail(email);
         if (existing.isPresent()) {
             throw new UserNotFoundException(String.format(UserInternalizationMessageManagerConfig
@@ -150,11 +150,11 @@ public class UserServiceImpl implements UserService, UserDetailsService {
             throw new UserValidationException(String.format(UserInternalizationMessageManagerConfig
                     .getExceptionMessage(NICKNAME_NOT_CORRECT), nickname));
         }
-        if(password == null || password.isEmpty()){
+        if(password == null || password.length == 0){
             throw new UserValidationException(String.format(UserInternalizationMessageManagerConfig
                     .getExceptionMessage(PASSWORD_NOT_CORRECT), password));
         }
-        if(password.length() < 8 || password.length() > 24){
+        if(password.length < 8 || password.length > 24){
             throw new UserValidationException(String.format(UserInternalizationMessageManagerConfig
                     .getExceptionMessage(PASSWORD_NOT_CORRECT), password));
         }
@@ -220,25 +220,25 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public void changePassword(Long userId, String newPassword) {
+    public void changePassword(Long userId, char[] newPassword) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException(UserInternalizationMessageManagerConfig
                         .getExceptionMessage(KEY_FOR_EXCEPTION_USER_NOT_FOUND)));
-        String encodedPassword = passwordEncoder.encode(newPassword);
+        char[] encodedPassword = passwordEncoder.encode(java.nio.CharBuffer.wrap(newPassword)).toCharArray();
         user.setPassword(encodedPassword);
         userRepository.save(user);
     }
 
     @Override
-    public void updatePassword(Long userId, String oldPassword, String newPassword) {
+    public void updatePassword(Long userId, char[] oldPassword, char[] newPassword) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException(UserInternalizationMessageManagerConfig
                         .getExceptionMessage(KEY_FOR_EXCEPTION_USER_NOT_FOUND)));
-        if (!passwordEncoder.matches(oldPassword, user.getPassword())) {
-            throw new UserException(UserInternalizationMessageManagerConfig
+        if (!passwordEncoder.matches(java.nio.CharBuffer.wrap(oldPassword), Arrays.toString(user.getPassword()))) {
+            throw new UserValidationException(UserInternalizationMessageManagerConfig
                     .getExceptionMessage(KEY_FOR_EXCEPTION_WRONG_OLD_PASSWORD));
         }
-        String encodedPassword = passwordEncoder.encode(newPassword);
+        char[] encodedPassword = passwordEncoder.encode(java.nio.CharBuffer.wrap(newPassword)).toCharArray();
         user.setPassword(encodedPassword);
         userRepository.save(user);
     }
