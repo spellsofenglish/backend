@@ -19,7 +19,7 @@ public class UserAppDetails implements UserDetails {
 
     @Override
     public String getPassword() {
-        return this.user.getPassword();
+        return Arrays.toString(this.user.getPassword());
     }
 
     @Override
