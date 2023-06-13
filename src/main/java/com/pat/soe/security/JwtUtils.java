@@ -54,7 +54,7 @@ public class JwtUtils {
             Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(authToken);
             return true;
         } catch (SignatureException e) {
-            new UserException(INVALID_JWT);
+            new UserValidationException(INVALID_JWT);
         }
 
         return false;
