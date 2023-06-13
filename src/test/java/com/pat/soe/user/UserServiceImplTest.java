@@ -1,8 +1,14 @@
 package com.pat.soe.user;
 
-import com.pat.soe.mail.MailService;
-import com.pat.soe.token.TokenLinkService;
-import com.pat.soe.user.exception.UserException;
+import com.pat.soe.dto.user.UserDtoForSave;
+import com.pat.soe.entity.User;
+import com.pat.soe.exception.UserValidationException;
+import com.pat.soe.mapper.user.UserMapper;
+import com.pat.soe.message.user.UserInternalizationMessageManagerConfig;
+import com.pat.soe.repository.user.UserRepository;
+import com.pat.soe.service.mail.MailService;
+import com.pat.soe.service.token.TokenLinkService;
+import com.pat.soe.service.user.UserServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatchers;
@@ -11,6 +17,8 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
+
+import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -81,15 +89,14 @@ class UserServiceImplTest {
 
     @Test
     void registerUserValidDtoForSave() {
-        UserDtoForSave dtoForSave = new UserDtoForSave();
-        dtoForSave.setEmail("valid_test_mail@valid.test");
-        dtoForSave.setPassword("password123");
-        dtoForSave.setNickName("JUnitTest");
+        UserDtoForSave dtoForSave = new UserDtoForSave("valid_test_mail@valid.test",
+                "password123".toCharArray(),
+                "JUnitTest");
 
-        String encodedPassword = "encodedPassword";
+        char[] encodedPassword = "encodedPassword".toCharArray();
 
         User entity = new User();
-        entity.setEmail(dtoForSave.getEmail().trim());
+        entity.setEmail(dtoForSave.email().trim());
         entity.setPassword(encodedPassword);
         entity.setNickName("JUnitTest");
         entity.setRole(User.Role.PLAYER);
@@ -97,7 +104,7 @@ class UserServiceImplTest {
 
         User createdEntity = new User();
         createdEntity.setId(1L);
-        createdEntity.setEmail(dtoForSave.getEmail().trim());
+        createdEntity.setEmail(dtoForSave.email().trim());
         entity.setPassword(encodedPassword);
         createdEntity.setNickName("JUnitTest");
         createdEntity.setRole(User.Role.PLAYER);
@@ -106,7 +113,7 @@ class UserServiceImplTest {
         String token = "token";
 
         when(userMapper.userDtoForSaveToUser(dtoForSave)).thenReturn(entity);
-        when(passwordEncoder.encode(dtoForSave.getPassword())).thenReturn(encodedPassword);
+        when(passwordEncoder.encode(java.nio.CharBuffer.wrap(dtoForSave.password()))).thenReturn(Arrays.toString(encodedPassword));
         when(userRepository.save(entity)).thenReturn(createdEntity);
         when(tokenLinkService.generateToken(ArgumentMatchers.anyInt())).thenReturn(token);
 
@@ -120,111 +127,104 @@ class UserServiceImplTest {
 
         assertAll("Method calls",
                 () -> assertEquals(entity, userMapper.userDtoForSaveToUser(dtoForSave)),
-                () -> assertEquals(encodedPassword, passwordEncoder.encode(dtoForSave.getPassword())),
+                () -> assertEquals(Arrays.toString(encodedPassword), passwordEncoder.encode(java.nio.CharBuffer.wrap(dtoForSave.password()))),
                 () -> assertEquals(createdEntity, userRepository.save(entity)));
     }
 
 
     @Test
     void registerUserNotValidDtoForSaveEmailNotA() {
-        UserDtoForSave dtoForSave = new UserDtoForSave();
-        dtoForSave.setEmail("not_valid_test_mailnot_valid.test");
-        dtoForSave.setPassword("password");
-        dtoForSave.setNickName("JUnitTest");
+        UserDtoForSave dtoForSave = new UserDtoForSave("not_valid_test_mailnot_valid.test",
+                "password123".toCharArray(),
+                "JUnitTest");
 
-        assertThrows(UserException.class, () -> userService.registerUser(dtoForSave));
+        assertThrows(UserValidationException.class, () -> userService.registerUser(dtoForSave));
     }
 
     @Test
     void registerUserNotValidDtoForSaveEmailNotPoint() {
-        UserDtoForSave dtoForSave = new UserDtoForSave();
-        dtoForSave.setEmail("not_valid_test_mail@not_validtest");
-        dtoForSave.setPassword("password");
-        dtoForSave.setNickName("JUnitTest");
+        UserDtoForSave dtoForSave = new UserDtoForSave("not_valid_test_mail@not_validtest",
+                "password123".toCharArray(),
+                "JUnitTest");
 
-        assertThrows(UserException.class, () -> userService.registerUser(dtoForSave));
+        assertThrows(UserValidationException.class, () -> userService.registerUser(dtoForSave));
     }
 
     @Test
     void registerUserNotValidDtoForSaveEmailCyrillic() {
-        UserDtoForSave dtoForSave = new UserDtoForSave();
-        dtoForSave.setEmail("тест_кирилицы@not_valid.test");
-        dtoForSave.setPassword("password");
-        dtoForSave.setNickName("JUnitTest");
+        UserDtoForSave dtoForSave = new UserDtoForSave("тест_кирилицы@not_valid.test",
+                "password123".toCharArray(),
+                "JUnitTest");
 
-        assertThrows(UserException.class, () -> userService.registerUser(dtoForSave));
+        assertThrows(UserValidationException.class, () -> userService.registerUser(dtoForSave));
     }
 
     @Test
     void registerUserNotValidDtoForSaveEmailWithSpecialSymbols() {
-        UserDtoForSave dtoForSave = new UserDtoForSave();
-        dtoForSave.setEmail("\\#@not_valid.test");
-        dtoForSave.setPassword("password");
-        dtoForSave.setNickName("JUnitTest");
+        UserDtoForSave dtoForSave = new UserDtoForSave("\\#@not_valid.test",
+                "password123".toCharArray(),
+                "JUnitTest");
 
-        assertThrows(UserException.class, () -> userService.registerUser(dtoForSave));
+        assertThrows(UserValidationException.class, () -> userService.registerUser(dtoForSave));
     }
+
     @Test
     void registerUserNotValidPassword() {
-        UserDtoForSave dtoForSave = new UserDtoForSave();
-        dtoForSave.setEmail("testemail@gmail.com");
-        dtoForSave.setPassword("pas");
-        dtoForSave.setNickName("JUnitTest");
+        UserDtoForSave dtoForSave = new UserDtoForSave("testemail@gmail.com",
+                "pas".toCharArray(),
+                "JUnitTest");
 
-        assertThrows(UserException.class, () -> userService.registerUser(dtoForSave));
+        assertThrows(UserValidationException.class, () -> userService.registerUser(dtoForSave));
     }
+
     @Test
     void registerUserNotValidPasswordIsNull() {
-        UserDtoForSave dtoForSave = new UserDtoForSave();
-        dtoForSave.setEmail("testemail@gmail.com");
-        dtoForSave.setPassword(null);
-        dtoForSave.setNickName("JUnitTest");
+        UserDtoForSave dtoForSave = new UserDtoForSave("testemail@gmail.com",
+                null,
+                "JUnitTest");
 
-        assertThrows(UserException.class, () -> userService.registerUser(dtoForSave));
+        assertThrows(UserValidationException.class, () -> userService.registerUser(dtoForSave));
     }
+
     @Test
     void registerUserNotValidPasswordIsEmpty() {
-        UserDtoForSave dtoForSave = new UserDtoForSave();
-        dtoForSave.setEmail("testemail@gmail.com");
-        dtoForSave.setPassword("");
-        dtoForSave.setNickName("JUnitTest");
+        UserDtoForSave dtoForSave = new UserDtoForSave("testemail@gmail.com",
+                new char[]{' '},
+                "JUnitTest");
 
-        assertThrows(UserException.class, () -> userService.registerUser(dtoForSave));
+        assertThrows(UserValidationException.class, () -> userService.registerUser(dtoForSave));
     }
+
     @Test
     void registerUserNotValidPasswordCyrillic() {
-        UserDtoForSave dtoForSave = new UserDtoForSave();
-        dtoForSave.setEmail("testemail@gmail.com");
-        dtoForSave.setPassword("пароль12345");
-        dtoForSave.setNickName("JUnitTest");
+        UserDtoForSave dtoForSave = new UserDtoForSave("testemail@gmail.com",
+                "пароль12345".toCharArray(),
+                "JUnitTest");
 
-        assertThrows(UserException.class, () -> userService.registerUser(dtoForSave));
+        assertThrows(UserValidationException.class, () -> userService.registerUser(dtoForSave));
     }
+
     @Test
     void registerUserNotValidNicknameIsEmpty() {
-        UserDtoForSave dtoForSave = new UserDtoForSave();
-        dtoForSave.setEmail("testemail@gmail.com");
-        dtoForSave.setPassword("password123");
-        dtoForSave.setNickName("");
+        UserDtoForSave dtoForSave = new UserDtoForSave("testemail@gmail.com",
+                "password123".toCharArray(),
+                "");
 
-        assertThrows(UserException.class, () -> userService.registerUser(dtoForSave));
+        assertThrows(UserValidationException.class, () -> userService.registerUser(dtoForSave));
     }
+
     @Test
     void registerUserNotValidNicknameIsNull() {
-        UserDtoForSave dtoForSave = new UserDtoForSave();
-        dtoForSave.setEmail("testemail@gmail.com");
-        dtoForSave.setPassword("password123");
-        dtoForSave.setNickName(null);
+        UserDtoForSave dtoForSave = new UserDtoForSave("testemail@gmail.com",
+                "password123".toCharArray(),
+                null);
 
-        assertThrows(UserException.class, () -> userService.registerUser(dtoForSave));
+        assertThrows(UserValidationException.class, () -> userService.registerUser(dtoForSave));
     }
+
     @Test
     void loginUser() {
     }
-
-//    @Test
-//    void verify() {
-//    }
 
     @Test
     void activateUser() {
