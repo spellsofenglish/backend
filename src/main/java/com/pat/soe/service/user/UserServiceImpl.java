@@ -97,7 +97,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         Optional<User> existing = userRepository.findByEmailActive(user.getEmail());
         if (existing.isPresent() && !existing.get().getId().equals(user.getId())) {
             throw new UserValidationException(String.format(UserInternalizationMessageManagerConfig
-                    .getExceptionMessage(KEY_FOR_EXCEPTION_EXISTING_EMAIL), user.getEmail()));
+                    .getExceptionMessage(KEY_FOR_EXCEPTION_EXISTING_EMAIL), user.email()));
         }
         User newUser = userMapper.userDtoForUpdateToUser(user);
         User updated = userRepository.save(newUser);
