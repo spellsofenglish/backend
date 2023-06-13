@@ -1,12 +1,18 @@
 package com.pat.soe.user;
 
-import com.pat.soe.mail.MailService;
+import com.pat.soe.dto.user.UserDto;
+import com.pat.soe.dto.user.UserDtoForResponse;
+import com.pat.soe.dto.user.UserDtoForSave;
+import com.pat.soe.dto.user.UserDtoForUpdate;
+import com.pat.soe.entity.User;
+import com.pat.soe.exception.UserNotFoundException;
+import com.pat.soe.exception.UserValidationException;
+import com.pat.soe.mapper.user.UserMapper;
+import com.pat.soe.repository.user.UserRepository;
 import com.pat.soe.security.JwtUtils;
-import com.pat.soe.token.TokenLinkService;
-import com.pat.soe.user.exception.UserException;
-import com.pat.soe.user.exception.UserNotFoundException;
-import com.pat.soe.user.exception.UserValidationException;
-import lombok.RequiredArgsConstructor;
+import com.pat.soe.service.mail.MailService;
+import com.pat.soe.service.token.TokenLinkService;
+import com.pat.soe.message.user.UserInternalizationMessageManagerConfig;
 import org.apache.commons.lang3.CharUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -98,15 +104,15 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         entity.setActive(true);
         char[] encodedPassword = passwordEncoder.encode(java.nio.CharBuffer.wrap(dtoForSave.password())).toCharArray();
         entity.setPassword(encodedPassword);
-        entity.setEmail(dtoForSave.getEmail().trim());
+        entity.setEmail(dtoForSave.email().trim());
         User created = userRepository.save(entity);
         return userMapper.userToUserDto(created);
     }
 
     @Override
     public UserDto update(UserDtoForUpdate user) {
-        Optional<User> existing = userRepository.findByEmailActive(user.getEmail());
-        if (existing.isPresent() && !existing.get().getId().equals(user.getId())) {
+        Optional<User> existing = userRepository.findByEmailActive(user.email());
+        if (existing.isPresent() && !existing.get().getId().equals(user.id())) {
             throw new UserValidationException(String.format(UserInternalizationMessageManagerConfig
                     .getExceptionMessage(KEY_FOR_EXCEPTION_EXISTING_EMAIL), user.email()));
         }
@@ -134,8 +140,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         User entity = userMapper.userDtoForSaveToUser(dtoForSave);
         char[] encodedPassword = passwordEncoder.encode(java.nio.CharBuffer.wrap(dtoForSave.password())).toCharArray();
         entity.setPassword(encodedPassword);
-        entity.setEmail(dtoForSave.getEmail().trim());
-        entity.setNickName(dtoForSave.getNickName());
+        entity.setEmail(dtoForSave.email().trim());
+        entity.setNickName(dtoForSave.nickName());
         if (entity.getRole() == null) {
             entity.setRole(User.Role.PLAYER);
         }

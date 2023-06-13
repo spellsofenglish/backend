@@ -48,8 +48,8 @@ public class AuthRestController {
 
     @PostMapping("/login")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody UserDtoForAuth dtoForAuth) {
-        String cooke = userService.loginUser(dtoForAuth.getEmail(), dtoForAuth.getPassword());
-        UserDtoForResponse dtoForResponse = userService.getByEmail(dtoForAuth.getEmail());
+        String cooke = userService.loginUser(dtoForAuth.email(), dtoForAuth.password());
+        UserDtoForResponse dtoForResponse = userService.getByEmail(dtoForAuth.email());
         return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, cooke)
                 .body(dtoForResponse);
     }
@@ -76,7 +76,7 @@ public class AuthRestController {
 
     @PostMapping("/recoveryPass")
     public ResponseEntity<?> performRecoveryPass(@RequestBody UserDtoForRecoveryPass user) {
-        userService.recoveryPassword(user.getEmail());
+        userService.recoveryPassword(user.email());
         return new ResponseEntity<>(USER_RECOVERY_SEND_TO_EMAIL, HttpStatus.OK);
     }
 
@@ -88,13 +88,13 @@ public class AuthRestController {
 
     @PostMapping("/changePassword")
     public ResponseEntity<?> changePassword(@RequestBody UserDtoForUpdatePass user) {
-        userService.changePassword(user.getId(), user.getNewPassword());
+        userService.changePassword(user.id(), user.newPassword());
         return new ResponseEntity<>(USER_UPDATE_SUCCESSFULLY, HttpStatus.OK);
     }
 
     @PostMapping("/updatePassword")
     public ResponseEntity<?> updatePassword(@RequestBody UserDtoForUpdatePass user) {
-        userService.updatePassword(user.getId(), user.getOldPassword(), user.getNewPassword());
+        userService.updatePassword(user.id(), user.oldPassword(), user.newPassword());
         return new ResponseEntity<>(USER_UPDATE_SUCCESSFULLY, HttpStatus.OK);
     }
 }
