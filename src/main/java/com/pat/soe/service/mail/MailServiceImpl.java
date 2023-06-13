@@ -1,7 +1,6 @@
 package com.pat.soe.mail;
 
-import com.pat.soe.mail.MailService;
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -10,9 +9,16 @@ import org.springframework.stereotype.Service;
 @Service("mailService")
 @RequiredArgsConstructor
 public class MailServiceImpl implements MailService {
+
     private final JavaMailSender emailSender;
+
     @Value("${spring.mail.username}")
     private String fromEmail;
+
+    @Autowired
+    public MailServiceImpl(JavaMailSender emailSender) {
+        this.emailSender = emailSender;
+    }
 
     @Override
     public void sendEmail(String to, String subject, String text) {

@@ -9,7 +9,7 @@ import com.pat.soe.user.UserDtoForAuth;
 import com.pat.soe.user.UserDtoForResponse;
 import com.pat.soe.user.UserDtoForSave;
 import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
@@ -36,9 +36,17 @@ public class AuthRestController {
     private static final String USER_UPDATE_SUCCESSFULLY = "User update password successfully";
     public static final String USER_IS_NOT_AUTH = "User is not Auth";
     public static final String YOU_VE_BEEN_SIGNED_OUT = "You've been signed out!";
+
     private final UserService userService;
     private final JwtUtils jwtUtils;
     private final TokenLinkService tokenLinkService;
+
+    @Autowired
+    public AuthRestController(UserService userService, JwtUtils jwtUtils, TokenLinkService tokenLinkService) {
+        this.userService = userService;
+        this.jwtUtils = jwtUtils;
+        this.tokenLinkService = tokenLinkService;
+    }
 
     @PostMapping("/login")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody UserDtoForAuth dtoForAuth) {

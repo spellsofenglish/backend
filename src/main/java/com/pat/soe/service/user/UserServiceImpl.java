@@ -8,6 +8,7 @@ import com.pat.soe.user.exception.UserNotFoundException;
 import com.pat.soe.user.exception.UserValidationException;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.CharUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -28,21 +29,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Service(value = "userService")
-@RequiredArgsConstructor
 public class UserServiceImpl implements UserService, UserDetailsService {
-    private final UserRepository userRepository;
-    private final UserMapper userMapper;
-    private final PasswordEncoder passwordEncoder;
-    private final TokenLinkService tokenLinkService;
-    private final MailService mailService;
-    private final AuthenticationManager authenticationManager;
-    private final JwtUtils jwtUtils;
-
-    @Value("${app.host}")
-    private String host;
-    @Value("${server.servlet.contextPath}")
-    private String contextPath;
-
     public static final String EMAIL_NOT_CORRECT = "UserService.NotCorrectEmail";
     public static final String PASSWORD_NOT_CORRECT="UserService.NotCorrectPassword";
     public static final String NICKNAME_NOT_CORRECT="UserService.NotCorrectNickname";
@@ -57,6 +44,29 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     public static final String KEY_FOR_EXCEPTION_WRONG_OLD_PASSWORD = "UserService.WrongOldPassword";
     public static final String KEY_FOR_EXCEPTION_USER_NOT_ACTIVATED = "UserService.UserNotActivated";
 
+    private final UserRepository userRepository;
+    private final UserMapper userMapper;
+    private final PasswordEncoder passwordEncoder;
+    private final TokenLinkService tokenLinkService;
+    private final MailService mailService;
+    private final AuthenticationManager authenticationManager;
+    private final JwtUtils jwtUtils;
+
+    @Value("${app.host}")
+    private String host;
+    @Value("${server.servlet.contextPath}")
+    private String contextPath;
+
+    @Autowired
+    public UserServiceImpl(UserRepository userRepository, UserMapper userMapper, PasswordEncoder passwordEncoder, TokenLinkService tokenLinkService, MailService mailService, AuthenticationManager authenticationManager, JwtUtils jwtUtils) {
+        this.userRepository = userRepository;
+        this.userMapper = userMapper;
+        this.passwordEncoder = passwordEncoder;
+        this.tokenLinkService = tokenLinkService;
+        this.mailService = mailService;
+        this.authenticationManager = authenticationManager;
+        this.jwtUtils = jwtUtils;
+    }
 
     @Override
     public UserDto getById(Long id) {
