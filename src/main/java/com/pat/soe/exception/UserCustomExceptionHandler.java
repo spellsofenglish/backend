@@ -1,4 +1,4 @@
-package com.pat.soe.user.exception;
+package com.pat.soe.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

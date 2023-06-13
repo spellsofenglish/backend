@@ -1,6 +1,4 @@
-package com.pat.soe.user;
-
-import org.springframework.context.i18n.LocaleContextHolder;
+package com.pat.soe.message.user;
 
 import java.util.Locale;
 import java.util.ResourceBundle;

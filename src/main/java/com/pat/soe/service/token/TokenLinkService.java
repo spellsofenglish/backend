@@ -1,4 +1,4 @@
-package com.pat.soe.token;
+package com.pat.soe.service.token;
 
 public interface TokenLinkService {
     String generateToken(int seconds);

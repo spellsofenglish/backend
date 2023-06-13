@@ -1,7 +1,7 @@
 package com.pat.soe.security;
 
-import com.pat.soe.user.UserAppDetails;
-import com.pat.soe.user.exception.UserException;
+import com.pat.soe.exception.UserValidationException;
+import com.pat.soe.service.user.UserAppDetails;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.SignatureException;
@@ -18,6 +18,7 @@ import java.util.Date;
 public class JwtUtils {
 
     public static final String INVALID_JWT = "Invalid JWT";
+
     @Value("${app.jwtSecret}")
     private String jwtSecret;
 

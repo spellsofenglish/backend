@@ -1,13 +1,9 @@
-package com.pat.soe.rest;
+package com.pat.soe.controller;
 
+import com.pat.soe.dto.user.*;
 import com.pat.soe.security.JwtUtils;
-import com.pat.soe.token.TokenLinkService;
-import com.pat.soe.user.UserDtoForRecoveryPass;
-import com.pat.soe.user.UserDtoForUpdatePass;
-import com.pat.soe.user.UserService;
-import com.pat.soe.user.UserDtoForAuth;
-import com.pat.soe.user.UserDtoForResponse;
-import com.pat.soe.user.UserDtoForSave;
+import com.pat.soe.service.token.TokenLinkService;
+import com.pat.soe.service.user.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -15,24 +11,16 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 
 @RestController
+@RequestMapping("/auth")
 public class AuthRestController {
     private static final String CONFIRMATION_MESSAGE = "An email has been sent to your email address with a confirmation link.";
-    public static final String USER_REGISTERED_SUCCESSFULLY = "User registered successfully";
-    private static final String USER_RECOVERY_SUCCESSFULLY = "User recovery password successfully";
     private static final String USER_RECOVERY_SEND_TO_EMAIL = "Token send to Email";
     private static final String USER_UPDATE_SUCCESSFULLY = "User update password successfully";
-    public static final String USER_IS_NOT_AUTH = "User is not Auth";
     public static final String YOU_VE_BEEN_SIGNED_OUT = "You've been signed out!";
 
     private final UserService userService;

@@ -1,6 +1,6 @@
 package com.pat.soe.security;
 
-import com.pat.soe.user.UserServiceImpl;
+import com.pat.soe.service.user.UserServiceImpl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;

@@ -1,4 +1,4 @@
-package com.pat.soe.user;
+package com.pat.soe.service.user;
 
 import com.pat.soe.dto.user.UserDto;
 import com.pat.soe.dto.user.UserDtoForResponse;
@@ -204,7 +204,6 @@ public class UserServiceImpl implements UserService, UserDetailsService {
                 .authenticate(new UsernamePasswordAuthenticationToken(username, password));
         SecurityContextHolder.getContext().setAuthentication(authentication);
         UserAppDetails userDetails = (UserAppDetails) authentication.getPrincipal();
-        UserDtoForResponse dtoForResponse = getByEmail(userDetails.getUsername());
         return jwtUtils.generateJwtCookie(userDetails).toString();
     }
 

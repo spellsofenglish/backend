@@ -1,6 +1,6 @@
-package com.pat.soe.token;
+package com.pat.soe.repository.token;
 
-import com.pat.soe.token.TokenLink;
+import com.pat.soe.entity.TokenLink;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

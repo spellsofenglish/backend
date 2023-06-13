@@ -1,5 +1,6 @@
-package com.pat.soe.user;
+package com.pat.soe.service.user;
 
+import com.pat.soe.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
