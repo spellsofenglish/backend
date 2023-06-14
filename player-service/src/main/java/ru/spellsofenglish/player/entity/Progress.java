@@ -2,10 +2,7 @@ package ru.spellsofenglish.player.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import lombok.experimental.Accessors;
 
 import java.util.UUID;
@@ -17,9 +14,12 @@ import java.util.UUID;
 @Entity
 @Table(name = "progress")
 @Accessors(chain = true)
+@Builder
 public class Progress {
+
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(unique = true, nullable = false)
     private UUID id;
 
     @Min(value = 0)
@@ -27,5 +27,4 @@ public class Progress {
 
     @Min(value = 0)
     private Long gameLevel;
-
 }

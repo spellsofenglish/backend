@@ -19,10 +19,6 @@ spring:
           uri: http://localhost:8070
           predicates:
             - Path=/api/v1/player/**
-        - id: task-service
-          uri: http://localhost:7550
-          predicates:
-            - Path=/api/v1/player/**
 
 server:
   port: 8222
