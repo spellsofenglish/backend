@@ -1,18 +1,21 @@
 package ru.spellsofenglish.player.mapper;
+
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.spellsofenglish.player.dto.player.DataPlayerDto;
+import ru.spellsofenglish.player.dto.player.PlayerDto;
 import ru.spellsofenglish.player.entity.Player;
 
 import java.util.function.Function;
 @Service
-public class PlayerMapperDto implements Function<Player, DataPlayerDto>  {
+@RequiredArgsConstructor
+public class PlayerMapperDto implements Function<Player, PlayerDto>  {
+    private final ProgressMapperDto progressMapperDto;
     @Override
-    public DataPlayerDto apply(Player player) {
-        return new DataPlayerDto(
+    public PlayerDto apply(Player player) {
+        return new PlayerDto(
+                player.getId(),
                 player.getUsername(),
-                player.getPoints(),
-                player.getProgress().getProgress(),
-                player.getProgress().getGameLevel()
+                progressMapperDto.apply(player.getProgress())
         );
     }
 }

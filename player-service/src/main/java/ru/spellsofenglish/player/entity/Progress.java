@@ -16,15 +16,17 @@ import java.util.UUID;
 @Accessors(chain = true)
 @Builder
 public class Progress {
-
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(unique = true, nullable = false)
     private UUID id;
 
     @Min(value = 0)
-    private Long progress;
+    private Double progress;
 
     @Min(value = 0)
-    private Long gameLevel;
+    private Integer gameLevel;
+
+    @Min(value = 0)
+    private Integer totalPoints;
 }

@@ -1,15 +1,16 @@
 package ru.spellsofenglish.player.service.impl;
 
-import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
-import ru.spellsofenglish.player.dto.player.DataPlayerDto;
+import org.springframework.transaction.annotation.Transactional;
 import ru.spellsofenglish.player.dto.player.PlayerDto;
 import ru.spellsofenglish.player.entity.Player;
 import ru.spellsofenglish.player.entity.Progress;
-import ru.spellsofenglish.player.entity.Settings;
+import ru.spellsofenglish.player.exception.InvalidDataException;
 import ru.spellsofenglish.player.mapper.PlayerMapperDto;
 import ru.spellsofenglish.player.repository.PlayerRepository;
 import ru.spellsofenglish.player.service.PlayerService;
+
+import java.util.UUID;
 
 
 @Service
@@ -24,21 +25,40 @@ public class PlayerServiceImpl implements PlayerService {
 
 
     @Override
-    public DataPlayerDto getPlayer(String username) {
-        return playerRepository.findByUsername(username)
-                .map(playerMapperDto)
-                .orElseThrow(() -> new IllegalArgumentException("User not fount"));
+    public PlayerDto getPlayer(UUID id) throws InvalidDataException {
+        return playerMapperDto.apply(findPlayerById(id));
+    }
+
+    @Override
+    public Player findPlayerById(UUID id) throws InvalidDataException {
+        return playerRepository.findPlayerById(id)
+                .orElseThrow(() -> new InvalidDataException("We didn't find such a player, try again (", "User not found"));
     }
 
     @Override
     @Transactional
-    public void updatePlayer(PlayerDto playerDto, Settings settings, Progress progress) {
-        var player = Player.builder()
-                .username(playerDto.username())
-                .points(50)
-                .progress(progress)
-                .settings(settings)
-                .build();
-        playerRepository.save(player);
+    public void createPlayer(PlayerDto playerDto, Progress progress) throws InvalidDataException {
+        if (!playerRepository.existsByUsername(playerDto.username())) {
+            var player = Player.builder()
+                    .username(playerDto.username())
+                    .progress(progress)
+                    .build();
+            playerRepository.save(player);
+        } else {
+            throw new InvalidDataException("The name " + playerDto.username() + " is already busy, try another one",
+                    "A user with this name was found");
+        }
+    }
+    @Override
+    @Transactional
+    public void updatePlayer(UUID id, PlayerDto playerDto) throws InvalidDataException {
+        if (!playerRepository.existsByUsername(playerDto.username())) {
+            var player = findPlayerById(id);
+            player.setUsername(playerDto.username());
+            playerRepository.save(player);
+        } else {
+            throw new InvalidDataException("The name " + playerDto.username() + " is already busy, try another one",
+                    "A user with this name was found");
+        }
     }
 }

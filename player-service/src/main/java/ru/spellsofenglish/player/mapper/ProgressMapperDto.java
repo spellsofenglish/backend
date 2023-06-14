@@ -11,8 +11,9 @@ public class ProgressMapperDto implements Function<Progress, ProgressDto> {
     @Override
     public ProgressDto apply(Progress progress) {
         return new ProgressDto(
+                progress.getProgress(),
                 progress.getGameLevel(),
-                progress.getProgress()
+                progress.getTotalPoints()
         );
     }
 }
