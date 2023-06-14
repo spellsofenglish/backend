@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.spellsofenglish.player.dto.progress.ProgressDto;
 import ru.spellsofenglish.player.entity.Player;
 import ru.spellsofenglish.player.entity.Progress;
+import ru.spellsofenglish.player.exception.InvalidDataException;
 import ru.spellsofenglish.player.mapper.ProgressMapperDto;
 import ru.spellsofenglish.player.repository.ProgressRepository;
 import ru.spellsofenglish.player.service.ProgressService;
@@ -29,7 +30,7 @@ public class ProgressServiceImpl implements ProgressService {
 
     @Override
     @Transactional
-    public void updateProgress(ProgressDto progressDto, Progress oldProgress) {
+    public void updateProgress(ProgressDto progressDto, Progress oldProgress) throws InvalidDataException {
         progressRepository.save(oldProgress
                 .setGameLevel(progressDto.gameLevel())
                 .setTotalPoints(oldProgress.getTotalPoints() + progressDto.totalPoint())

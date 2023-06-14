@@ -1,43 +1,37 @@
 package ru.spellsofenglish.player.exception;
 
-import jakarta.validation.UnexpectedTypeException;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import java.util.List;
+import java.time.ZonedDateTime;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Map;
 
-@ControllerAdvice
-public class CustomErrorController {
-    @ExceptionHandler({MethodArgumentNotValidException.class, UnexpectedTypeException.class})
-    public ResponseEntity<Map<String, List<String>>> handleValidationErrors(MethodArgumentNotValidException ex) {
-        return new ResponseEntity<>(getErrorsMap(
-                ex.getBindingResult()
-                        .getFieldErrors()
-                        .stream()
-                        .map(FieldError::getDefaultMessage)
-                        .toList()),
-                new HttpHeaders(),
-                HttpStatus.BAD_REQUEST);
-    }
-    @ExceptionHandler({IllegalArgumentException.class})
-    public ProblemDetail handleNotFoundExceptions(Exception ex) {
-        return buildErrorResponse(ex.getMessage());
+@RestControllerAdvice
+public class CustomErrorController  {
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public Map<String, String> handleInvalidArgument(MethodArgumentNotValidException exception) {
+        Map<String, String> validationException =  new HashMap<>();
+        exception.getBindingResult().getFieldErrors().forEach(fieldError -> {
+            validationException.put(fieldError.getField(), fieldError.getDefaultMessage());
+        });
+        return validationException;
     }
 
-    private ProblemDetail buildErrorResponse(String message) {
-        return ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, message);
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(InvalidDataException.class)
+    public ResponseEntity<ErrorResponse> handleUserNotFoundException(InvalidDataException exception) {
+        ErrorResponse errorResponse = new ErrorResponse();
+        errorResponse.setTitle(exception.getTitle());
+        errorResponse.setMessage(exception.getMessage());
+        errorResponse.setDateTimeError(ZonedDateTime.now());
+        return ResponseEntity.badRequest().body(errorResponse);
     }
-
-    private Map<String, List<String>> getErrorsMap(List<String> errors) {
-        return Map.of("message error", errors);
-    }
-
-
 }

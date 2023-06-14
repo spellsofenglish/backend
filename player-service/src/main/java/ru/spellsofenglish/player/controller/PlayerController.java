@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.PatchMapping;
 import ru.spellsofenglish.player.dto.player.PlayerDto;
 import ru.spellsofenglish.player.dto.progress.ProgressDto;
+import ru.spellsofenglish.player.exception.InvalidDataException;
 import ru.spellsofenglish.player.service.PlayerService;
 import ru.spellsofenglish.player.service.ProgressService;
 
@@ -27,18 +28,26 @@ public class PlayerController {
     private final ProgressService progressService;
 
     @GetMapping("/{id}")
-    public ResponseEntity<PlayerDto> getPlayer(@PathVariable UUID id) {
+    public ResponseEntity<PlayerDto> getPlayer(@PathVariable UUID id) throws InvalidDataException {
         return ResponseEntity.ok(playerService.getPlayer(id));
     }
 
+    @PatchMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    private void updatePlayer(@PathVariable UUID id,
+                            @RequestBody @Valid PlayerDto playerDto) throws InvalidDataException {
+        playerService.updatePlayer(id,playerDto);
+    }
+
+
     @PostMapping
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void createPlayer(@RequestBody @Valid PlayerDto playerDto){
+    public void createPlayer(@RequestBody @Valid PlayerDto playerDto) throws InvalidDataException {
         playerService.createPlayer(playerDto, progressService.createProgress());
     }
 
     @GetMapping("{id}/progress")
-    public ResponseEntity<ProgressDto> getPlayerProgress(@PathVariable UUID id) {
+    public ResponseEntity<ProgressDto> getPlayerProgress(@PathVariable UUID id) throws InvalidDataException {
         return ResponseEntity.ok(progressService.getPlayerProgress(
                 playerService.findPlayerById(id)));
     }
@@ -46,7 +55,7 @@ public class PlayerController {
     @PatchMapping("{id}/progress")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void updateProgress(@PathVariable UUID id,
-                               @RequestBody @Valid ProgressDto progressDto) {
+                               @RequestBody @Valid ProgressDto progressDto) throws InvalidDataException {
         progressService.updateProgress(progressDto, playerService.findPlayerById(id).getProgress());
 
 
