@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.Arrays;
 import java.util.Objects;
 
 @Entity
@@ -21,7 +20,7 @@ public class User {
     private String email;
 
     @Column(name = "password")
-    private char[] password;
+    private String password;
 
     @Column(name = "nick_name")
     private String nickName;
@@ -41,7 +40,7 @@ public class User {
         return "User{" +
                 "id=" + id +
                 ", email='" + email + '\'' +
-                ", password=" + Arrays.toString(password) +
+                ", password='" + password + '\'' +
                 ", nickName='" + nickName + '\'' +
                 ", result='" + result + '\'' +
                 ", role=" + role +
@@ -54,14 +53,12 @@ public class User {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return isActive == user.isActive && Objects.equals(id, user.id) && Objects.equals(email, user.email) && Arrays.equals(password, user.password) && Objects.equals(nickName, user.nickName) && Objects.equals(result, user.result) && role == user.role;
+        return isActive == user.isActive && Objects.equals(id, user.id) && Objects.equals(email, user.email) && Objects.equals(password, user.password) && Objects.equals(nickName, user.nickName) && Objects.equals(result, user.result) && role == user.role;
     }
 
     @Override
     public int hashCode() {
-        int result1 = Objects.hash(id, email, nickName, result, role, isActive);
-        result1 = 31 * result1 + Arrays.hashCode(password);
-        return result1;
+        return Objects.hash(id, email, password, nickName, result, role, isActive);
     }
 
     public enum Role {

@@ -8,11 +8,11 @@ import com.pat.soe.entity.User;
 import com.pat.soe.exception.UserNotFoundException;
 import com.pat.soe.exception.UserValidationException;
 import com.pat.soe.mapper.user.UserMapper;
+import com.pat.soe.message.user.UserInternalizationMessageManagerConfig;
 import com.pat.soe.repository.user.UserRepository;
 import com.pat.soe.security.JwtUtils;
 import com.pat.soe.service.mail.MailService;
 import com.pat.soe.service.token.TokenLinkService;
-import com.pat.soe.message.user.UserInternalizationMessageManagerConfig;
 import org.apache.commons.lang3.CharUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -28,7 +28,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.regex.Matcher;
@@ -102,7 +101,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         User entity = userMapper.userDtoForSaveToUser(dtoForSave);
         entity.setRole(User.Role.PLAYER);
         entity.setActive(true);
-        char[] encodedPassword = passwordEncoder.encode(java.nio.CharBuffer.wrap(dtoForSave.password())).toCharArray();
+        String encodedPassword = passwordEncoder.encode(dtoForSave.password());
         entity.setPassword(encodedPassword);
         entity.setEmail(dtoForSave.email().trim());
         User created = userRepository.save(entity);
@@ -138,7 +137,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     public void registerUser(UserDtoForSave dtoForSave) {
         validation(dtoForSave);
         User entity = userMapper.userDtoForSaveToUser(dtoForSave);
-        char[] encodedPassword = passwordEncoder.encode(java.nio.CharBuffer.wrap(dtoForSave.password())).toCharArray();
+        String encodedPassword = passwordEncoder.encode(dtoForSave.password());
         entity.setPassword(encodedPassword);
         entity.setEmail(dtoForSave.email().trim());
         entity.setNickName(dtoForSave.nickName());
@@ -156,7 +155,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     private void validation(UserDtoForSave dtoForSave) {
         String email = dtoForSave.email();
-        char[] password= dtoForSave.password();
+        String password= dtoForSave.password();
         String nickname=dtoForSave.nickName();
         Optional<User> existing = userRepository.findByEmail(email);
         if (existing.isPresent()) {
@@ -167,11 +166,11 @@ public class UserServiceImpl implements UserService, UserDetailsService {
             throw new UserValidationException(String.format(UserInternalizationMessageManagerConfig
                     .getExceptionMessage(NICKNAME_NOT_CORRECT), nickname));
         }
-        if(password == null || password.length == 0){
+        if(password == null || password.isEmpty()){
             throw new UserValidationException(String.format(UserInternalizationMessageManagerConfig
                     .getExceptionMessage(PASSWORD_NOT_CORRECT), password));
         }
-        if(password.length < 8 || password.length > 24){
+        if(password.length() < 8 || password.length() > 24){
             throw new UserValidationException(String.format(UserInternalizationMessageManagerConfig
                     .getExceptionMessage(PASSWORD_NOT_CORRECT), password));
         }
@@ -187,7 +186,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         Pattern pattern = Pattern.compile(emailRegex);
         Pattern passwordPattern=Pattern.compile(passwordRegex);
         Matcher matcher = pattern.matcher(email);
-        Matcher passwordMatcher=passwordPattern.matcher(java.nio.CharBuffer.wrap(password));
+        Matcher passwordMatcher=passwordPattern.matcher(password);
         if (!matcher.matches()) {
             throw new UserValidationException(String.format(UserInternalizationMessageManagerConfig
                     .getExceptionMessage(EMAIL_NOT_CORRECT), email));
@@ -199,7 +198,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public String loginUser(String username, char[] password) {
+    public String loginUser(String username, String password) {
         Authentication authentication = authenticationManager
                 .authenticate(new UsernamePasswordAuthenticationToken(username, password));
         SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -236,25 +235,25 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public void changePassword(Long userId, char[] newPassword) {
+    public void changePassword(Long userId, String newPassword) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException(UserInternalizationMessageManagerConfig
                         .getExceptionMessage(KEY_FOR_EXCEPTION_USER_NOT_FOUND)));
-        char[] encodedPassword = passwordEncoder.encode(java.nio.CharBuffer.wrap(newPassword)).toCharArray();
+        String encodedPassword = passwordEncoder.encode(newPassword);
         user.setPassword(encodedPassword);
         userRepository.save(user);
     }
 
     @Override
-    public void updatePassword(Long userId, char[] oldPassword, char[] newPassword) {
+    public void updatePassword(Long userId, String oldPassword, String newPassword) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException(UserInternalizationMessageManagerConfig
                         .getExceptionMessage(KEY_FOR_EXCEPTION_USER_NOT_FOUND)));
-        if (!passwordEncoder.matches(java.nio.CharBuffer.wrap(oldPassword), Arrays.toString(user.getPassword()))) {
+        if (!passwordEncoder.matches(oldPassword, user.getPassword())) {
             throw new UserValidationException(UserInternalizationMessageManagerConfig
                     .getExceptionMessage(KEY_FOR_EXCEPTION_WRONG_OLD_PASSWORD));
         }
-        char[] encodedPassword = passwordEncoder.encode(java.nio.CharBuffer.wrap(newPassword)).toCharArray();
+        String encodedPassword = passwordEncoder.encode(newPassword);
         user.setPassword(encodedPassword);
         userRepository.save(user);
     }

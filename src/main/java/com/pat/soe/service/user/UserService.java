@@ -22,7 +22,7 @@ public interface UserService {
 
     void registerUser(UserDtoForSave dto);
 
-    String loginUser(String username, char[] password);
+    String loginUser(String username, String password);
 
     void verify(String username, String code);
 
@@ -30,7 +30,7 @@ public interface UserService {
 
     void recoveryPassword(String email);
 
-    void changePassword(Long userId, char[] newPassword);
+    void changePassword(Long userId, String newPassword);
 
-    void updatePassword(Long userId, char[] oldPassword, char[] newPassword);
+    void updatePassword(Long userId, String oldPassword, String newPassword);
 }
