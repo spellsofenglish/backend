@@ -41,7 +41,7 @@ app:
   host: ${APP_HOST}
   jwtSecret: testCode
   jwtExpirationMs: 86400000
-  jwtCookieName: testName
+  jwtCookieName: Bearer
 ---
 spring:
   config:
