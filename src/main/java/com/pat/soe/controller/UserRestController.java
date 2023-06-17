@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/users")
-public class UserRestController {
+public class UserRestController implements GlobalController{
     private final UserService userService;
 
     public UserRestController(UserService userService) {

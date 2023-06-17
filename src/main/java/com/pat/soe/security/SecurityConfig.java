@@ -44,7 +44,7 @@ public class SecurityConfig {
 
         http.authenticationProvider(authenticationProvider());
 
-        http.addFilterBefore(corsFilter(), UsernamePasswordAuthenticationFilter.class).csrf().disable();
+        http.csrf().disable();
 
         http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
 
@@ -56,11 +56,11 @@ public class SecurityConfig {
         return http.build();
     }
 
-    @Bean
-    public CorsFilter corsFilter() {
-        CorsFilter corsFilter = new CorsFilter();
-        return corsFilter;
-    }
+//    @Bean
+//    public CorsFilter corsFilter() {
+//        CorsFilter corsFilter = new CorsFilter();
+//        return corsFilter;
+//    }
 
     @Bean
     public PasswordEncoder passwordEncoder() {

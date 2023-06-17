@@ -17,7 +17,7 @@ import java.net.URI;
 
 @RestController
 @RequestMapping("/auth")
-public class AuthRestController {
+public class AuthRestController implements GlobalController{
     private static final String CONFIRMATION_MESSAGE = "An email has been sent to your email address with a confirmation link.";
     private static final String USER_RECOVERY_SEND_TO_EMAIL = "Token send to Email";
     private static final String USER_UPDATE_SUCCESSFULLY = "User update password successfully";
