@@ -21,6 +21,9 @@
       <module name="config-server.main" target="17" />
       <module name="config-server.test" target="17" />
       <module name="discovery" target="17" />
+      <module name="discovery-service" target="17" />
+      <module name="discovery-service.main" target="17" />
+      <module name="discovery-service.test" target="17" />
       <module name="discovery.main" target="17" />
       <module name="discovery.test" target="17" />
       <module name="gateway" target="17" />
