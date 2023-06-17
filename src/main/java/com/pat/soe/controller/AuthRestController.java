@@ -59,7 +59,9 @@ public class AuthRestController {
     public ResponseEntity<?> activateUser(@PathVariable String token, @PathVariable Long userId) {
         tokenLinkService.activate(token);
         userService.activateUser(userId);
-        return ResponseEntity.status(HttpStatus.FOUND).location(URI.create("https://spells.hedgi.ru/auth")).build();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setLocation(URI.create("https://spells.hedgi.ru/auth"));
+        return new ResponseEntity<>(headers, HttpStatus.MOVED_PERMANENTLY);
     }
 
     @PostMapping("/recoveryPass")
