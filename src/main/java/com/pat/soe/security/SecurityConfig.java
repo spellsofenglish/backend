@@ -48,6 +48,11 @@ public class SecurityConfig {
 
         http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
 
+        http.logout()
+                .deleteCookies("Bearer")
+                .clearAuthentication(true)
+                .invalidateHttpSession(true);
+
         return http.build();
     }
 
