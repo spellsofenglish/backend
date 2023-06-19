@@ -1,7 +1,6 @@
 package com.pat.soe.security;
 
 import com.pat.soe.service.user.UserServiceImpl;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -22,24 +21,22 @@ import org.springframework.web.servlet.HandlerExceptionResolver;
 @EnableWebSecurity
 public class SecurityConfig {
     private final UserServiceImpl userService;
-    @Autowired
-    private AuthEntryPointJwt unauthorizedHandler;
-    @Autowired
-    @Qualifier("handlerExceptionResolver")
-    private HandlerExceptionResolver resolver;
+    private final AuthEntryPointJwt unauthorizedHandler;
 
     @Autowired
-    public SecurityConfig(@Lazy UserServiceImpl userService) {
+    public SecurityConfig(@Lazy UserServiceImpl userService,
+                          @Qualifier("handlerExceptionResolver") HandlerExceptionResolver resolver,
+                          AuthEntryPointJwt unauthorizedHandler) {
         this.userService = userService;
+        this.unauthorizedHandler = unauthorizedHandler;
     }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
-                .authorizeHttpRequests()
-                .requestMatchers("/auth/**").permitAll()
+        http.exceptionHandling().authenticationEntryPoint(unauthorizedHandler)
+                .and()
+                .authorizeHttpRequests().requestMatchers("/auth/**").permitAll()
                 .requestMatchers("/swagger-ui/**", "/swagger-ui.html", "/v3/api-docs/**").permitAll()
-//                .requestMatchers("/**").permitAll()
                 .anyRequest().authenticated();
 
         http.authenticationProvider(authenticationProvider());
@@ -48,19 +45,10 @@ public class SecurityConfig {
 
         http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
 
-        http.logout()
-                .deleteCookies("Bearer")
-                .clearAuthentication(true)
-                .invalidateHttpSession(true);
+        http.logout().deleteCookies("Bearer").clearAuthentication(true).invalidateHttpSession(true);
 
         return http.build();
     }
-
-//    @Bean
-//    public CorsFilter corsFilter() {
-//        CorsFilter corsFilter = new CorsFilter();
-//        return corsFilter;
-//    }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
