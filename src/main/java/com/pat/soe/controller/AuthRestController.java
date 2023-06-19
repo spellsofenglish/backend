@@ -14,10 +14,11 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/auth")
-public class AuthRestController implements GlobalController{
+public class AuthRestController implements GlobalController {
     private static final String CONFIRMATION_MESSAGE = "An email has been sent to your email address with a confirmation link.";
     private static final String USER_RECOVERY_SEND_TO_EMAIL = "Token send to Email";
     private static final String USER_UPDATE_SUCCESSFULLY = "User update password successfully";
@@ -56,7 +57,7 @@ public class AuthRestController implements GlobalController{
     }
 
     @GetMapping("/activate/{token}/{userId}")
-    public ResponseEntity<?> activateUser(@PathVariable String token, @PathVariable Long userId) {
+    public ResponseEntity<?> activateUser(@PathVariable String token, @PathVariable UUID userId) {
         tokenLinkService.activate(token);
         userService.activateUser(userId);
         HttpHeaders headers = new HttpHeaders();

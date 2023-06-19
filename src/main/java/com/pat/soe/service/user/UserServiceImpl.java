@@ -30,6 +30,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Objects;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -74,7 +75,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public UserDto getById(Long id) {
+    public UserDto getById(UUID id) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException(UserInternalizationMessageManagerConfig
                         .getExceptionMessage(KEY_FOR_EXCEPTION_USER_NOT_FOUND)));
@@ -121,7 +122,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public void delete(Long id) {
+    public void delete(UUID id) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException(UserInternalizationMessageManagerConfig
                         .getExceptionMessage(KEY_FOR_EXCEPTION_USER_NOT_FOUND)));
@@ -214,7 +215,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public void activateUser(Long userId) {
+    public void activateUser(UUID userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException(UserInternalizationMessageManagerConfig
                         .getExceptionMessage(KEY_FOR_EXCEPTION_USER_NOT_FOUND)));
@@ -235,7 +236,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public void changePassword(Long userId, String newPassword) {
+    public void changePassword(UUID userId, String newPassword) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException(UserInternalizationMessageManagerConfig
                         .getExceptionMessage(KEY_FOR_EXCEPTION_USER_NOT_FOUND)));
@@ -245,7 +246,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public void updatePassword(Long userId, String oldPassword, String newPassword) {
+    public void updatePassword(UUID userId, String oldPassword, String newPassword) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException(UserInternalizationMessageManagerConfig
                         .getExceptionMessage(KEY_FOR_EXCEPTION_USER_NOT_FOUND)));

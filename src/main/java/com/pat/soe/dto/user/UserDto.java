@@ -2,7 +2,9 @@ package com.pat.soe.dto.user;
 
 import com.pat.soe.entity.User;
 
-public record UserDto(Long id,
+import java.util.UUID;
+
+public record UserDto(UUID id,
                       String email,
                       String password,
                       String nickName,

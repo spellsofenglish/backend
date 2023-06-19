@@ -6,6 +6,7 @@ import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
+import java.util.UUID;
 
 @Entity
 @Getter
@@ -13,9 +14,9 @@ import java.util.Objects;
 @Table(name = "token_links")
 public class TokenLink {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(unique = true, nullable = false)
+    private UUID id;
 
     @Column(name = "token")
     private String token;

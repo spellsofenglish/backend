@@ -1,6 +1,8 @@
 package com.pat.soe.dto.user;
 
-public record UserDtoForUpdatePass(Long id,
+import java.util.UUID;
+
+public record UserDtoForUpdatePass(UUID id,
                                    String oldPassword,
                                    String newPassword) {
 

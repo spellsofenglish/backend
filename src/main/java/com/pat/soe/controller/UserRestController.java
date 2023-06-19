@@ -9,9 +9,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.UUID;
+
 @RestController
 @RequestMapping("/users")
-public class UserRestController implements GlobalController{
+public class UserRestController implements GlobalController {
     private final UserService userService;
 
     public UserRestController(UserService userService) {
@@ -30,7 +32,7 @@ public class UserRestController implements GlobalController{
     }
 
     @GetMapping("/{id}")
-    public UserDto getById(@PathVariable Long id) {
+    public UserDto getById(@PathVariable UUID id) {
         return userService.getById(id);
     }
 
@@ -46,7 +48,7 @@ public class UserRestController implements GlobalController{
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@PathVariable Long id) {
+    public void delete(@PathVariable UUID id) {
         userService.delete(id);
     }
 }

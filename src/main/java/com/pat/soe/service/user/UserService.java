@@ -7,8 +7,10 @@ import com.pat.soe.dto.user.UserDtoForUpdate;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.util.UUID;
+
 public interface UserService {
-    UserDto getById(Long id);
+    UserDto getById(UUID id);
 
     UserDtoForResponse getByEmail(String email);
 
@@ -18,7 +20,7 @@ public interface UserService {
 
     UserDto update(UserDtoForUpdate user);
 
-    void delete(Long id);
+    void delete(UUID id);
 
     void registerUser(UserDtoForSave dto);
 
@@ -26,11 +28,11 @@ public interface UserService {
 
     void verify(String username, String code);
 
-    void activateUser(Long userId);
+    void activateUser(UUID userId);
 
     void recoveryPassword(String email);
 
-    void changePassword(Long userId, String newPassword);
+    void changePassword(UUID userId, String newPassword);
 
-    void updatePassword(Long userId, String oldPassword, String newPassword);
+    void updatePassword(UUID userId, String oldPassword, String newPassword);
 }
