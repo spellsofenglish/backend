@@ -51,7 +51,7 @@ public class AuthRestController implements GlobalController {
     }
 
     @PostMapping("/registration")
-    public ResponseEntity<?> performRegistration(@RequestBody UserDtoForSave user) {
+    public ResponseEntity<?> performRegistration(@Valid @RequestBody UserDtoForSave user) {
         userService.registerUser(user);
         return new ResponseEntity<>(CONFIRMATION_MESSAGE, HttpStatus.OK);
     }
