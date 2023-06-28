@@ -2,10 +2,9 @@ package ru.spellsofenglish.player.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.UUID;
 
@@ -13,7 +12,6 @@ import java.util.UUID;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
 @Entity
 @Table(name = "player")
 public class Player {
@@ -27,5 +25,4 @@ public class Player {
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private Progress progress;
-
 }

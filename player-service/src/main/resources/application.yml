@@ -1,9 +1,9 @@
 eureka:
-  instance:
-    hostname: localhost
   client:
+    fetch-registry: true
+    register-with-eureka: true
     service-url:
-      defaultZone: http://localhost:8761/eureka
+      defaultZone: http://discovery-service:8761/eureka
 
 spring:
   application:
@@ -12,15 +12,11 @@ spring:
     import: optional:configserver:instead
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/spellsofenglish_db
+    url: jdbc:postgresql://postgres:5432/spellsofenglish_db
     username: postgres
     password: postgres
   flyway:
     locations: classpath:db/migration
-
-#  jpa:
-#    hibernate:
-#      ddl-auto: create
 
 server:
   port: 8070
@@ -29,4 +25,9 @@ management:
   tracing:
     sampling:
       probability: 1.0
+  zipkin:
+    tracing:
+      endpoint: http://zipkin:9411/api/v2/spans
+
+
 

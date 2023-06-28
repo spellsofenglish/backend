@@ -7,7 +7,6 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.spellsofenglish.player.dto.progress.ProgressDto;
 import ru.spellsofenglish.player.entity.Player;
 import ru.spellsofenglish.player.entity.Progress;
-import ru.spellsofenglish.player.exception.InvalidDataException;
 import ru.spellsofenglish.player.mapper.ProgressMapperDto;
 import ru.spellsofenglish.player.repository.ProgressRepository;
 import ru.spellsofenglish.player.service.ProgressService;
@@ -30,17 +29,21 @@ public class ProgressServiceImpl implements ProgressService {
 
     @Override
     @Transactional
-    public void updateProgress(ProgressDto progressDto, Progress oldProgress) throws InvalidDataException {
-        progressRepository.save(oldProgress
-                .setGameLevel(progressDto.gameLevel())
-                .setTotalPoints(oldProgress.getTotalPoints() + progressDto.totalPoint())
-                .setProgress((progressDto.gameLevel() * 100) / 48.0));
+    public void updateProgress(ProgressDto progressDto, Progress oldProgress) {
+        oldProgress.setGameLevel(progressDto.gameLevel());
+        oldProgress.setTotalPoints(oldProgress.getTotalPoints() + progressDto.totalPoint());
+        oldProgress.setProgress((progressDto.gameLevel() * 100) / 48.0);
+        progressRepository.save(oldProgress);
 
     }
 
     @Override
     @Transactional
     public Progress createProgress() {
-        return progressRepository.save(new Progress().setProgress(0d).setTotalPoints(50).setGameLevel(0));
+        var progress = new Progress();
+        progress.setGameLevel(0);
+        progress.setTotalPoints(0);
+        progress.setProgress(0.0);
+        return progressRepository.save(progress);
     }
 }

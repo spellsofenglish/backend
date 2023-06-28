@@ -1,17 +1,9 @@
 package ru.spellsofenglish.player.controller;
 
 import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.*;
 import ru.spellsofenglish.player.dto.player.PlayerDto;
 import ru.spellsofenglish.player.dto.progress.ProgressDto;
 import ru.spellsofenglish.player.exception.InvalidDataException;
@@ -22,21 +14,27 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1/players")
-@RequiredArgsConstructor
 public class PlayerController {
     private final PlayerService playerService;
     private final ProgressService progressService;
 
+    @Autowired
+    public PlayerController(PlayerService playerService, ProgressService progressService) {
+        this.playerService = playerService;
+        this.progressService = progressService;
+    }
+
     @GetMapping("/{id}")
-    public ResponseEntity<PlayerDto> getPlayer(@PathVariable UUID id) throws InvalidDataException {
-        return ResponseEntity.ok(playerService.getPlayer(id));
+    @ResponseStatus(HttpStatus.OK)
+    public PlayerDto getPlayer(@PathVariable ("id") UUID id) throws InvalidDataException {
+        return playerService.getPlayer(id);
     }
 
     @PatchMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    private void updatePlayer(@PathVariable UUID id,
-                            @RequestBody @Valid PlayerDto playerDto) throws InvalidDataException {
-        playerService.updatePlayer(id,playerDto);
+    private void updatePlayer(@PathVariable ("id")  UUID id,
+                              @RequestBody @Valid PlayerDto playerDto) throws InvalidDataException {
+        playerService.updatePlayer(id, playerDto);
     }
 
 
@@ -47,14 +45,14 @@ public class PlayerController {
     }
 
     @GetMapping("{id}/progress")
-    public ResponseEntity<ProgressDto> getPlayerProgress(@PathVariable UUID id) throws InvalidDataException {
-        return ResponseEntity.ok(progressService.getPlayerProgress(
-                playerService.findPlayerById(id)));
+    @ResponseStatus(HttpStatus.OK)
+    public ProgressDto getPlayerProgress(@PathVariable ("id")  UUID id) throws InvalidDataException {
+        return progressService.getPlayerProgress(playerService.findPlayerById(id));
     }
 
     @PatchMapping("{id}/progress")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void updateProgress(@PathVariable UUID id,
+    public void updateProgress(@PathVariable ("id")  UUID id,
                                @RequestBody @Valid ProgressDto progressDto) throws InvalidDataException {
         progressService.updateProgress(progressDto, playerService.findPlayerById(id).getProgress());
 

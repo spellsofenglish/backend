@@ -7,6 +7,87 @@ services:
     networks:
       - zipkin
 
+  postgres:
+    image: postgres:15.3
+    container_name: soe_player_db
+    ports:
+      - "5454:5454"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=spellsofenglish_db
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./created.sql:/docker-entrypoint-initdb.d/created.sql
+    networks:
+      - postgres
+    restart: always
+
+
+  pgadmin:
+    container_name: pgadmin4
+    image: dpage/pgadmin4
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    environment:
+      - POSTGRES_HOST_AUTH_METHOD=trust
+      - PGADMIN_DEFAULT_EMAIL=admin@admin.com
+      - PGADMIN_DEFAULT_PASSWORD=root
+    depends_on:
+      - postgres
+    networks:
+      - postgres
+
+  discovery-service:
+    build:
+      context: ./discovery-service
+      dockerfile: Dockerfile
+    container_name: discovery-server
+    ports:
+      - "8761:8761"
+    networks:
+      - services
+
+  gateway-service:
+    build:
+      context: ./gateway-service
+      dockerfile: Dockerfile
+    container_name: gateway-service
+    ports:
+      - "8222:8222"
+    depends_on:
+      - zipkin
+      - discovery-service
+    networks:
+      - zipkin
+      - services
+
+  player-service:
+    container_name: player-service
+    build:
+      context: ./player-service
+      dockerfile: Dockerfile
+    ports:
+      - "8070:8070"
+    depends_on:
+      - discovery-service
+      - gateway-service
+      - postgres
+      - zipkin
+    networks:
+      - zipkin
+      - postgres
+      - services
+
 networks:
+  services:
+
   zipkin:
     driver: bridge
+
+  postgres:
+    driver: bridge
+
+volumes:
+  pgdata:

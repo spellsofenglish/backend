@@ -23,7 +23,6 @@ public class PlayerServiceImpl implements PlayerService {
         this.playerRepository = playerRepository;
     }
 
-
     @Override
     public PlayerDto getPlayer(UUID id) throws InvalidDataException {
         return playerMapperDto.apply(findPlayerById(id));
@@ -39,10 +38,9 @@ public class PlayerServiceImpl implements PlayerService {
     @Transactional
     public void createPlayer(PlayerDto playerDto, Progress progress) throws InvalidDataException {
         if (!playerRepository.existsByUsername(playerDto.username())) {
-            var player = Player.builder()
-                    .username(playerDto.username())
-                    .progress(progress)
-                    .build();
+            var player = new Player();
+            player.setUsername(playerDto.username());
+            player.setProgress(progress);
             playerRepository.save(player);
         } else {
             throw new InvalidDataException("The name " + playerDto.username() + " is already busy, try another one",
