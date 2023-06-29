@@ -13,8 +13,9 @@ spring:
   datasource:
     driver-class-name: org.postgresql.Driver
     url: jdbc:postgresql://postgres:5432/spellsofenglish_db
-    username: postgres
-    password: postgres
+    username: admin
+    password: root
+
   flyway:
     locations: classpath:db/migration
 
@@ -28,6 +29,5 @@ management:
   zipkin:
     tracing:
       endpoint: http://zipkin:9411/api/v2/spans
-
 
 

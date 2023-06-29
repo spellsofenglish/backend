@@ -1,12 +1,7 @@
-FROM gradle:latest AS BUILD
-WORKDIR /usr/app/
-COPY . .
-RUN gradle build
+FROM openjdk:17-oracle
 
-# Package stage
-FROM khipu/openjdk17-alpine
-ENV JAR_NAME=player-service-0.0.1-SNAPSHOT.jar
-ENV APP_HOME=/usr/app/
-WORKDIR $APP_HOME
-COPY --from=BUILD $APP_HOME .
-ENTRYPOINT exec java -jar $APP_HOME/build/libs/$JAR_NAME  
+WORKDIR /usr/app/
+
+COPY ./build/libs/player-service-0.0.1-SNAPSHOT.jar /usr/app/
+
+ENTRYPOINT ["java", "-jar", "-Xms512m", "-Xmx1024m", "player-service-0.0.1-SNAPSHOT.jar"]

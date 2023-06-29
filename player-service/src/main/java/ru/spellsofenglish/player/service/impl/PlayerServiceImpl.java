@@ -24,32 +24,34 @@ public class PlayerServiceImpl implements PlayerService {
     }
 
     @Override
-    public PlayerDto getPlayer(UUID id) throws InvalidDataException {
+    public PlayerDto getPlayer(UUID id) {
         return playerMapperDto.apply(findPlayerById(id));
     }
 
     @Override
-    public Player findPlayerById(UUID id) throws InvalidDataException {
+    public Player findPlayerById(UUID id) {
         return playerRepository.findPlayerById(id)
                 .orElseThrow(() -> new InvalidDataException("We didn't find such a player, try again (", "User not found"));
     }
 
     @Override
     @Transactional
-    public void createPlayer(PlayerDto playerDto, Progress progress) throws InvalidDataException {
+    public Player createPlayer(PlayerDto playerDto, Progress progress) {
         if (!playerRepository.existsByUsername(playerDto.username())) {
             var player = new Player();
             player.setUsername(playerDto.username());
             player.setProgress(progress);
-            playerRepository.save(player);
+            return playerRepository.save(player);
         } else {
             throw new InvalidDataException("The name " + playerDto.username() + " is already busy, try another one",
                     "A user with this name was found");
         }
+
     }
+
     @Override
     @Transactional
-    public void updatePlayer(UUID id, PlayerDto playerDto) throws InvalidDataException {
+    public void updatePlayer(UUID id, PlayerDto playerDto) {
         if (!playerRepository.existsByUsername(playerDto.username())) {
             var player = findPlayerById(id);
             player.setUsername(playerDto.username());

@@ -13,8 +13,8 @@ services:
     ports:
       - "5454:5454"
     environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=root
       - POSTGRES_DB=spellsofenglish_db
     volumes:
       - pgdata:/var/lib/postgresql/data
@@ -22,22 +22,6 @@ services:
     networks:
       - postgres
     restart: always
-
-
-  pgadmin:
-    container_name: pgadmin4
-    image: dpage/pgadmin4
-    restart: unless-stopped
-    ports:
-      - "80:80"
-    environment:
-      - POSTGRES_HOST_AUTH_METHOD=trust
-      - PGADMIN_DEFAULT_EMAIL=admin@admin.com
-      - PGADMIN_DEFAULT_PASSWORD=root
-    depends_on:
-      - postgres
-    networks:
-      - postgres
 
   discovery-service:
     build:

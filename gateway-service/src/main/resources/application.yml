@@ -4,7 +4,7 @@ eureka:
     register-with-eureka: true
     service-url:
       defaultZone: http://discovery-service:8761/eureka
-
+#  discovery-service
 server:
   port: 8222
 
@@ -16,10 +16,6 @@ spring:
 
   cloud:
     gateway:
-      discovery:
-        locator:
-          enabled: true
-
       routes:
         - id: player-service
           uri: http://player-service:8070
@@ -33,4 +29,3 @@ management:
   zipkin:
     tracing:
       endpoint: http://zipkin:9411/api/v2/spans
-

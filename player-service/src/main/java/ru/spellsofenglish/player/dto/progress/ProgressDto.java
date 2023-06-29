@@ -12,6 +12,8 @@ public record ProgressDto(
         @NotNull(message = "Game level is not null")
         Integer gameLevel,
         @NotNull(message = "Total point is not null")
+        @Min(value = -5, message = "The minimum number of points is -5")
+        @Max(value = 10, message = "The maximum number of points is 10")
         Integer totalPoint
 
 ) {
