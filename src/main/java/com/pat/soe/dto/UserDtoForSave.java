@@ -10,8 +10,6 @@ import static com.pat.soe.service.impl.UserServiceImpl.*;
 
 public record UserDtoForSave(
         @NotBlank(message = EMAIL_NOT_CORRECT)
-        @Pattern(message = "Bad formed person username: ${validatedValue}",
-                regexp = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9-]+\\.[A-Za-z0-9-.]+$")
         @Length(min = 2, max = 255, message = THE_LENGTH_OF_THE_NAME)
         @Email(message = EMAIL_NOT_CORRECT)
         String email,
@@ -21,8 +19,6 @@ public record UserDtoForSave(
         @Size(min = 8)
         String password,
         @NotBlank(message = NICKNAME_NOT_CORRECT)
-        @Pattern(message = "Bad formed person username: ${validatedValue}",
-                regexp = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9-]+\\.[A-Za-z0-9-.]+$")
         @Length(min = 2, max = 255, message = THE_LENGTH_OF_THE_NAME)
         String nickName) {
 }
