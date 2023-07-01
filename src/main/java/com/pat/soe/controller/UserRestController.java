@@ -1,8 +1,7 @@
 package com.pat.soe.controller;
 
-import com.pat.soe.dto.UserDto;
 import com.pat.soe.dto.UserDtoForSave;
-import com.pat.soe.dto.UserDtoForUpdate;
+import com.pat.soe.entity.User;
 import com.pat.soe.service.api.UserService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -22,27 +21,27 @@ public class UserRestController implements GlobalController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public UserDto create(@RequestBody UserDtoForSave user) {
+    public User create(@RequestBody UserDtoForSave user) {
         return userService.create(user);
     }
 
     @GetMapping
-    public Page<UserDto> getAll(Pageable pageable) {
+    public Page<User> getAll(Pageable pageable) {
         return userService.getAll(pageable);
     }
 
     @GetMapping("/{id}")
-    public UserDto getById(@PathVariable UUID id) {
+    public User getById(@PathVariable UUID id) {
         return userService.getById(id);
     }
 
     @PutMapping("/{id}")
-    public UserDto update(@RequestBody UserDtoForUpdate user) {
+    public User update(@RequestBody User user) {
         return userService.update(user);
     }
 
     @PatchMapping("/{id}")
-    public UserDto updatePartly(@RequestBody UserDtoForUpdate user) {
+    public User updatePartly(@RequestBody User user) {
         return userService.update(user);
     }
 

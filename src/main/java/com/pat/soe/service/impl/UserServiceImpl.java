@@ -1,9 +1,7 @@
 package com.pat.soe.service.impl;
 
-import com.pat.soe.dto.UserDto;
 import com.pat.soe.dto.UserDtoForResponse;
 import com.pat.soe.dto.UserDtoForSave;
-import com.pat.soe.dto.UserDtoForUpdate;
 import com.pat.soe.entity.SecurityUser;
 import com.pat.soe.entity.User;
 import com.pat.soe.exception.UserNotFoundException;
@@ -16,7 +14,6 @@ import com.pat.soe.service.api.MailService;
 import com.pat.soe.service.api.TokenLinkService;
 import com.pat.soe.service.api.UserService;
 import jakarta.servlet.http.Cookie;
-import org.apache.commons.lang3.CharUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Lazy;
@@ -33,14 +30,14 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 import java.util.UUID;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 @Service(value = "userService")
 public class UserServiceImpl implements UserService, UserDetailsService {
+
     public static final String EMAIL_NOT_CORRECT = "UserService.NotCorrectEmail";
     public static final String PASSWORD_NOT_CORRECT = "UserService.NotCorrectPassword";
     public static final String NICKNAME_NOT_CORRECT = "UserService.NotCorrectNickname";
+    public static final String THE_LENGTH_OF_THE_NAME = "The length of the name must be from 2 to 255 characters";
     public static final String KET_FOR_EMAIL_RECOVERY_PASSWORD_SUBJECT = "UserService.EmailRecoveryPasswordSubject";
     private static final int REGISTER_TOKEN_ACTIVITY_SECONDS = 60 * 60;
     private static final int RECOVERY_TOKEN_ACTIVITY_SECONDS = 5 * 60;
@@ -84,11 +81,10 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public UserDto getById(UUID id) {
-        User user = userRepository.findById(id)
+    public User getById(UUID id) {
+        return userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException(UserInternalizationMessageManagerConfig
                         .getExceptionMessage(KEY_FOR_EXCEPTION_USER_NOT_FOUND)));
-        return userMapper.userToUserDto(user);
     }
 
     @Override
@@ -96,38 +92,33 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new UserNotFoundException(UserInternalizationMessageManagerConfig
                         .getExceptionMessage(KEY_FOR_EXCEPTION_USER_NOT_FOUND)));
-        return userMapper.userDtoToUserDtoForResponse(userMapper.userToUserDto(user));
+        return userMapper.userDtoToUserDtoForResponse(user);
     }
 
     @Override
-    public Page<UserDto> getAll(Pageable pageable) {
-        Page<User> users = userRepository.findAll(pageable);
-        return users.map(userMapper::userToUserDto);
+    public Page<User> getAll(Pageable pageable) {
+        return userRepository.findAll(pageable);
     }
 
     @Override
-    public UserDto create(UserDtoForSave dtoForSave) {
-        validation(dtoForSave);
+    public User create(UserDtoForSave dtoForSave) {
         User entity = userMapper.userDtoForSaveToUser(dtoForSave);
         entity.setRole(User.Role.PLAYER);
         entity.setActive(true);
         String encodedPassword = passwordEncoder.encode(dtoForSave.password());
         entity.setPassword(encodedPassword);
         entity.setEmail(dtoForSave.email().trim());
-        User created = userRepository.save(entity);
-        return userMapper.userToUserDto(created);
+        return userRepository.save(entity);
     }
 
     @Override
-    public UserDto update(UserDtoForUpdate user) {
-        Optional<User> existing = userRepository.findByEmailActive(user.email());
-        if (existing.isPresent() && !existing.get().getId().equals(user.id())) {
+    public User update(User user) {
+        Optional<User> existing = userRepository.findByEmailActive(user.getEmail());
+        if (existing.isPresent() && !existing.get().getId().equals(user.getId())) {
             throw new UserValidationException(String.format(UserInternalizationMessageManagerConfig
-                    .getExceptionMessage(KEY_FOR_EXCEPTION_EXISTING_EMAIL), user.email()));
+                    .getExceptionMessage(KEY_FOR_EXCEPTION_EXISTING_EMAIL), user.getEmail()));
         }
-        User newUser = userMapper.userDtoForUpdateToUser(user);
-        User updated = userRepository.save(newUser);
-        return userMapper.userToUserDto(updated);
+        return userRepository.save(user);
     }
 
     @Override
@@ -145,7 +136,6 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public void registerUser(UserDtoForSave dtoForSave) {
-//        validation(dtoForSave);
         User entity = userMapper.userDtoForSaveToUser(dtoForSave);
         String encodedPassword = passwordEncoder.encode(dtoForSave.password());
         entity.setPassword(encodedPassword);
@@ -161,50 +151,6 @@ public class UserServiceImpl implements UserService, UserDetailsService {
                         .getMessage(KEY_FOR_EMAIL_USER_CONFIRMATION_SUBJECT),
                 String.format(UserInternalizationMessageManagerConfig
                         .getMessage(KEY_FOR_EXCEPTION_ACTIVATE_LINK_PATTERN), host, contextPath, token, created.getId()));
-    }
-
-    private void validation(UserDtoForSave dtoForSave) {
-        String email = dtoForSave.email();
-        String password = dtoForSave.password();
-        String nickname = dtoForSave.nickName();
-        Optional<User> existing = userRepository.findByEmail(email);
-        if (existing.isPresent()) {
-            throw new UserNotFoundException(String.format(UserInternalizationMessageManagerConfig
-                    .getExceptionMessage(KEY_FOR_EXCEPTION_EXISTING_EMAIL), email));
-        }
-        if (nickname == null || nickname.isEmpty()) {
-            throw new UserValidationException(String.format(UserInternalizationMessageManagerConfig
-                    .getExceptionMessage(NICKNAME_NOT_CORRECT), nickname));
-        }
-        if (password == null || password.isEmpty()) {
-            throw new UserValidationException(String.format(UserInternalizationMessageManagerConfig
-                    .getExceptionMessage(PASSWORD_NOT_CORRECT), password));
-        }
-        if (password.length() < 8 || password.length() > 24) {
-            throw new UserValidationException(String.format(UserInternalizationMessageManagerConfig
-                    .getExceptionMessage(PASSWORD_NOT_CORRECT), password));
-        }
-        for (int i = 0; i < email.length(); i++) {
-            char ch = email.charAt(i);
-            if (!CharUtils.isAscii(ch)) {
-                throw new UserValidationException(String.format(UserInternalizationMessageManagerConfig
-                        .getExceptionMessage(EMAIL_NOT_CORRECT), email));
-            }
-        }
-        String emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9-]+\\.[A-Za-z0-9-.]+$";
-        String passwordRegex = "^[a-zA-Z0-9!@#$%^&*()-_+=~`{}\\[\\]|\\\\:;'<>,.?\\/]{8,24}$";
-        Pattern pattern = Pattern.compile(emailRegex);
-        Pattern passwordPattern = Pattern.compile(passwordRegex);
-        Matcher matcher = pattern.matcher(email);
-        Matcher passwordMatcher = passwordPattern.matcher(password);
-        if (!matcher.matches()) {
-            throw new UserValidationException(String.format(UserInternalizationMessageManagerConfig
-                    .getExceptionMessage(EMAIL_NOT_CORRECT), email));
-        }
-        if (!passwordMatcher.matches()) {
-            throw new UserValidationException(String.format(UserInternalizationMessageManagerConfig
-                    .getExceptionMessage(PASSWORD_NOT_CORRECT), password));
-        }
     }
 
     @Override

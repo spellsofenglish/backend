@@ -15,7 +15,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
@@ -72,13 +71,13 @@ public class AuthRestController implements GlobalController {
     }
 
     @PostMapping("/recoveryPass")
-    public ResponseEntity<?> performRecoveryPass(@RequestBody UserDtoForRecoveryPass user) {
+    public ResponseEntity<?> performRecoveryPass(@Valid @RequestBody UserDtoForRecoveryPass user) {
         userService.recoveryPassword(user.email());
         return new ResponseEntity<>(USER_RECOVERY_SEND_TO_EMAIL, HttpStatus.OK);
     }
 
     @GetMapping("/recoveryPass/{token}/{userId}")
-    public ResponseEntity<?> recoveryPass(Model model, @PathVariable String token, @PathVariable Long userId) {
+    public ResponseEntity<?> recoveryPass(@PathVariable String token, @PathVariable Long userId) {
         tokenLinkService.activate(token);
         HttpHeaders headers = new HttpHeaders();
         headers.setLocation(URI.create("https://spells.hedgi.ru/reset?" + userId));
@@ -86,13 +85,13 @@ public class AuthRestController implements GlobalController {
     }
 
     @PostMapping("/changePassword")
-    public ResponseEntity<?> changePassword(@RequestBody UserDtoForUpdatePass user) {
+    public ResponseEntity<?> changePassword(@Valid @RequestBody UserDtoForUpdatePass user) {
         userService.changePassword(user.id(), user.newPassword());
         return new ResponseEntity<>(USER_UPDATE_SUCCESSFULLY, HttpStatus.OK);
     }
 
     @PostMapping("/updatePassword")
-    public ResponseEntity<?> updatePassword(@RequestBody UserDtoForUpdatePass user) {
+    public ResponseEntity<?> updatePassword(@Valid @RequestBody UserDtoForUpdatePass user) {
         userService.updatePassword(user.id(), user.oldPassword(), user.newPassword());
         return new ResponseEntity<>(USER_UPDATE_SUCCESSFULLY, HttpStatus.OK);
     }
