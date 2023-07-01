@@ -8,7 +8,6 @@ import com.nimbusds.jose.jwk.source.JWKSource;
 import com.nimbusds.jose.proc.SecurityContext;
 import com.pat.soe.service.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
@@ -35,9 +34,6 @@ public class SecurityConfig {
     private final UserServiceImpl userService;
     private final AuthEntryPointJwt unauthorizedHandler;
     private final RsaKeyProperty rsaKey;
-
-    @Value("${app.jwtName}")
-    private String jwtName;
 
     @Autowired
     public SecurityConfig(RsaKeyProperty rsaKey,
