@@ -13,9 +13,7 @@ CREATE TABLE IF NOT EXISTS users
 
 CREATE TABLE IF NOT EXISTS token_links
 (
-    id          uuid PRIMARY KEY      NOT NULL,
-    token       CHARACTER VARYING(40) NOT NULL,
-    active_time BIGINT,
-    create_time TIMESTAMP,
-    is_active   BOOLEAN DEFAULT FALSE NOT NULL
+    id        uuid PRIMARY KEY        NOT NULL,
+    token     CHARACTER VARYING(1000) NOT NULL,
+    is_active BOOLEAN DEFAULT FALSE   NOT NULL
 );
