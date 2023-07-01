@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -21,13 +20,6 @@ public class TokenLink {
     @Column(name = "token")
     private String token;
 
-    @Column(name = "active_time")
-    private Integer activeTime;
-
-    @Column(name = "create_time")
-    @Temporal(TemporalType.TIMESTAMP)
-    private LocalDateTime createTime;
-
     @Column(name = "is_active")
     private boolean isActive;
 
@@ -36,8 +28,6 @@ public class TokenLink {
         return "TokenLink{" +
                 "id=" + id +
                 ", token='" + token + '\'' +
-                ", activeTime=" + activeTime +
-                ", createTime=" + createTime +
                 ", isActive=" + isActive +
                 '}';
     }
@@ -47,11 +37,11 @@ public class TokenLink {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         TokenLink tokenLink = (TokenLink) o;
-        return isActive == tokenLink.isActive && Objects.equals(id, tokenLink.id) && Objects.equals(token, tokenLink.token) && Objects.equals(activeTime, tokenLink.activeTime) && Objects.equals(createTime, tokenLink.createTime);
+        return isActive == tokenLink.isActive && Objects.equals(id, tokenLink.id) && Objects.equals(token, tokenLink.token);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, token, activeTime, createTime, isActive);
+        return Objects.hash(id, token, isActive);
     }
 }

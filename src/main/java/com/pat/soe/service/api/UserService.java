@@ -1,4 +1,4 @@
-package com.pat.soe.service.user;
+package com.pat.soe.service.api;
 
 import com.pat.soe.dto.UserDto;
 import com.pat.soe.dto.UserDtoForResponse;
@@ -25,7 +25,7 @@ public interface UserService {
 
     void registerUser(UserDtoForSave dto);
 
-    String loginUser(String username, String password);
+    Cookie loginUser(String username, String password);
 
     void verify(String username, String code);
 

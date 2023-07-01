@@ -1,14 +1,14 @@
 package com.pat.soe.user;
 
-import com.pat.soe.dto.user.UserDtoForSave;
+import com.pat.soe.dto.UserDtoForSave;
 import com.pat.soe.entity.User;
 import com.pat.soe.exception.UserValidationException;
-import com.pat.soe.mapper.user.UserMapper;
-import com.pat.soe.message.user.UserInternalizationMessageManagerConfig;
-import com.pat.soe.repository.user.UserRepository;
-import com.pat.soe.service.mail.MailService;
-import com.pat.soe.service.token.TokenLinkService;
-import com.pat.soe.service.user.UserServiceImpl;
+import com.pat.soe.mapper.UserMapper;
+import com.pat.soe.message.UserInternalizationMessageManagerConfig;
+import com.pat.soe.repository.UserRepository;
+import com.pat.soe.service.api.MailService;
+import com.pat.soe.service.api.TokenLinkService;
+import com.pat.soe.service.impl.UserServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatchers;
@@ -17,6 +17,8 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
+
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.verify;
@@ -99,7 +101,7 @@ class UserServiceImplTest {
         entity.setActive(false);
 
         User createdEntity = new User();
-        createdEntity.setId(1L);
+        createdEntity.setId(UUID.randomUUID());
         createdEntity.setEmail(dtoForSave.email().trim());
         entity.setPassword(encodedPassword);
         createdEntity.setNickName("JUnitTest");
@@ -111,7 +113,7 @@ class UserServiceImplTest {
         when(userMapper.userDtoForSaveToUser(dtoForSave)).thenReturn(entity);
         when(passwordEncoder.encode(java.nio.CharBuffer.wrap(dtoForSave.password()))).thenReturn(encodedPassword);
         when(userRepository.save(entity)).thenReturn(createdEntity);
-        when(tokenLinkService.generateToken(ArgumentMatchers.anyInt())).thenReturn(token);
+        when(tokenLinkService.generateToken(ArgumentMatchers.anyInt(), entity.getNickName())).thenReturn(token);
 
         userService.registerUser(dtoForSave);
 

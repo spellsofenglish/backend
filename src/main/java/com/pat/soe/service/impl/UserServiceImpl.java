@@ -44,6 +44,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     public static final String KET_FOR_EMAIL_RECOVERY_PASSWORD_SUBJECT = "UserService.EmailRecoveryPasswordSubject";
     private static final int REGISTER_TOKEN_ACTIVITY_SECONDS = 60 * 60;
     private static final int RECOVERY_TOKEN_ACTIVITY_SECONDS = 5 * 60;
+    private static final int COOKIE_TOKEN_ACTIVITY_SECONDS = 24 * 60 * 60;
     public static final String KEY_FOR_EXCEPTION_USER_NOT_FOUND = "UserService.UserNotFound";
     public static final String KEY_FOR_EXCEPTION_EXISTING_EMAIL = "UserService.ExistingEmail";
     public static final String KEY_FOR_EXCEPTION_ACTIVATE_LINK_PATTERN = "UserService.ActivateLinkPattern";
@@ -51,6 +52,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     public static final String KEY_FOR_RECOVERY_PASS_LINK_PATTERN = "UserService.RecoveryPassLinkPattern";
     public static final String KEY_FOR_EXCEPTION_WRONG_OLD_PASSWORD = "UserService.WrongOldPassword";
     public static final String KEY_FOR_EXCEPTION_USER_NOT_ACTIVATED = "UserService.UserNotActivated";
+    public static final int LOGIN_TOKEN_ACTIVITY_SECONDS = 24 * 60 * 60;
 
     private final UserRepository userRepository;
     private final UserMapper userMapper;
@@ -66,7 +68,12 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     private String contextPath;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, UserMapper userMapper, PasswordEncoder passwordEncoder, TokenLinkService tokenLinkService, MailService mailService, AuthenticationManager authenticationManager, JwtUtils jwtUtils) {
+    public UserServiceImpl(UserRepository userRepository,
+                           UserMapper userMapper,
+                           PasswordEncoder passwordEncoder,
+                           TokenLinkService tokenLinkService,
+                           MailService mailService,
+                           @Lazy AuthenticationManager authenticationManager, JwtUtils jwtUtils) {
         this.userRepository = userRepository;
         this.userMapper = userMapper;
         this.passwordEncoder = passwordEncoder;
@@ -138,7 +145,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public void registerUser(UserDtoForSave dtoForSave) {
-        validation(dtoForSave);
+//        validation(dtoForSave);
         User entity = userMapper.userDtoForSaveToUser(dtoForSave);
         String encodedPassword = passwordEncoder.encode(dtoForSave.password());
         entity.setPassword(encodedPassword);
@@ -149,7 +156,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         }
         entity.setActive(false);
         User created = userRepository.save(entity);
-        String token = tokenLinkService.generateToken(REGISTER_TOKEN_ACTIVITY_SECONDS);
+        String token = tokenLinkService.generateToken(REGISTER_TOKEN_ACTIVITY_SECONDS, created.getNickName());
         mailService.sendEmail(created.getEmail(), UserInternalizationMessageManagerConfig
                         .getMessage(KEY_FOR_EMAIL_USER_CONFIRMATION_SUBJECT),
                 String.format(UserInternalizationMessageManagerConfig
@@ -229,7 +236,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         User existing = userRepository.findByEmail(email)
                 .orElseThrow(() -> new UserNotFoundException(UserInternalizationMessageManagerConfig
                         .getExceptionMessage(KEY_FOR_EXCEPTION_USER_NOT_FOUND)));
-        String token = tokenLinkService.generateToken(RECOVERY_TOKEN_ACTIVITY_SECONDS);
+        String token = tokenLinkService.generateToken(RECOVERY_TOKEN_ACTIVITY_SECONDS, existing.getNickName());
         mailService.sendEmail(email, UserInternalizationMessageManagerConfig
                         .getMessage(KET_FOR_EMAIL_RECOVERY_PASSWORD_SUBJECT),
                 String.format(UserInternalizationMessageManagerConfig
