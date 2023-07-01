@@ -22,13 +22,18 @@ import org.springframework.web.servlet.HandlerExceptionResolver;
 public class SecurityConfig {
     private final UserServiceImpl userService;
     private final AuthEntryPointJwt unauthorizedHandler;
+    private final RsaKeyProperty rsaKey;
+
+    @Value("${app.jwtName}")
+    private String jwtName;
 
     @Autowired
-    public SecurityConfig(@Lazy UserServiceImpl userService,
-                          @Qualifier("handlerExceptionResolver") HandlerExceptionResolver resolver,
+    public SecurityConfig(RsaKeyProperty rsaKey,
+                          @Lazy UserServiceImpl userService,
                           AuthEntryPointJwt unauthorizedHandler) {
         this.userService = userService;
         this.unauthorizedHandler = unauthorizedHandler;
+        this.rsaKey = rsaKey;
     }
 
     @Bean
