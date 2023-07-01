@@ -1,15 +1,20 @@
 package com.pat.soe.controller;
 
-import com.pat.soe.dto.user.*;
+import com.pat.soe.dto.UserDtoForAuth;
+import com.pat.soe.dto.UserDtoForRecoveryPass;
+import com.pat.soe.dto.UserDtoForSave;
+import com.pat.soe.dto.UserDtoForUpdatePass;
 import com.pat.soe.security.JwtUtils;
-import com.pat.soe.service.token.TokenLinkService;
-import com.pat.soe.service.user.UserService;
+import com.pat.soe.service.api.TokenLinkService;
+import com.pat.soe.service.api.UserService;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,35 +24,36 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/auth")
 public class AuthRestController implements GlobalController {
+
     private static final String CONFIRMATION_MESSAGE = "An email has been sent to your email address with a confirmation link.";
     private static final String USER_RECOVERY_SEND_TO_EMAIL = "Token send to Email";
     private static final String USER_UPDATE_SUCCESSFULLY = "User update password successfully";
-    public static final String YOU_VE_BEEN_SIGNED_OUT = "You've been signed out!";
 
     private final UserService userService;
-    private final JwtUtils jwtUtils;
     private final TokenLinkService tokenLinkService;
+    private final JwtUtils jwtUtils;
 
     @Autowired
-    public AuthRestController(UserService userService, JwtUtils jwtUtils, TokenLinkService tokenLinkService) {
+    public AuthRestController(UserService userService, TokenLinkService tokenLinkService, JwtUtils jwtUtils) {
         this.userService = userService;
-        this.jwtUtils = jwtUtils;
         this.tokenLinkService = tokenLinkService;
+        this.jwtUtils = jwtUtils;
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> authenticateUser(@Valid @RequestBody UserDtoForAuth dtoForAuth) {
-        String cooke = userService.loginUser(dtoForAuth.email(), dtoForAuth.password());
-        UserDtoForResponse dtoForResponse = userService.getByEmail(dtoForAuth.email());
-        return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, cooke)
-                .body(dtoForResponse);
+    @ResponseStatus(value = HttpStatus.OK)
+    public void authenticateUser(@Valid @RequestBody UserDtoForAuth dtoForAuth,
+                                 HttpServletResponse response) {
+        Cookie cookie = userService.loginUser(dtoForAuth.email(), dtoForAuth.password());
+        response.addCookie(cookie);
     }
 
     @PostMapping("/signout")
-    public ResponseEntity<?> logoutUser() {
-        ResponseCookie cookie = jwtUtils.getCleanJwtCookie();
-        return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, cookie.toString())
-                .body(YOU_VE_BEEN_SIGNED_OUT);
+    @ResponseStatus(HttpStatus.OK)
+    public void logoutUser(HttpServletResponse response) {
+        SecurityContextHolder.clearContext();
+        Cookie cookie = jwtUtils.getCleanJwtCookie();
+        response.addCookie(cookie);
     }
 
     @PostMapping("/registration")

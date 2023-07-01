@@ -199,12 +199,11 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public String loginUser(String username, String password) {
+    public Cookie loginUser(String username, String password) {
         Authentication authentication = authenticationManager
                 .authenticate(new UsernamePasswordAuthenticationToken(username, password));
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        UserAppDetails userDetails = (UserAppDetails) authentication.getPrincipal();
-        return jwtUtils.generateJwtCookie(userDetails).toString();
+        String token = tokenLinkService.generateToken(authentication, LOGIN_TOKEN_ACTIVITY_SECONDS);
+        return jwtUtils.createCookieWithJwt(token, COOKIE_TOKEN_ACTIVITY_SECONDS);
     }
 
     @Override
@@ -261,13 +260,9 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        User existingUser = userMapper.userDtoForResponseToUser(getByEmail(email));
-        if (Objects.isNull(existingUser)) {
-            throw new UserNotFoundException(UserInternalizationMessageManagerConfig
-                    .getExceptionMessage(String.format(KEY_FOR_EXCEPTION_USER_NOT_FOUND)));
-        }
-        return new UserAppDetails(userRepository.findByEmailActive(email)
+        return userRepository.findByEmailActive(email)
+                .map(SecurityUser::new)
                 .orElseThrow(() -> new UserNotFoundException(UserInternalizationMessageManagerConfig
-                        .getExceptionMessage(KEY_FOR_EXCEPTION_USER_NOT_ACTIVATED))));
+                        .getExceptionMessage(KEY_FOR_EXCEPTION_USER_NOT_ACTIVATED)));
     }
 }
