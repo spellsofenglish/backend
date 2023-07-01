@@ -41,33 +41,4 @@ server:
     min-response-size: 10240
 app:
   version: v0.0.1
-  files:
-    localStorage: files
   host: ${APP_HOST}
-  jwtName: Bearer
----
-spring:
-  config:
-    activate:
-      on-profile: production
-  datasource:
-    driver-class-name:
-    url:
-  jpa:
-    show-sql: true
-    hibernate:
-      ddl-auto: validate
-  mail:
-    host: ${HOST_MAIL}
-    port: ${PORT_MAIL}
-    username: ${LOGIN_MAIL}
-server:
-  port: 8080
-  error:
-    path: /error
-  compression:
-    enabled: true
-    mime-types: application/json,application/xml,text/html,text/xml,text/plain,application/javascript,text/css
-    min-response-size: 10240
-app:
-  host: http://000.000.000.000
