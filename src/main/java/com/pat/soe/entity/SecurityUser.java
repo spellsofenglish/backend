@@ -1,4 +1,4 @@
-package com.pat.soe.service.user;
+package com.pat.soe.entity;
 
 import com.pat.soe.entity.User;
 import lombok.RequiredArgsConstructor;

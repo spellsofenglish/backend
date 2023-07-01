@@ -1,9 +1,10 @@
 package com.pat.soe.service.user;
 
-import com.pat.soe.dto.user.UserDto;
-import com.pat.soe.dto.user.UserDtoForResponse;
-import com.pat.soe.dto.user.UserDtoForSave;
-import com.pat.soe.dto.user.UserDtoForUpdate;
+import com.pat.soe.dto.UserDto;
+import com.pat.soe.dto.UserDtoForResponse;
+import com.pat.soe.dto.UserDtoForSave;
+import com.pat.soe.dto.UserDtoForUpdate;
+import jakarta.servlet.http.Cookie;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 

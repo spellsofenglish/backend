@@ -1,4 +1,4 @@
-package com.pat.soe.repository.user;
+package com.pat.soe.repository;
 
 import com.pat.soe.entity.User;
 import org.springframework.beans.factory.annotation.Qualifier;

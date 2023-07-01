@@ -1,4 +1,4 @@
-package com.pat.soe.message.user;
+package com.pat.soe.message;
 
 import java.util.Locale;
 import java.util.ResourceBundle;

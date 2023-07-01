@@ -1,9 +1,9 @@
 package com.pat.soe.controller;
 
-import com.pat.soe.dto.user.UserDto;
-import com.pat.soe.dto.user.UserDtoForSave;
-import com.pat.soe.dto.user.UserDtoForUpdate;
-import com.pat.soe.service.user.UserService;
+import com.pat.soe.dto.UserDto;
+import com.pat.soe.dto.UserDtoForSave;
+import com.pat.soe.dto.UserDtoForUpdate;
+import com.pat.soe.service.api.UserService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;

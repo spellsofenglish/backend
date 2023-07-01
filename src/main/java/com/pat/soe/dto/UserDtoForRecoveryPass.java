@@ -1,4 +1,4 @@
-package com.pat.soe.dto.user;
+package com.pat.soe.dto;
 
 public record UserDtoForRecoveryPass(String email) {
 }

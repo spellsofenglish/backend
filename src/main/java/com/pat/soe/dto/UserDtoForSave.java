@@ -1,11 +1,11 @@
-package com.pat.soe.dto.user;
+package com.pat.soe.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import org.hibernate.validator.constraints.Length;
 
-import static com.pat.soe.service.user.UserServiceImpl.EMAIL_NOT_CORRECT;
+import static com.pat.soe.service.impl.UserServiceImpl.EMAIL_NOT_CORRECT;
 
 public record UserDtoForSave(
         @NotNull(message = EMAIL_NOT_CORRECT)

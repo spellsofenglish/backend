@@ -1,5 +1,6 @@
-package com.pat.soe.service.mail;
+package com.pat.soe.service.impl;
 
+import com.pat.soe.service.api.MailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;

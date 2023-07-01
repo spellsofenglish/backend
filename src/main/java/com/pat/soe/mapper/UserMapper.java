@@ -1,9 +1,9 @@
-package com.pat.soe.mapper.user;
+package com.pat.soe.mapper;
 
-import com.pat.soe.dto.user.UserDto;
-import com.pat.soe.dto.user.UserDtoForResponse;
-import com.pat.soe.dto.user.UserDtoForSave;
-import com.pat.soe.dto.user.UserDtoForUpdate;
+import com.pat.soe.dto.UserDto;
+import com.pat.soe.dto.UserDtoForResponse;
+import com.pat.soe.dto.UserDtoForSave;
+import com.pat.soe.dto.UserDtoForUpdate;
 import com.pat.soe.entity.User;
 import org.springframework.stereotype.Component;
 
