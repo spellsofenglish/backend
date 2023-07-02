@@ -2,7 +2,7 @@ package com.pat.soe.user;
 
 import com.pat.soe.dto.UserDtoForSave;
 import com.pat.soe.entity.User;
-import com.pat.soe.exception.UserValidationException;
+import com.pat.soe.exception.UserCustomException;
 import com.pat.soe.mapper.UserMapper;
 import com.pat.soe.message.UserInternalizationMessageManagerConfig;
 import com.pat.soe.repository.UserRepository;
@@ -136,7 +136,7 @@ class UserServiceImplTest {
                 "password123",
                 "JUnitTest");
 
-        assertThrows(UserValidationException.class, () -> userService.registerUser(dtoForSave));
+        assertThrows(UserCustomException.class, () -> userService.registerUser(dtoForSave));
     }
 
     @Test
@@ -145,7 +145,7 @@ class UserServiceImplTest {
                 "password123",
                 "JUnitTest");
 
-        assertThrows(UserValidationException.class, () -> userService.registerUser(dtoForSave));
+        assertThrows(UserCustomException.class, () -> userService.registerUser(dtoForSave));
     }
 
     @Test
@@ -154,7 +154,7 @@ class UserServiceImplTest {
                 "password123",
                 "JUnitTest");
 
-        assertThrows(UserValidationException.class, () -> userService.registerUser(dtoForSave));
+        assertThrows(UserCustomException.class, () -> userService.registerUser(dtoForSave));
     }
 
     @Test
@@ -163,7 +163,7 @@ class UserServiceImplTest {
                 "password123",
                 "JUnitTest");
 
-        assertThrows(UserValidationException.class, () -> userService.registerUser(dtoForSave));
+        assertThrows(UserCustomException.class, () -> userService.registerUser(dtoForSave));
     }
 
     @Test
@@ -172,7 +172,7 @@ class UserServiceImplTest {
                 "pas",
                 "JUnitTest");
 
-        assertThrows(UserValidationException.class, () -> userService.registerUser(dtoForSave));
+        assertThrows(UserCustomException.class, () -> userService.registerUser(dtoForSave));
     }
 
     @Test
@@ -181,7 +181,7 @@ class UserServiceImplTest {
                 null,
                 "JUnitTest");
 
-        assertThrows(UserValidationException.class, () -> userService.registerUser(dtoForSave));
+        assertThrows(UserCustomException.class, () -> userService.registerUser(dtoForSave));
     }
 
     @Test
@@ -190,7 +190,7 @@ class UserServiceImplTest {
                 " ",
                 "JUnitTest");
 
-        assertThrows(UserValidationException.class, () -> userService.registerUser(dtoForSave));
+        assertThrows(UserCustomException.class, () -> userService.registerUser(dtoForSave));
     }
 
     @Test
@@ -199,7 +199,7 @@ class UserServiceImplTest {
                 "пароль12345",
                 "JUnitTest");
 
-        assertThrows(UserValidationException.class, () -> userService.registerUser(dtoForSave));
+        assertThrows(UserCustomException.class, () -> userService.registerUser(dtoForSave));
     }
 
     @Test
@@ -208,7 +208,7 @@ class UserServiceImplTest {
                 "password123",
                 "");
 
-        assertThrows(UserValidationException.class, () -> userService.registerUser(dtoForSave));
+        assertThrows(UserCustomException.class, () -> userService.registerUser(dtoForSave));
     }
 
     @Test
@@ -217,7 +217,7 @@ class UserServiceImplTest {
                 "password123",
                 null);
 
-        assertThrows(UserValidationException.class, () -> userService.registerUser(dtoForSave));
+        assertThrows(UserCustomException.class, () -> userService.registerUser(dtoForSave));
     }
 
     @Test
