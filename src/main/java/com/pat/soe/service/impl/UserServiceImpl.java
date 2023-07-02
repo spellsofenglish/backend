@@ -4,8 +4,8 @@ import com.pat.soe.dto.UserDtoForResponse;
 import com.pat.soe.dto.UserDtoForSave;
 import com.pat.soe.entity.SecurityUser;
 import com.pat.soe.entity.User;
-import com.pat.soe.exception.UserNotFoundException;
-import com.pat.soe.exception.UserValidationException;
+import com.pat.soe.exception.ExceptionLocations;
+import com.pat.soe.exception.UserCustomException;
 import com.pat.soe.mapper.UserMapper;
 import com.pat.soe.message.UserInternalizationMessageManagerConfig;
 import com.pat.soe.repository.UserRepository;
@@ -83,15 +83,17 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     public User getById(UUID id) {
         return userRepository.findById(id)
-                .orElseThrow(() -> new UserNotFoundException(UserInternalizationMessageManagerConfig
-                        .getExceptionMessage(KEY_FOR_EXCEPTION_USER_NOT_FOUND)));
+                .orElseThrow(() -> new UserCustomException(UserInternalizationMessageManagerConfig
+                        .getExceptionMessage(KEY_FOR_EXCEPTION_USER_NOT_FOUND),
+                        ExceptionLocations.USER_SERVICE_NOT_FOUND));
     }
 
     @Override
     public UserDtoForResponse getByEmail(String email) {
         User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new UserNotFoundException(UserInternalizationMessageManagerConfig
-                        .getExceptionMessage(KEY_FOR_EXCEPTION_USER_NOT_FOUND)));
+                .orElseThrow(() -> new UserCustomException(UserInternalizationMessageManagerConfig
+                        .getExceptionMessage(KEY_FOR_EXCEPTION_USER_NOT_FOUND),
+                        ExceptionLocations.USER_SERVICE_NOT_FOUND));
         return userMapper.userDtoToUserDtoForResponse(user);
     }
 
@@ -115,8 +117,9 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     public User update(User user) {
         Optional<User> existing = userRepository.findByEmailActive(user.getEmail());
         if (existing.isPresent() && !existing.get().getId().equals(user.getId())) {
-            throw new UserValidationException(String.format(UserInternalizationMessageManagerConfig
-                    .getExceptionMessage(KEY_FOR_EXCEPTION_EXISTING_EMAIL), user.getEmail()));
+            throw new UserCustomException(String.format(UserInternalizationMessageManagerConfig
+                    .getExceptionMessage(KEY_FOR_EXCEPTION_EXISTING_EMAIL), user.getEmail()),
+                    ExceptionLocations.USER_SERVICE_VALIDATION);
         }
         return userRepository.save(user);
     }
@@ -124,11 +127,13 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     public void delete(UUID id) {
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new UserNotFoundException(UserInternalizationMessageManagerConfig
-                        .getExceptionMessage(KEY_FOR_EXCEPTION_USER_NOT_FOUND)));
+                .orElseThrow(() -> new UserCustomException(UserInternalizationMessageManagerConfig
+                        .getExceptionMessage(KEY_FOR_EXCEPTION_USER_NOT_FOUND),
+                        ExceptionLocations.USER_SERVICE_NOT_FOUND));
         if (!user.isActive()) {
-            throw new UserNotFoundException(UserInternalizationMessageManagerConfig
-                    .getExceptionMessage(KEY_FOR_EXCEPTION_USER_NOT_FOUND));
+            throw new UserCustomException(UserInternalizationMessageManagerConfig
+                    .getExceptionMessage(KEY_FOR_EXCEPTION_USER_NOT_FOUND),
+                    ExceptionLocations.USER_SERVICE_NOT_FOUND);
         }
         user.setActive(false);
         userRepository.save(user);
@@ -136,6 +141,12 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public void registerUser(UserDtoForSave dtoForSave) {
+        Optional<User> existing = userRepository.findByEmail(dtoForSave.email());
+        if (existing.isPresent()) {
+            throw new UserCustomException(String.format(UserInternalizationMessageManagerConfig
+                    .getExceptionMessage(KEY_FOR_EXCEPTION_EXISTING_EMAIL), dtoForSave.email()),
+                    ExceptionLocations.USER_SERVICE_VALIDATION);
+        }
         User entity = userMapper.userDtoForSaveToUser(dtoForSave);
         String encodedPassword = passwordEncoder.encode(dtoForSave.password());
         entity.setPassword(encodedPassword);
@@ -163,16 +174,18 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public void verify(String username, String code) {
-        User user = userRepository.findByEmail(username)
-                .orElseThrow(() -> new UserNotFoundException(UserInternalizationMessageManagerConfig
-                        .getExceptionMessage(KEY_FOR_EXCEPTION_USER_NOT_FOUND)));
+        userRepository.findByEmail(username)
+                .orElseThrow(() -> new UserCustomException(UserInternalizationMessageManagerConfig
+                        .getExceptionMessage(KEY_FOR_EXCEPTION_USER_NOT_FOUND),
+                        ExceptionLocations.USER_SERVICE_NOT_FOUND));
     }
 
     @Override
     public void activateUser(UUID userId) {
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new UserNotFoundException(UserInternalizationMessageManagerConfig
-                        .getExceptionMessage(KEY_FOR_EXCEPTION_USER_NOT_FOUND)));
+                .orElseThrow(() -> new UserCustomException(UserInternalizationMessageManagerConfig
+                        .getExceptionMessage(KEY_FOR_EXCEPTION_USER_NOT_FOUND),
+                        ExceptionLocations.USER_SERVICE_NOT_FOUND));
         user.setActive(true);
         userRepository.save(user);
     }
@@ -180,8 +193,9 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     public void recoveryPassword(String email) {
         User existing = userRepository.findByEmail(email)
-                .orElseThrow(() -> new UserNotFoundException(UserInternalizationMessageManagerConfig
-                        .getExceptionMessage(KEY_FOR_EXCEPTION_USER_NOT_FOUND)));
+                .orElseThrow(() -> new UserCustomException(UserInternalizationMessageManagerConfig
+                        .getExceptionMessage(KEY_FOR_EXCEPTION_USER_NOT_FOUND),
+                        ExceptionLocations.USER_SERVICE_NOT_FOUND));
         String token = tokenLinkService.generateToken(RECOVERY_TOKEN_ACTIVITY_SECONDS, existing.getNickName());
         mailService.sendEmail(email, UserInternalizationMessageManagerConfig
                         .getMessage(KET_FOR_EMAIL_RECOVERY_PASSWORD_SUBJECT),
@@ -192,8 +206,9 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     public void changePassword(UUID userId, String newPassword) {
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new UserNotFoundException(UserInternalizationMessageManagerConfig
-                        .getExceptionMessage(KEY_FOR_EXCEPTION_USER_NOT_FOUND)));
+                .orElseThrow(() -> new UserCustomException(UserInternalizationMessageManagerConfig
+                        .getExceptionMessage(KEY_FOR_EXCEPTION_USER_NOT_FOUND),
+                        ExceptionLocations.USER_SERVICE_NOT_FOUND));
         String encodedPassword = passwordEncoder.encode(newPassword);
         user.setPassword(encodedPassword);
         userRepository.save(user);
@@ -202,11 +217,13 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     public void updatePassword(UUID userId, String oldPassword, String newPassword) {
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new UserNotFoundException(UserInternalizationMessageManagerConfig
-                        .getExceptionMessage(KEY_FOR_EXCEPTION_USER_NOT_FOUND)));
+                .orElseThrow(() -> new UserCustomException(UserInternalizationMessageManagerConfig
+                        .getExceptionMessage(KEY_FOR_EXCEPTION_USER_NOT_FOUND),
+                        ExceptionLocations.USER_SERVICE_NOT_FOUND));
         if (!passwordEncoder.matches(oldPassword, user.getPassword())) {
-            throw new UserValidationException(UserInternalizationMessageManagerConfig
-                    .getExceptionMessage(KEY_FOR_EXCEPTION_WRONG_OLD_PASSWORD));
+            throw new UserCustomException(UserInternalizationMessageManagerConfig
+                    .getExceptionMessage(KEY_FOR_EXCEPTION_WRONG_OLD_PASSWORD),
+                    ExceptionLocations.USER_SERVICE_VALIDATION);
         }
         String encodedPassword = passwordEncoder.encode(newPassword);
         user.setPassword(encodedPassword);
@@ -217,7 +234,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         return userRepository.findByEmailActive(email)
                 .map(SecurityUser::new)
-                .orElseThrow(() -> new UserNotFoundException(UserInternalizationMessageManagerConfig
-                        .getExceptionMessage(KEY_FOR_EXCEPTION_USER_NOT_ACTIVATED)));
+                .orElseThrow(() -> new UserCustomException(UserInternalizationMessageManagerConfig
+                        .getExceptionMessage(KEY_FOR_EXCEPTION_USER_NOT_ACTIVATED),
+                        ExceptionLocations.USER_SERVICE_VALIDATION));
     }
 }

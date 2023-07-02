@@ -1,8 +1,8 @@
 package com.pat.soe.service.impl;
 
 import com.pat.soe.entity.TokenLink;
-import com.pat.soe.exception.UserNotFoundException;
-import com.pat.soe.exception.UserValidationException;
+import com.pat.soe.exception.ExceptionLocations;
+import com.pat.soe.exception.UserCustomException;
 import com.pat.soe.repository.TokenLinkRepository;
 import com.pat.soe.service.api.TokenLinkService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,13 +51,13 @@ public class TokenLinkServiceImpl implements TokenLinkService {
     @Override
     public void activate(String token) {
         TokenLink existingToken = tokenLinkRepository.findByEmailToken(token).orElseThrow(() -> {
-            throw new UserNotFoundException(TOKEN_NOT_FOUND);
+            throw new UserCustomException(TOKEN_NOT_FOUND, ExceptionLocations.TOKEN_SERVICE_NOT_FOUND);
         });
         if (existingToken.isActive()) {
-            throw new UserValidationException("Token already activated");
+            throw new UserCustomException("Token already activated", ExceptionLocations.TOKEN_SERVICE_CONFLICT);
         }
         if (isExpired(existingToken)) {
-            throw new UserValidationException("Token expired");
+            throw new UserCustomException("Token expired", ExceptionLocations.TOKEN_SERVICE_FORBIDDEN);
         }
         existingToken.setActive(false);
         tokenLinkRepository.save(existingToken);
