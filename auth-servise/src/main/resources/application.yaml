@@ -1,3 +1,11 @@
+eureka:
+  client:
+    fetch-registry: true
+    register-with-eureka: true
+    service-url:
+      defaultZone: http://127.0.0.1:8761/eureka
+
+
 rsa:
   rsa-public-key: classpath:certs/public.pem
   rsa-private-key: classpath:certs/private.pem
