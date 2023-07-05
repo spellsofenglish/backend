@@ -21,6 +21,10 @@ spring:
           uri: http://player-service:8070
           predicates:
             - Path=/api/v1/players/**
+        - id: game-service
+          uri: http://game-service:7050
+          predicates:
+            - Path=/api/v1/games/**
 
 management:
   tracing:

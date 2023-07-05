@@ -12,6 +12,15 @@
         </option>
       </GradleProjectSettings>
       <GradleProjectSettings>
+        <option name="distributionType" value="DEFAULT_WRAPPED" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$/game-service" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$/game-service" />
+          </set>
+        </option>
+      </GradleProjectSettings>
+      <GradleProjectSettings>
         <option name="externalProjectPath" value="$PROJECT_DIR$/gateway-service" />
         <option name="modules">
           <set>
@@ -24,14 +33,6 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$/player-service" />
-          </set>
-        </option>
-      </GradleProjectSettings>
-      <GradleProjectSettings>
-        <option name="externalProjectPath" value="$PROJECT_DIR$/task-service" />
-        <option name="modules">
-          <set>
-            <option value="$PROJECT_DIR$/task-service" />
           </set>
         </option>
       </GradleProjectSettings>
