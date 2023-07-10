@@ -1,5 +1,6 @@
 package ru.spellsofenglish.player.exception;
 
+import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -16,7 +17,7 @@ import java.util.Map;
 public class CustomErrorController  {
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(MethodArgumentNotValidException.class)
+    @ExceptionHandler({MethodArgumentNotValidException.class})
     public Map<String, String> handleInvalidArgument(MethodArgumentNotValidException exception) {
         Map<String, String> validationException =  new HashMap<>();
         for (FieldError fieldError : exception.getBindingResult().getFieldErrors()) {

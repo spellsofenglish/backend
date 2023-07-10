@@ -6,7 +6,6 @@ import jakarta.validation.constraints.NotNull;
 
 
 public record ProgressDto(
-        Double progress,
         @Min(value = 0, message = "Game level cannot be less than zero")
         @Max(value = 48, message = "The maximum level is 48")
         @NotNull(message = "Game level is not null")

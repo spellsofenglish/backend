@@ -9,11 +9,9 @@ import java.util.UUID;
 
 @Service
 public interface PlayerService {
-    PlayerDto getPlayer(UUID id);
-
     Player findPlayerById(UUID id);
 
     Player createPlayer(PlayerDto playerDto, Progress progress);
-    void updatePlayer(UUID id, PlayerDto playerDto);
+    Player updatePlayer(UUID id, PlayerDto playerDto);
 
 }

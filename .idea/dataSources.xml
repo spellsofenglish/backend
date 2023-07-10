@@ -8,5 +8,12 @@
       <jdbc-url>jdbc:postgresql://localhost:5432/spellsofenglish_db</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
+    <data-source source="LOCAL" name="spellsofenglish@localhost" uuid="3ece4c74-4b18-4223-abc0-d852013ce37e">
+      <driver-ref>postgresql</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.postgresql.Driver</jdbc-driver>
+      <jdbc-url>jdbc:postgresql://localhost:5432/spellsofenglish</jdbc-url>
+      <working-dir>$ProjectFileDir$</working-dir>
+    </data-source>
   </component>
 </project>

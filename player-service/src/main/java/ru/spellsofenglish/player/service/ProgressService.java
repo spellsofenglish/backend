@@ -8,8 +8,7 @@ import ru.spellsofenglish.player.exception.InvalidDataException;
 
 @Service
 public interface ProgressService {
-    ProgressDto getPlayerProgress(Player player);
-    void updateProgress(ProgressDto progressDto, Progress oldProgress);
+    Progress updateProgress(ProgressDto progressDto, Progress oldProgress);
     Progress createProgress();
 
 }

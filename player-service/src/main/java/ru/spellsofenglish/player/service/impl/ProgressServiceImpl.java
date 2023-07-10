@@ -7,36 +7,34 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.spellsofenglish.player.dto.progress.ProgressDto;
 import ru.spellsofenglish.player.entity.Player;
 import ru.spellsofenglish.player.entity.Progress;
-import ru.spellsofenglish.player.mapper.ProgressMapperDto;
+import ru.spellsofenglish.player.exception.InvalidDataException;
 import ru.spellsofenglish.player.repository.ProgressRepository;
 import ru.spellsofenglish.player.service.ProgressService;
 
 @Service
 public class ProgressServiceImpl implements ProgressService {
-    private final ProgressMapperDto progressMapperDto;
     private final ProgressRepository progressRepository;
 
     @Autowired
-    public ProgressServiceImpl(ProgressMapperDto progressMapperDto, ProgressRepository progressRepository) {
-        this.progressMapperDto = progressMapperDto;
+    public ProgressServiceImpl(ProgressRepository progressRepository) {
         this.progressRepository = progressRepository;
     }
 
     @Override
-    public ProgressDto getPlayerProgress(Player player) {
-        return progressMapperDto.apply(player.getProgress());
-    }
-
-    @Override
     @Transactional
-    public void updateProgress(ProgressDto progressDto, Progress oldProgress) {
+    public Progress updateProgress(ProgressDto progressDto, Progress oldProgress) {
+        var updateTotalPoint = oldProgress.getTotalPoints() + progressDto.totalPoint();
+
+        if (updateTotalPoint < 0)
+            throw new InvalidDataException("The resulting total point cannot be negative",
+                    "Value  "+ progressDto.totalPoint() + " not valid");
+
         oldProgress.setGameLevel(progressDto.gameLevel());
-        oldProgress.setTotalPoints(oldProgress.getTotalPoints() + progressDto.totalPoint());
+        oldProgress.setTotalPoints(updateTotalPoint);
         oldProgress.setProgress((progressDto.gameLevel() * 100) / 48.0);
-        progressRepository.save(oldProgress);
+        return progressRepository.save(oldProgress);
 
     }
-
     @Override
     @Transactional
     public Progress createProgress() {
