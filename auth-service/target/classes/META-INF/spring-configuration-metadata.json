@@ -1,0 +1,22 @@
+{
+  "groups": [
+    {
+      "name": "rsa",
+      "type": "ru.spellsofenglish.authservice.security.RsaKeyProperty",
+      "sourceType": "ru.spellsofenglish.authservice.security.RsaKeyProperty"
+    }
+  ],
+  "properties": [
+    {
+      "name": "rsa.rsa-private-key",
+      "type": "java.security.interfaces.RSAPrivateKey",
+      "sourceType": "ru.spellsofenglish.authservice.security.RsaKeyProperty"
+    },
+    {
+      "name": "rsa.rsa-public-key",
+      "type": "java.security.interfaces.RSAPublicKey",
+      "sourceType": "ru.spellsofenglish.authservice.security.RsaKeyProperty"
+    }
+  ],
+  "hints": []
+}
