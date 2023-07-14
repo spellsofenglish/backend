@@ -39,8 +39,8 @@ public class GameController {
     }
 
     @GetMapping("/rollDice")
-    public int rollDice(){
-        int randomNumber=new Random().nextInt(12)+2;
+    public Integer rollDice(){
+        Integer randomNumber=new Random().nextInt(12)+2;
         playerService.updatePlayer(randomNumber);
         return randomNumber;
     }

@@ -27,8 +27,9 @@ public class PlayerServiceImpl implements PlayerService {
         Player player=getPlayer();
         Progress progress=player.getProgress();
         progress.setGameLevel(progress.getGameLevel()+gameLevel);
+        progress.setTotalPoint(0);
         playerClient.updatePlayer(UUID.fromString("242e710c-823d-4aa6-bd12-53d02885173b"),new ProgressDto(
-                progress.getGameLevel(), progress.getTotalPoints()
+                progress.getGameLevel(), progress.getTotalPoint()
         ));
     }
 }

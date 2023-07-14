@@ -16,5 +16,5 @@ public class Progress {
     private UUID id;
     private Double progress;
     private Integer gameLevel;
-    private Integer totalPoints;
+    private Integer totalPoint;
 }

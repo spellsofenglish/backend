@@ -53,7 +53,7 @@ public class PlayerController {
         return playerService.findPlayerById(id).getProgress();
     }
 
-    @PatchMapping("{id}/progress")
+    @PutMapping("{id}/progress")
     @ResponseStatus(HttpStatus.OK)
     public Progress updateProgress(@PathVariable ("id")  UUID id,
                                @RequestBody @Valid ProgressDto progressDto) {

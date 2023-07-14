@@ -15,6 +15,6 @@ import java.util.UUID;
 public interface PlayerClient {
     @GetMapping("/api/v1/players/{id}")
     Optional<Player> getPlayerById(@PathVariable("id") UUID id);
-    @RequestMapping(method = RequestMethod.PATCH, value = "/api/v1/players/{id}/progress", consumes = "application/json")
+    @RequestMapping(method = RequestMethod.PUT, value = "/api/v1/players/{id}/progress", consumes = "application/json")
     void updatePlayer(@PathVariable("id") UUID id, ProgressDto progressDto);
 }
