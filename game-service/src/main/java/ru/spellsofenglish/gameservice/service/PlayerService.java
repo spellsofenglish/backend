@@ -4,5 +4,6 @@ import ru.spellsofenglish.gameservice.models.Player;
 
 public interface PlayerService {
     Player getPlayer();
-    void updatePlayer(Integer gameLevel);
+    void updatePlayerGameLevel(Integer gameLevel);
+    void updatePlayerTotalPoints(Integer totalPoints);
 }

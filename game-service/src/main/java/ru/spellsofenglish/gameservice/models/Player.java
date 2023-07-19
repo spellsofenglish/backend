@@ -16,5 +16,6 @@ public class Player {
     private UUID id;
     private String username;
     private Progress progress;
+    private String taskId;
 }
 

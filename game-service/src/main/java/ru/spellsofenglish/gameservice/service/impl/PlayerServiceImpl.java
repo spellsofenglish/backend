@@ -23,13 +23,23 @@ public class PlayerServiceImpl implements PlayerService {
     }
 
     @Override
-    public void updatePlayer(Integer gameLevel) {
+    public void updatePlayerTotalPoints(Integer totalPoints) {
+        Player player=getPlayer();
+        Progress progress=player.getProgress();
+        progress.setTotalPoint(totalPoints);
+        playerClient.updatePlayer(UUID.fromString("242e710c-823d-4aa6-bd12-53d02885173b"),new ProgressDto(
+                progress.getGameLevel(),progress.getTotalPoint()
+        ));
+    }
+
+    @Override
+    public void updatePlayerGameLevel(Integer gameLevel) {
         Player player=getPlayer();
         Progress progress=player.getProgress();
         progress.setGameLevel(progress.getGameLevel()+gameLevel);
         progress.setTotalPoint(0);
         playerClient.updatePlayer(UUID.fromString("242e710c-823d-4aa6-bd12-53d02885173b"),new ProgressDto(
-                progress.getGameLevel(), progress.getTotalPoint()
+                progress.getGameLevel(),progress.getTotalPoint()
         ));
     }
 }

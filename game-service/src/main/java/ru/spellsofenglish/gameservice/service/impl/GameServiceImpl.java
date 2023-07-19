@@ -9,19 +9,16 @@ import ru.spellsofenglish.gameservice.service.TaskService;
 @Service
 public class GameServiceImpl implements GameService {
     private final PlayerService playerService;
-    private final TaskService taskService;
 
 
-    public GameServiceImpl(PlayerService playerService, TaskService taskService) {
+    public GameServiceImpl(PlayerService playerService) {
         this.playerService = playerService;
-        this.taskService = taskService;
     }
 
     @Override
     public GameDto getGame() {
         return new GameDto(
-                playerService.getPlayer(),
-                taskService.getTask()
+                playerService.getPlayer()
         );
     }
 }

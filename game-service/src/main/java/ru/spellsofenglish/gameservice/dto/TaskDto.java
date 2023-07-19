@@ -1,5 +1,8 @@
 package ru.spellsofenglish.gameservice.dto;
 
+import org.springframework.cache.annotation.Cacheable;
+
+@Cacheable("tasks")
 public record TaskDto(
          Integer index,
          String word,
