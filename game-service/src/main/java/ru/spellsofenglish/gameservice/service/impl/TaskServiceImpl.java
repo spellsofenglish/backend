@@ -5,6 +5,7 @@ import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.http.MediaType;
@@ -16,8 +17,7 @@ import ru.spellsofenglish.gameservice.repository.TaskRepository;
 import ru.spellsofenglish.gameservice.service.TaskService;
 
 
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 @Service
 public class TaskServiceImpl implements TaskService {
@@ -37,6 +37,7 @@ public class TaskServiceImpl implements TaskService {
         int randomNumber=new Random().nextInt(3600)+1;
         Task task=taskRepository.findByIndex(randomNumber);
         return new TaskDto(
+                task.getId(),
                 task.getIndex(),
                 task.getWord(),
                 PATH + task.getImage(),
@@ -75,6 +76,35 @@ public class TaskServiceImpl implements TaskService {
             default:
                 return MediaType.APPLICATION_OCTET_STREAM_VALUE;
         }
+    }
+    @Override
+    public ResponseEntity<Map<String, Object>> getAudioTask() {
+        TaskDto task = getTask();
+        Map<String, Object> response = new HashMap<>();
+        response.put("audio", task.audio());
+        List<String> wordOptions = generateWordOptions(task.word());
+        response.put("wordOptions", wordOptions);
+        return ResponseEntity.ok(response);
+    }
+    @Override
+    public List<String> generateWordOptions(String correctWord) {
+        List<String> wordOptions = new ArrayList<>();
+        wordOptions.add(correctWord);
+        wordOptions.add(getTask().word());
+        wordOptions.add(getTask().word());
+        return wordOptions;
+    }
+   @Override
+    public ResponseEntity<Map<String, Object>> getImageTask() {
+        TaskDto task = getTask();
+        Map<String, Object> response = new HashMap<>();
+        response.put("image", task.image());
+        response.put("audioMeaning", task.audioMeaning());
+        response.put("textMeaning", task.textMeaningTranslate());
+        response.put("wordTranslate", task.wordTranslate());
+        response.put("audioExample", task.audioExample());
+        response.put("textExampleTranslate", task.textExampleTranslate());
+        return ResponseEntity.ok(response);
     }
 
     @Override
