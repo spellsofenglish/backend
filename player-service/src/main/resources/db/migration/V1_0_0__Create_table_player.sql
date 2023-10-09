@@ -13,6 +13,7 @@ create table if not exists player
     progress_id uuid not null references progress (id) on delete cascade,
 
     username    text not null,
+    allow_move  boolean not null,
 
     primary key (id),
     unique (username)

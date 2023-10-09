@@ -1,8 +1,7 @@
 package ru.spellsofenglish.gameservice.dto;
 
 public record TaskDto(
-         String id,
-         Integer index,
+         int index,
          String word,
          String image,
          String audio,

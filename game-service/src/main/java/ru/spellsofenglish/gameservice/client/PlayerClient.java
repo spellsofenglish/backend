@@ -1,10 +1,8 @@
 package ru.spellsofenglish.gameservice.client;
 
+import jakarta.validation.Valid;
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 import ru.spellsofenglish.gameservice.dto.ProgressDto;
 import ru.spellsofenglish.gameservice.models.Player;
 
@@ -15,6 +13,10 @@ import java.util.UUID;
 public interface PlayerClient {
     @GetMapping("/api/v1/players/{id}")
     Optional<Player> getPlayerById(@PathVariable("id") UUID id);
+
     @RequestMapping(method = RequestMethod.PUT, value = "/api/v1/players/{id}/progress", consumes = "application/json")
-    void updatePlayer(@PathVariable("id") UUID id, ProgressDto progressDto);
+    void updatePlayer(@PathVariable("id") UUID id, @Valid ProgressDto progressDto);
+
+    @PutMapping("/api/v1/players/{id}/allowMove")
+    void allowOrDenyMovePlayer(@PathVariable ("id") UUID id, @RequestBody boolean allowMove);
 }

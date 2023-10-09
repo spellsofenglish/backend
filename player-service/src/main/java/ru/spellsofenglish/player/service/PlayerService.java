@@ -13,5 +13,6 @@ public interface PlayerService {
 
     Player createPlayer(PlayerDto playerDto, Progress progress);
     Player updatePlayer(UUID id, PlayerDto playerDto);
+    Player allowOrDenyMovePlayer(UUID id, boolean allowMove);
 
 }

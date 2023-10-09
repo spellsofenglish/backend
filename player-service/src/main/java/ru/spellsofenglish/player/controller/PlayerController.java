@@ -59,4 +59,11 @@ public class PlayerController {
                                @RequestBody @Valid ProgressDto progressDto) {
         return progressService.updateProgress(progressDto, playerService.findPlayerById(id).getProgress());
     }
+
+    @PutMapping("{id}/allowMove")
+    @ResponseStatus(HttpStatus.OK)
+    public Player allowOrDenyMovePlayer(@PathVariable ("id") UUID id,
+                                        @RequestBody boolean allowMove){
+        return playerService.allowOrDenyMovePlayer(id,allowMove);
+    }
 }

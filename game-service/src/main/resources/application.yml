@@ -16,6 +16,15 @@ spring:
     mongodb:
       uri: mongodb://localhost:27017/englishTasks
 
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://127.0.0.1:5432/game_db
+    username: postgres
+    password: root
+
+  flyway:
+    locations: classpath:migration
+
 server:
   port: 7550
 

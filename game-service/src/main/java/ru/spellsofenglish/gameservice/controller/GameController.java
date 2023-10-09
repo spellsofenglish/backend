@@ -1,17 +1,21 @@
 package ru.spellsofenglish.gameservice.controller;
 
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.spellsofenglish.gameservice.dto.AnswerTaskDto;
 import ru.spellsofenglish.gameservice.dto.GameDto;
-import ru.spellsofenglish.gameservice.dto.TaskDto;
+import ru.spellsofenglish.gameservice.models.Task;
+import ru.spellsofenglish.gameservice.repository.TaskRepository;
 import ru.spellsofenglish.gameservice.service.GameService;
-import ru.spellsofenglish.gameservice.service.PlayerService;
 import ru.spellsofenglish.gameservice.service.TaskService;
 
+import java.util.List;
 import java.util.Map;
-import java.util.Random;
+import java.util.UUID;
 
 
 @RestController
@@ -19,13 +23,11 @@ import java.util.Random;
 public class GameController {
     private final TaskService taskService;
     private final GameService gameService;
-    private final PlayerService playerService;
 
     @Autowired
-    public GameController(TaskService taskService, GameService gameService, PlayerService playerService) {
+    public GameController(TaskService taskService, GameService gameService) {
         this.taskService = taskService;
         this.gameService = gameService;
-        this.playerService = playerService;
     }
 
     @GetMapping("/audioTask")
@@ -42,17 +44,22 @@ public class GameController {
     public ResponseEntity<Resource> getFile(@PathVariable String fileName) {
         return taskService.getFile(fileName);
     }
-    @GetMapping
-    public GameDto getGame(){
-        return gameService.getGame();
+    @GetMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public GameDto getGame(@PathVariable UUID id){
+        return gameService.getGame(id);
     }
 
-    @GetMapping("/rollDice")
-    public Integer rollDice(){
-            Integer randomNumber = new Random().nextInt(12) + 2;
-            playerService.updatePlayerGameLevel(randomNumber);
-            return randomNumber;
+    @GetMapping("/{id}/rollDice")
+    @ResponseStatus(HttpStatus.OK)
+    public Integer rollDice(@PathVariable UUID id){
+        return gameService.rollDice(id);
         }
+
+    @PostMapping("/answer")
+    public ResponseEntity<String> checkAnswerForTask(@RequestBody @Valid AnswerTaskDto answerTaskDto){
+        return taskService.checkAnswerForTask(answerTaskDto);
+    }
 
 
 }

@@ -5,15 +5,17 @@ import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import ru.spellsofenglish.gameservice.dto.AnswerTaskDto;
 import ru.spellsofenglish.gameservice.dto.TaskDto;
+import ru.spellsofenglish.gameservice.mapper.TaskMapperDto;
 import ru.spellsofenglish.gameservice.models.Task;
 import ru.spellsofenglish.gameservice.repository.TaskRepository;
+import ru.spellsofenglish.gameservice.service.PlayerService;
 import ru.spellsofenglish.gameservice.service.TaskService;
 
 
@@ -22,13 +24,16 @@ import java.util.*;
 @Service
 public class TaskServiceImpl implements TaskService {
     private final TaskRepository taskRepository;
+    private final TaskMapperDto taskMapperDto;
+    private final PlayerService playerService;
     private final CacheManager cacheManager;
     private final ResourceLoader resourceLoader;
-    private final String PATH="/api/v1/games/";
 
     @Autowired
-    public TaskServiceImpl(TaskRepository taskRepository, CacheManager cacheManager, ResourceLoader resourceLoader) {
+    public TaskServiceImpl(TaskRepository taskRepository, TaskMapperDto taskMapperDto, PlayerService playerService, CacheManager cacheManager, ResourceLoader resourceLoader) {
         this.taskRepository = taskRepository;
+        this.taskMapperDto = taskMapperDto;
+        this.playerService = playerService;
         this.cacheManager = cacheManager;
         this.resourceLoader = resourceLoader;
     }
@@ -36,21 +41,7 @@ public class TaskServiceImpl implements TaskService {
     public TaskDto getTask(){
         int randomNumber=new Random().nextInt(3600)+1;
         Task task=taskRepository.findByIndex(randomNumber);
-        return new TaskDto(
-                task.getId(),
-                task.getIndex(),
-                task.getWord(),
-                PATH + task.getImage(),
-                PATH + task.getAudio(),
-                PATH + task.getAudioMeaning(),
-                PATH + task.getAudioExample(),
-                task.getTextMeaning(),
-                task.getTextExample(),
-                task.getTranscription(),
-                task.getTextExampleTranslate(),
-                task.getTextMeaningTranslate(),
-                task.getWordTranslate()
-        );
+        return taskMapperDto.apply(task);
     }
     @Override
     public ResponseEntity<Resource> getFile(String fileName) {
@@ -81,6 +72,7 @@ public class TaskServiceImpl implements TaskService {
     public ResponseEntity<Map<String, Object>> getAudioTask() {
         TaskDto task = getTask();
         Map<String, Object> response = new HashMap<>();
+        response.put("index",task.index());
         response.put("audio", task.audio());
         List<String> wordOptions = generateWordOptions(task.word());
         response.put("wordOptions", wordOptions);
@@ -105,6 +97,20 @@ public class TaskServiceImpl implements TaskService {
         response.put("audioExample", task.audioExample());
         response.put("textExampleTranslate", task.textExampleTranslate());
         return ResponseEntity.ok(response);
+    }
+
+    @Override
+    public ResponseEntity<String> checkAnswerForTask(AnswerTaskDto answerTaskDto) {
+    if(answerTaskDto.word().toLowerCase().equals(taskRepository.findByIndex(answerTaskDto.indexTask()).getWord())){
+        playerService.updatePlayerTotalPoints(10,answerTaskDto.playerId());
+        playerService.allowOrDenyMovePlayer(answerTaskDto.playerId(),true);
+        return ResponseEntity.ok("Your answer is correct");
+    }
+    else {
+        playerService.updatePlayerTotalPoints(-5,answerTaskDto.playerId());
+        playerService.allowOrDenyMovePlayer(answerTaskDto.playerId(),true);
+        return ResponseEntity.ok("Your answer isn't correct");
+    }
     }
 
     @Override

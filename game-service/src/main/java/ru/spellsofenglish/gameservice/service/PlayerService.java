@@ -2,8 +2,11 @@ package ru.spellsofenglish.gameservice.service;
 
 import ru.spellsofenglish.gameservice.models.Player;
 
+import java.util.UUID;
+
 public interface PlayerService {
-    Player getPlayer();
-    void updatePlayerGameLevel(Integer gameLevel);
-    void updatePlayerTotalPoints(Integer totalPoints);
+    Player getPlayer(UUID playerId);
+    void updatePlayerGameLevel(Integer gameLevel, UUID playerId);
+    void updatePlayerTotalPoints(Integer totalPoints, UUID playerId);
+    void allowOrDenyMovePlayer (UUID playerId, boolean allowMove);
 }

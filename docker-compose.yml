@@ -11,7 +11,7 @@ services:
     image: postgres:15.3
     container_name: soe_player_db
     ports:
-      - "5454:5454"
+      - "5432:5432"
     environment:
       - POSTGRES_USER=admin
       - POSTGRES_PASSWORD=root
@@ -19,6 +19,22 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql/data
       - ./created.sql:/docker-entrypoint-initdb.d/created.sql
+    networks:
+      - postgres
+    restart: always
+
+  postgres_game:
+    image: postgres:15.3
+    container_name: game_db
+    ports:
+      - "5434:5434"
+    environment:
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=root
+      - POSTGRES_DB=game_db
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./created_game_db.sql:/docker-entrypoint-initdb.d/created_game_db.sql
     networks:
       - postgres
     restart: always

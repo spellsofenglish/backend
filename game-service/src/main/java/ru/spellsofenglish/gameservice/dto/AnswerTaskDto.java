@@ -2,13 +2,16 @@ package ru.spellsofenglish.gameservice.dto;
 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
-import ru.spellsofenglish.gameservice.models.Player;
 
-public record GameDto(
+import java.util.UUID;
+
+public record AnswerTaskDto(
         @NotNull
-        Player player,
+        @Min(value = 0)
+        int indexTask,
         @NotNull
-        @Min(value=0)
-        int playerPosition
+        UUID playerId,
+        @NotNull
+        String word
 ) {
 }

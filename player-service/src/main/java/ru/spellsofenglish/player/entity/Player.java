@@ -25,4 +25,6 @@ public class Player {
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private Progress progress;
+
+    private boolean allowMove;
 }

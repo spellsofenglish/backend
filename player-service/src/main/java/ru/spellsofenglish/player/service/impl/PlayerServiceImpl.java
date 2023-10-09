@@ -34,6 +34,7 @@ public class PlayerServiceImpl implements PlayerService {
             var player = new Player();
             player.setUsername(playerDto.username());
             player.setProgress(progress);
+            player.setAllowMove(true);
             return playerRepository.save(player);
         } else {
             throw new InvalidDataException("The name " + playerDto.username() + " is already busy, try another one",
@@ -51,6 +52,14 @@ public class PlayerServiceImpl implements PlayerService {
         }
         var player = findPlayerById(id);
         player.setUsername(playerDto.username());
+        return playerRepository.save(player);
+    }
+
+    @Override
+    @Transactional
+    public Player allowOrDenyMovePlayer(UUID id, boolean allowMove) {
+        var player= findPlayerById(id);
+        player.setAllowMove(allowMove);
         return playerRepository.save(player);
     }
 }
