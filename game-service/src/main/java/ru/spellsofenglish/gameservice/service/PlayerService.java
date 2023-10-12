@@ -7,6 +7,6 @@ import java.util.UUID;
 public interface PlayerService {
     Player getPlayer(UUID playerId);
     void updatePlayerGameLevel(Integer gameLevel, UUID playerId);
-    void updatePlayerTotalPoints(Integer totalPoints, UUID playerId);
+    void updatePlayerProgress(Integer totalPoints, UUID playerId);
     void allowOrDenyMovePlayer (UUID playerId, boolean allowMove);
 }

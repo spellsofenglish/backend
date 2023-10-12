@@ -2,7 +2,6 @@ package ru.spellsofenglish.gameservice.service.impl;
 
 import jakarta.annotation.PostConstruct;
 import org.apache.commons.io.FilenameUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
 import org.springframework.core.io.Resource;
@@ -29,7 +28,7 @@ public class TaskServiceImpl implements TaskService {
     private final CacheManager cacheManager;
     private final ResourceLoader resourceLoader;
 
-    @Autowired
+
     public TaskServiceImpl(TaskRepository taskRepository, TaskMapperDto taskMapperDto, PlayerService playerService, CacheManager cacheManager, ResourceLoader resourceLoader) {
         this.taskRepository = taskRepository;
         this.taskMapperDto = taskMapperDto;
@@ -40,7 +39,8 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public TaskDto getTask(){
         int randomNumber=new Random().nextInt(3600)+1;
-        Task task=taskRepository.findByIndex(randomNumber);
+        Task task=(Task)cacheManager.getCache("tasks").get(randomNumber).get();
+        assert task != null;
         return taskMapperDto.apply(task);
     }
     @Override
@@ -69,14 +69,14 @@ public class TaskServiceImpl implements TaskService {
         }
     }
     @Override
-    public ResponseEntity<Map<String, Object>> getAudioTask() {
+    public Map<String, Object> getAudioTask() {
         TaskDto task = getTask();
         Map<String, Object> response = new HashMap<>();
         response.put("index",task.index());
         response.put("audio", task.audio());
         List<String> wordOptions = generateWordOptions(task.word());
         response.put("wordOptions", wordOptions);
-        return ResponseEntity.ok(response);
+        return response;
     }
     @Override
     public List<String> generateWordOptions(String correctWord) {
@@ -87,27 +87,28 @@ public class TaskServiceImpl implements TaskService {
         return wordOptions;
     }
    @Override
-    public ResponseEntity<Map<String, Object>> getImageTask() {
+    public Map<String, Object> getImageTask() {
         TaskDto task = getTask();
         Map<String, Object> response = new HashMap<>();
+        response.put("index",task.index());
         response.put("image", task.image());
         response.put("audioMeaning", task.audioMeaning());
         response.put("textMeaning", task.textMeaningTranslate());
-        response.put("wordTranslate", task.wordTranslate());
         response.put("audioExample", task.audioExample());
         response.put("textExampleTranslate", task.textExampleTranslate());
-        return ResponseEntity.ok(response);
+        return response;
     }
 
     @Override
     public ResponseEntity<String> checkAnswerForTask(AnswerTaskDto answerTaskDto) {
-    if(answerTaskDto.word().toLowerCase().equals(taskRepository.findByIndex(answerTaskDto.indexTask()).getWord())){
-        playerService.updatePlayerTotalPoints(10,answerTaskDto.playerId());
+        var task=(Task) cacheManager.getCache("tasks").get(answerTaskDto.indexTask()).get();
+    if(answerTaskDto.word().toLowerCase().equals(task.getWord()) || answerTaskDto.word().toLowerCase().equals(task.getWordTranslate())){
+        playerService.updatePlayerProgress(10,answerTaskDto.playerId());
         playerService.allowOrDenyMovePlayer(answerTaskDto.playerId(),true);
         return ResponseEntity.ok("Your answer is correct");
     }
     else {
-        playerService.updatePlayerTotalPoints(-5,answerTaskDto.playerId());
+        playerService.updatePlayerProgress(-5,answerTaskDto.playerId());
         playerService.allowOrDenyMovePlayer(answerTaskDto.playerId(),true);
         return ResponseEntity.ok("Your answer isn't correct");
     }
@@ -119,7 +120,8 @@ public class TaskServiceImpl implements TaskService {
         Cache cache = cacheManager.getCache("tasks");
         List<Task> tasks = taskRepository.findAll();
         for (Task task : tasks) {
-            cache.put(task.getId(), task);
+            assert cache != null;
+            cache.put(task.getIndex(), task);
         }
     }
 

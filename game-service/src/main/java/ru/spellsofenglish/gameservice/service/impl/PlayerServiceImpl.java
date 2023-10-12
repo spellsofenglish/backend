@@ -16,7 +16,7 @@ public class PlayerServiceImpl implements PlayerService {
     private final PlayerClient playerClient;
     private final ProgressMapperDto progressMapperDto;
 
-    @Autowired
+
     public PlayerServiceImpl(PlayerClient playerClient, ProgressMapperDto progressMapperDto) {
         this.playerClient = playerClient;
         this.progressMapperDto = progressMapperDto;
@@ -29,7 +29,7 @@ public class PlayerServiceImpl implements PlayerService {
     }
 
     @Override
-    public void updatePlayerTotalPoints(Integer totalPoints, UUID playerId) {
+    public void updatePlayerProgress(Integer totalPoints, UUID playerId) {
         Player player=getPlayer(playerId);
         Progress progress=player.getProgress();
         progress.setTotalPoints(totalPoints);

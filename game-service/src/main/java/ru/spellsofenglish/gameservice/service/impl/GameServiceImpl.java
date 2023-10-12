@@ -1,6 +1,5 @@
 package ru.spellsofenglish.gameservice.service.impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.spellsofenglish.gameservice.dto.GameDto;
 import ru.spellsofenglish.gameservice.exception.InvalidDataException;
@@ -19,7 +18,7 @@ public class GameServiceImpl implements GameService {
     private final GameMapperDto gameMapperDto;
     private final PlayerService playerService;
 
-    @Autowired
+
     public GameServiceImpl(GameRepository gameRepository, GameMapperDto gameMapperDto, PlayerService playerService) {
         this.gameRepository = gameRepository;
         this.gameMapperDto = gameMapperDto;
@@ -51,6 +50,8 @@ public class GameServiceImpl implements GameService {
     public void updateGameIfIsOver(UUID playerId) {
        var game= gameRepository.findByPlayerId(playerId);
        game.get().setPlayerPosition(0);
+        playerService.updatePlayerProgress(40,playerId);
+        playerService.updatePlayerGameLevel(0,playerId);
        gameRepository.save(game.get());
     }
 
@@ -73,9 +74,6 @@ public class GameServiceImpl implements GameService {
         }
 
         else{
-            var player= playerService.getPlayer(playerId);
-            playerService.updatePlayerTotalPoints(40,playerId);
-            playerService.updatePlayerGameLevel(0,playerId);
             updateGameIfIsOver(playerId);
             throw new InvalidDataException("Your game is over", "Game is over");
         }

@@ -7,7 +7,6 @@ import ru.spellsofenglish.gameservice.dto.TaskDto;
 
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 
 public interface TaskService {
@@ -15,7 +14,7 @@ public interface TaskService {
     void loadAllDataToCache();
     ResponseEntity<Resource> getFile(String fileName);
     List<String> generateWordOptions(String correctWord);
-    ResponseEntity<Map<String, Object>> getAudioTask();
-    ResponseEntity<Map<String, Object>> getImageTask();
+    Map<String, Object> getAudioTask();
+    Map<String, Object> getImageTask();
     ResponseEntity<String> checkAnswerForTask(AnswerTaskDto answerTaskDto);
 }
