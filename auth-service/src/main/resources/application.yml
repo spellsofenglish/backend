@@ -1,32 +1,28 @@
 eureka:
-  instance:
-    hostname: localhost
   client:
+    fetch-registry: true
+    register-with-eureka: true
     service-url:
       defaultZone: http://localhost:8761/eureka
 
 spring:
   application:
-    name: game-service
+    name: auth-service
   config:
     import: optional:configserver:instead
-  cache:
-    type: simple
-  data:
-    mongodb:
-      uri: mongodb://localhost:27017/englishTasks
-
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://127.0.0.1:5432/game_db
+    url: jdbc:postgresql://localhost:5432/user_db
     username: postgres
     password: root
 
+
   flyway:
-    locations: classpath:migration
+    locations: classpath:db/migration
 
 server:
-  port: 7550
+  port: 8010
+
 
 management:
   tracing:
@@ -36,3 +32,5 @@ management:
 zipkin:
   tracing:
     endpoint: http://zipkin:9411/api/v2/spans
+
+

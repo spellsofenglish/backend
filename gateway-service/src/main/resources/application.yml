@@ -18,23 +18,28 @@ spring:
     gateway:
       routes:
         - id: player-service
-#          uri: http://player-service:8070
           uri: http://127.0.0.1:8070
           predicates:
             - Path=/api/v1/players/**
+          filters:
+            - AuthenticationFilter
+
         - id: auth-service
-          uri: http://127.0.0.1:8075
+          uri: http://127.0.0.1:8010
           predicates:
               - Path=/api/v1/auth/**
+
         - id: game-service
           uri: http://127.0.0.1:7550
           predicates:
               - Path=/api/v1/games/**
+          filters:
+            - AuthenticationFilter
 
 management:
   tracing:
     sampling:
       probability: 1.0
-#  zipkin:
-#    tracing:
-#      endpoint: http://zipkin:9411/api/v2/spans
+zipkin:
+  tracing:
+    endpoint: http://zipkin:9411/api/v2/spans

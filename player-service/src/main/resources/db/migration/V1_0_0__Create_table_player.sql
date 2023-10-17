@@ -1,6 +1,6 @@
 create table if not exists progress
 (
-    id           uuid not null,
+    id           uuid ,
     progress     numeric(4, 1),
     total_points int4,
     game_level   int4,
@@ -9,7 +9,7 @@ create table if not exists progress
 
 create table if not exists player
 (
-    id          uuid not null,
+    id          uuid ,
     progress_id uuid not null references progress (id) on delete cascade,
 
     username    text not null,
