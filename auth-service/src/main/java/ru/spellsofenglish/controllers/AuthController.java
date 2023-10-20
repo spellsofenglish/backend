@@ -8,6 +8,7 @@ import ru.spellsofenglish.dto.AuthRequest;
 import ru.spellsofenglish.models.User;
 import ru.spellsofenglish.services.UserService;
 
+
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("api/v1/auth")
@@ -25,7 +26,7 @@ public class AuthController {
         var authenticate=authenticationManager.authenticate
                 (new UsernamePasswordAuthenticationToken(authRequest.username(),authRequest.password()));
         if(authenticate.isAuthenticated()){
-            return userService.generateToken(authRequest.username());
+            return userService.generateToken(authRequest.username(),authRequest.userId());
         }
         else{
             throw new RuntimeException("Invalid access");

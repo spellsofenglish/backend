@@ -1,5 +1,6 @@
 package ru.spellsofenglish.player.controller;
 
+import jakarta.annotation.security.PermitAll;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -41,7 +42,7 @@ public class PlayerController {
     }
 
 
-    @PostMapping
+    @PostMapping("/create")
     @ResponseStatus(HttpStatus.OK)
     public Player createPlayer(@RequestBody @Valid PlayerDto playerDto) {
         return playerService.createPlayer(playerDto, progressService.createProgress());

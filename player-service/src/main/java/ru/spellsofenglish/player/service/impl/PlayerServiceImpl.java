@@ -32,6 +32,7 @@ public class PlayerServiceImpl implements PlayerService {
     public Player createPlayer(@NotNull PlayerDto playerDto, Progress progress) {
         if (!playerRepository.existsByUsername(playerDto.username())) {
             var player = new Player();
+            player.setId(playerDto.id());
             player.setUsername(playerDto.username());
             player.setProgress(progress);
             player.setAllowMove(true);

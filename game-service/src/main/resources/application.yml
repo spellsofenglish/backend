@@ -18,8 +18,8 @@ spring:
 
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://127.0.0.1:5432/game_db
-    username: postgres
+    url: jdbc:postgresql://127.0.0.1:5450/game_db
+    username: admin
     password: root
 
   flyway:

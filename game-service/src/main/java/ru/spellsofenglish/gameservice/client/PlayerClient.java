@@ -14,7 +14,7 @@ public interface PlayerClient {
     @GetMapping("/api/v1/players/{id}")
     Optional<Player> getPlayerById(@PathVariable("id") UUID id);
 
-    @RequestMapping(method = RequestMethod.PUT, value = "/api/v1/players/{id}/progress", consumes = "application/json")
+    @PutMapping("/api/v1/players/{id}/progress")
     void updatePlayer(@PathVariable("id") UUID id, @Valid ProgressDto progressDto);
 
     @PutMapping("/api/v1/players/{id}/allowMove")

@@ -27,7 +27,7 @@ services:
     image: postgres:15.3
     container_name: game_db
     ports:
-      - "5434:5434"
+      - "5450:5450"
     environment:
       - POSTGRES_USER=admin
       - POSTGRES_PASSWORD=root
@@ -36,7 +36,23 @@ services:
       - pgdata:/var/lib/postgresql/data
       - ./created_game_db.sql:/docker-entrypoint-initdb.d/created_game_db.sql
     networks:
-      - postgres
+      - postgres_game
+    restart: always
+
+  postgres_user:
+    image: postgres:15.3
+    container_name: game_db
+    ports:
+      - "5480:5480"
+    environment:
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=root
+      - POSTGRES_DB=user_db
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./created_user_db.sql:/docker-entrypoint-initdb.d/created_user_db.sql
+    networks:
+      - postgres_user
     restart: always
 
   discovery-service:
@@ -63,6 +79,42 @@ services:
       - zipkin
       - services
 
+  game-service:
+    container_name: game-service
+    build:
+      context: ./game-service
+      dockerfile: Dockerfile
+    ports:
+      - "7550:7550"
+    depends_on:
+      - discovery-service
+      - gateway-service
+      - postgres
+      - mongodb
+      - zipkin
+    networks:
+      - zipkin
+      - postgres
+      - mongodb
+      - services
+
+  auth-service:
+    container_name: auth-service
+    build:
+      context: ./auth-service
+      dockerfile: Dockerfile
+    ports:
+      - "8010:8010"
+    depends_on:
+      - discovery-service
+      - gateway-service
+      - postgres
+      - zipkin
+    networks:
+      - zipkin
+      - postgres
+      - services
+
   player-service:
     container_name: player-service
     build:
@@ -87,6 +139,12 @@ networks:
     driver: bridge
 
   postgres:
+    driver: bridge
+
+  postgres_game:
+    driver: bridge
+
+  postgres_user:
     driver: bridge
 
 volumes:
