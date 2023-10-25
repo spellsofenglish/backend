@@ -18,7 +18,7 @@ services:
       - POSTGRES_DB=spellsofenglish_db
     volumes:
       - pgdata:/var/lib/postgresql/data
-      - ./created.sql:/docker-entrypoint-initdb.d/created.sql
+      - ./script_db/created.sql:/docker-entrypoint-initdb.d/created.sql
     networks:
       - postgres
     restart: always
@@ -34,7 +34,7 @@ services:
       - POSTGRES_DB=game_db
     volumes:
       - pgdata:/var/lib/postgresql/data
-      - ./created_game_db.sql:/docker-entrypoint-initdb.d/created_game_db.sql
+      - ./script_db/created_game_db.sql:/docker-entrypoint-initdb.d/created_game_db.sql
     networks:
       - postgres_game
     restart: always
@@ -50,7 +50,7 @@ services:
       - POSTGRES_DB=user_db
     volumes:
       - pgdata:/var/lib/postgresql/data
-      - ./created_user_db.sql:/docker-entrypoint-initdb.d/created_user_db.sql
+      - ./script_db/created_user_db.sql:/docker-entrypoint-initdb.d/created_user_db.sql
     networks:
       - postgres_user
     restart: always
